@@ -1,0 +1,361 @@
+{
+  "users": [
+    {
+      "code": "20235218",
+      "password": "ulima123",
+      "firstName": "Jeff",
+      "lastName": "Angelo",
+      "email": "20235218@aloe.ulima.edu.pe",
+      "role": "delegado",
+      "career_id": 1,
+      "especialidades": [
+        1
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "approvedElectives": [
+          "paradigmas_programacion",
+          "analisis_diseno_algoritmos"
+        ],
+        "currentCourses": [
+          "propuesta_investigacion",
+          "sistemas_erp",
+          "auditoria_control_sistemas",
+          "ingenieria_software_ii",
+          "deep_learning",
+          "programacion_movil"
+        ]
+      }
+    },
+    {
+      "code": "20232548",
+      "password": "ulima123",
+      "firstName": "Samantha",
+      "lastName": "Rodríguez",
+      "email": "20232548@aloe.ulima.edu.pe",
+      "role": "subdelegado",
+      "career_id": 1,
+      "especialidades": [
+        1
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "approvedElectives": [
+          "paradigmas_programacion"
+        ],
+        "currentCourses": [
+          "sistemas_inteligencia_empresarial",
+          "gestion_operaciones",
+          "ingenieria_software_i",
+          "machine_learning",
+          "ciberseguridad",
+          "analisis_diseno_algoritmos"
+        ]
+      }
+    },
+    {
+      "code": "20232907",
+      "password": "ulima123",
+      "firstName": "Martín",
+      "lastName": "Tejada",
+      "email": "20232907@aloe.ulima.edu.pe",
+      "role": "estudiante",
+      "career_id": 1,
+      "especialidades": [
+        1
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "approvedElectives": [],
+        "currentCourses": [
+          "ingenieria_procesos_negocio",
+          "redes_computadoras",
+          "simulacion",
+          "estructuras_datos_ii",
+          "programacion_web",
+          "gestion_financiera",
+          "paradigmas_programacion"
+        ]
+      }
+    },
+    {
+      "code": "20232637",
+      "password": "ulima123",
+      "firstName": "Melissa",
+      "lastName": "Ruiz",
+      "email": "20232637@aloe.ulima.edu.pe",
+      "role": "estudiante",
+      "career_id": 1,
+      "especialidades": [
+        1
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "approvedElectives": [],
+        "currentCourses": [
+          "estadistica_aplicada",
+          "investigacion_operaciones_i",
+          "sistemas_operativos",
+          "desarrollo_competencias_gerenciales",
+          "estructuras_datos_i",
+          "modelamiento_base_datos"
+        ]
+      }
+    },
+    {
+      "code": "20232685",
+      "password": "ulima123",
+      "firstName": "Julio",
+      "lastName": "Salazar",
+      "email": "20232685@aloe.ulima.edu.pe",
+      "role": "estudiante",
+      "career_id": 1,
+      "especialidades": [
+        1
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "approvedElectives": [
+          "paradigmas_programacion",
+          "programacion_movil"
+        ],
+        "currentCourses": [
+          "propuesta_investigacion",
+          "sistemas_erp",
+          "auditoria_control_sistemas",
+          "ingenieria_software_ii",
+          "analisis_diseno_algoritmos"
+        ]
+      }
+    },
+    {
+      "code": "20231098",
+      "password": "ulima123",
+      "firstName": "Nehemias",
+      "lastName": "Falcon",
+      "email": "20231098@aloe.ulima.edu.pe",
+      "role": "estudiante",
+      "career_id": 1,
+      "especialidades": [
+        1
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3
+        ],
+        "approvedElectives": [],
+        "currentCourses": [
+          "estadistica_probabilidad",
+          "calculo_iii",
+          "modelacion_integracion_sistemas",
+          "costeo_operaciones",
+          "programacion_orientada_objetos",
+          "arquitectura_computadoras"
+        ]
+      }
+    },
+    {
+      "code": "20231483",
+      "password": "ulima123",
+      "firstName": "Melissa",
+      "lastName": "Ruiz",
+      "email": "20231483@aloe.ulima.edu.pe",
+      "role": "estudiante",
+      "career_id": 1,
+      "especialidades": [
+        1
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2
+        ],
+        "approvedElectives": [],
+        "currentCourses": [
+          "inteligencia_artificial_aplicada",
+          "calculo_ii",
+          "sistemas_organizacionales",
+          "fisica_sistemas",
+          "estructuras_discretas",
+          "introduccion_programacion"
+        ]
+      }
+    },
+    {
+      "code": "20221234",
+      "password": "ulima123",
+      "firstName": "María",
+      "lastName": "Quispe",
+      "email": "20221234@aloe.ulima.edu.pe",
+      "role": "estudiante",
+      "career_id": 1,
+      "especialidades": [
+        2
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "approvedElectives": [
+          "internet_de_las_cosas",
+          "redes_avanzadas",
+          "topicos_avanzados_ciberseguridad"
+        ],
+        "currentCourses": [
+          "planeamiento_estrategico",
+          "gestion_proyectos",
+          "seminario_investigacion_i",
+          "seguridad_sistemas",
+          "sistemas_distribuidos"
+        ]
+      }
+    },
+    {
+      "code": "20245100",
+      "password": "ulima123",
+      "firstName": "Carlos",
+      "lastName": "Mendoza",
+      "email": "20245100@aloe.ulima.edu.pe",
+      "role": "estudiante",
+      "career_id": 1,
+      "especialidades": [
+        1
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "approvedElectives": [],
+        "currentCourses": [
+          "estadistica_aplicada",
+          "investigacion_operaciones_i",
+          "sistemas_operativos",
+          "desarrollo_competencias_gerenciales",
+          "estructuras_datos_i",
+          "modelamiento_base_datos"
+        ]
+      }
+    },
+    {
+      "code": "20255678",
+      "password": "ulima123",
+      "firstName": "Lucía",
+      "lastName": "Torres",
+      "email": "20255678@aloe.ulima.edu.pe",
+      "role": "estudiante",
+      "career_id": 2,
+      "especialidades": [],
+      "currentCycle": "2026-1",
+      "setupComplete": false,
+      "courseProgress": {
+        "approvedLevels": [],
+        "approvedElectives": [],
+        "currentCourses": []
+      }
+    },
+    {
+      "code": "20215555",
+      "password": "ulima123",
+      "firstName": "Diego",
+      "lastName": "Salinas",
+      "email": "20215555@aloe.ulima.edu.pe",
+      "role": "subdelegado",
+      "career_id": 1,
+      "especialidades": [
+        3
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "approvedElectives": [
+          "gestion_base_de_datos",
+          "ingenieria_del_conocimiento",
+          "analitica_big_data",
+          "analitica_negocios"
+        ],
+        "currentCourses": [
+          "seminario_investigacion_ii",
+          "gestion_servicios_digitales",
+          "proyecto_integrador_sistemas",
+          "innovacion_digital",
+          "arquitectura_empresarial"
+        ]
+      }
+    }
+  ]
+}
