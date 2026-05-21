@@ -28,7 +28,7 @@ class UserModel {
     this.courseProgress,
   }) : especialidades = especialidades ?? <int>[];
 
-  String get fullName => '$lastName $firstName ';
+  String get fullName => '$firstName $lastName';
 
   bool get isDelegate => role == 'delegado' || role == 'subdelegado';
 
