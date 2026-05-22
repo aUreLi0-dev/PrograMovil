@@ -1,12 +1,10 @@
-// lib/services/auth_service.dart
-// Servicio de autenticación basado en JSON local (assets/data/users.json).
-// Mantiene la sesión en memoria mientras la app corre.
-
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user_model.dart';
+import 'notas_service.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
@@ -82,6 +80,11 @@ class AuthService extends GetxService {
       uJson['especialidades'] = userEspIds;
 
       _currentUser.value = UserModel.fromJson(uJson);
+      
+      // Guardar ID del estudiante para notas
+      await NotasService().guardarIdEstudianteActual(userCode);
+      print('✓ Sesión iniciada para: $userCode');
+      
       return null;
     } catch (e) {
       return 'Ocurrió un error inesperado: $e';
