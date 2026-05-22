@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 import '../../models/evaluation_model.dart';
 import '../../services/evaluations_service.dart';
@@ -8,22 +6,15 @@ import '../../services/notas_service.dart';
 import '../../services/auth_service.dart';
 
 class CalculadoraController extends GetxController {
-  // Lista reactiva de cursos obtenidos del modelo
   late var cursos = <Map<String, dynamic>>[].obs;
 
-  // Servicios
   late EvaluationSyllabusService _syllabusService;
   late CoursesService _coursesService;
   late NotasService _notasService;
 
-  // ID del estudiante actual
   late String _idEstudianteActual;
 
-  // Map de sílabus por curso ID
   late var syllabusData = <String, CourseSyllabus>{}.obs;
-
-  // Lista temporal para almacenar datos crudos de secciones
-  List<Map<String, dynamic>> _seccionesRaw = [];
 
   @override
   void onInit() {
@@ -52,8 +43,6 @@ class CalculadoraController extends GetxController {
     try {
       final user = AuthService.to.currentUser;
 
-      // Accedemos de forma segura a la lista de objetos (ahora garantizados como mapas)
-      // Si el campo fuera null, devolvemos una lista vacía.
       final List<Map<String, dynamic>> seccionesInscritas =
           user?.courseProgress?.currentCourses ?? [];
       _idEstudianteActual =
@@ -69,8 +58,6 @@ class CalculadoraController extends GetxController {
         List<dynamic> seccionesDelCurso = curso['secciones'] ?? [];
 
         for (var seccion in seccionesDelCurso) {
-          // Ahora podemos acceder directamente al idSeccion sin validar el tipo,
-          // ya que el JSON está normalizado.
           bool estaInscrito = seccionesInscritas.any(
             (inscrito) => inscrito['idSeccion'] == seccion['idSeccion'],
           );

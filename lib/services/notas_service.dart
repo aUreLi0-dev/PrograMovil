@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// Servicio para guardar y cargar notas localmente por estudiante
 class NotasService {
   static final NotasService _instance = NotasService._internal();
   static const String _notasKey = 'notas_estudiante';
@@ -12,12 +11,10 @@ class NotasService {
 
   NotasService._internal();
 
-  /// Guarda las notas del alumno actual en memoria local
   Future<void> guardarNotas(String idEstudiante, List<Map<String, dynamic>> cursos) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       
-      // Convertir los cursos a formato serializable (RxList a List)
       final cursosSerializables = cursos.map((curso) {
         return {
           'id': curso['id'],
@@ -36,14 +33,13 @@ class NotasService {
     }
   }
 
-  /// Carga las notas del alumno actual desde memoria local
   Future<List<Map<String, dynamic>>> cargarNotas(String idEstudiante) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final jsonString = prefs.getString('${_notasKey}_$idEstudiante');
       
       if (jsonString == null) {
-        print('ℹ️ No hay notas guardadas para: $idEstudiante');
+        print('No hay notas guardadas para: $idEstudiante');
         return [];
       }
 
@@ -55,7 +51,6 @@ class NotasService {
     }
   }
 
-  /// Elimina las notas del alumno
   Future<void> eliminarNotas(String idEstudiante) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -66,7 +61,6 @@ class NotasService {
     }
   }
 
-  /// Obtiene el ID del estudiante actual desde SharedPreferences
   Future<String?> obtenerIdEstudianteActual() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -77,7 +71,6 @@ class NotasService {
     }
   }
 
-  /// Guarda el ID del estudiante actual
   Future<void> guardarIdEstudianteActual(String idEstudiante) async {
     try {
       final prefs = await SharedPreferences.getInstance();

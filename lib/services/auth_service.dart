@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user_model.dart';
 import 'notas_service.dart';
-
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
 
@@ -34,8 +32,6 @@ class AuthService extends GetxService {
     return match != null ? match['name'] as String : '';
   }
 
-  /// Carga el catálogo de usuarios mock desde assets.
-  /// Se llama automáticamente la primera vez que se intenta hacer login.
   Future<void> _ensureLoaded() async {
     if (_users.isNotEmpty) return;
     
@@ -54,8 +50,6 @@ class AuthService extends GetxService {
     _userEspecialidades.assignAll((jsonDecode(rawUserEspecialidades) as List).cast<Map<String, dynamic>>());
   }
 
-  /// Intenta autenticar al usuario. Devuelve `null` si las credenciales
-  /// son correctas, o un mensaje de error legible si fallan.
   Future<String?> login({required String code, required String password}) async {
     _loading.value = true;
     try {
@@ -81,7 +75,6 @@ class AuthService extends GetxService {
 
       _currentUser.value = UserModel.fromJson(uJson);
       
-      // Guardar ID del estudiante para notas
       await NotasService().guardarIdEstudianteActual(userCode);
       print('✓ Sesión iniciada para: $userCode');
       
@@ -93,7 +86,6 @@ class AuthService extends GetxService {
     }
   }
 
-  /// Actualiza carrera/especialidades del usuario actual y marca el setup completo.
   void completeSetup({required int careerId, required List<int> especialidades}) {
     final u = _currentUser.value;
     if (u == null) return;
