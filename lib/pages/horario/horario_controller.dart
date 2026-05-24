@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
 import '../../services/auth_service.dart';
 
 class DaySchedule {
@@ -14,8 +15,7 @@ class DaySchedule {
 class HorarioController extends GetxController {
   final currentDayIndex = 0.obs;
   final daysList = <DaySchedule>[].obs;
-  
-  // Lista donde almacenaremos todas las secciones cargadas del JSON
+
   List<Map<String, dynamic>> _todasLasSecciones = [];
 
   @override
@@ -25,18 +25,23 @@ class HorarioController extends GetxController {
     _loadSecciones();
   }
 
-  // Carga los días de la semana
   Future<void> _loadDays() async {
     try {
-      final jsonString = await rootBundle.loadString('assets/data/schedule_days.json');
+      final jsonString = await rootBundle.loadString(
+        'assets/data/schedule_days.json',
+      );
       final List<dynamic> decoded = jsonDecode(jsonString);
-      daysList.assignAll(decoded.map((d) => DaySchedule(
-        d['dayName'] as String,
-        d['dateText'] as String,
-        d['weekText'] as String,
-      )).toList());
-      
-      // Auto-selecciona el viernes si existe, sino el primero
+      daysList.assignAll(
+        decoded
+            .map(
+              (d) => DaySchedule(
+                d['dayName'] as String,
+                d['dateText'] as String,
+                d['weekText'] as String,
+              ),
+            )
+            .toList(),
+      );
       final idx = daysList.indexWhere((d) => d.dayName == 'Viernes');
       currentDayIndex.value = idx != -1 ? idx : 0;
     } catch (e) {
@@ -56,9 +61,9 @@ class HorarioController extends GetxController {
     }
   }
 
-  DaySchedule? get currentDay => daysList.isEmpty ? null : daysList[currentDayIndex.value];
+  DaySchedule? get currentDay =>
+      daysList.isEmpty ? null : daysList[currentDayIndex.value];
 
-  // Filtra las secciones para el día seleccionado y según el usuario actual
   List<Map<String, dynamic>> get currentDayCourses {
     final activeDay = currentDay;
     if (activeDay == null || _todasLasSecciones.isEmpty) return const [];
@@ -84,18 +89,24 @@ class HorarioController extends GetxController {
       return esMismoDia && estaInscrito;
     }).toList();
   }
-
+  
   void previousDay() {
     if (daysList.isEmpty) return;
-    currentDayIndex.value = (currentDayIndex.value > 0) 
-        ? currentDayIndex.value - 1 
-        : daysList.length - 1;
+    if (currentDayIndex.value > 0) {
+      currentDayIndex.value--;
+    } else {
+      currentDayIndex.value = daysList.length - 1;
+    }
   }
 
   void nextDay() {
     if (daysList.isEmpty) return;
-    currentDayIndex.value = (currentDayIndex.value < daysList.length - 1) 
-        ? currentDayIndex.value + 1 
-        : 0;
+    if (currentDayIndex.value < daysList.length - 1) {
+      currentDayIndex.value++;
+    } else {
+      currentDayIndex.value = 0;
+    }
   }
+
+  
 }

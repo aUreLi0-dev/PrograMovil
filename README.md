@@ -19,7 +19,7 @@ App móvil diseñada para estudiantes de la Universidad de Lima que facilita la 
 Para garantizar una experiencia de usuario (UX) coherente y una identidad visual sólida, se utilizaron:
 
 * **Figma:** Utilizado para el diseño de interfaces (UI), prototipado de alta fidelidad y definición del sistema de diseño (colores, tipografía y componentes).
-* **Inkscape:** Herramienta de vectores utilizada específicamente para el diseño de logotipos e iconografía personalizada del proyecto, exportando assets en formato `.svg`.
+* **Inkscape:** Herramienta de vectores utilizada específicamente para el diseño de logotipos e iconografía personalizada del proyecto, exportando docs/images en formato `.svg`.
 ---
 
 ### Stack de Desarrollo Mobile
@@ -226,14 +226,16 @@ Para asegurar que los requisitos funcionales tengan un soporte técnico sólido,
 Este diagrama define la estructura de objetos en Dart/Flutter. Representa cómo entidades como `Alumno`, `Curso`, `Nota` y `Sección` interactúan lógicamente para procesar la información académica.
 
 <div align="center">
-<img src="docs/images/arquitectura/diagramaClases.png" width="800"/>
+<img src="docs/images/arquitectura/diagramaClases.png" width="700"/>
 </div>
+
+<!-- 
 
 ### Diagrama Entidad-Relación (Base de Datos)
 Este modelo asegura la integridad de los datos de las evaluaciones, sílabos y registros de usuarios.
 
 <div align="center">
-<img src="docs/images/arquitectura/diagrama db.png" width="800"/>
+<img src="docs/images/arquitectura/diagramaER.png" width="700"/>
 </div>
 
 ---
@@ -297,6 +299,8 @@ La arquitectura implementa un modelo de **cliente-servidor distribuido** con sep
 
 </div>
 
+
+
 ### Componentes
 
 - **Servicio de Autenticación (Externo)**: Gestión centralizada de identidad y tokens (OAuth 2.0 / JWT)
@@ -312,7 +316,7 @@ La arquitectura implementa un modelo de **cliente-servidor distribuido** con sep
 - **Servicio de Autenticación Externo**: Separado del backend para garantizar disponibilidad 99%, independencia de fallos y escalabilidad (Req #1, #6, #7)
 - **Separación de responsabilidades**: Cada servicio tiene una función específica y bien definida
 - **Tecnologías seleccionadas**: Ruby Sinatra por su simpleza y eficiencia, MySQL por confiabilidad, Redis para caché distribuido, OAuth 2.0/JWT para autenticación segura
-
+-->
 
 ## Mockups
 
@@ -383,3 +387,10 @@ El actor 'Delegado' contará con un módulo exclusivo que integra las siguientes
 | <img src="docs/images/UI/GestionCursosDelegado.png" width="250"/> | <img src="docs/images/UI/GestionAnunciosDelegado.png" width="250"/> | <img src="docs/images/UI/SeguimientoProgresoSeccion.png" width="250"/> |
 
 </div>
+
+
+
+
+
+
+

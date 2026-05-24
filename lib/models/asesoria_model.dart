@@ -23,14 +23,12 @@ class Asesoria {
     required this.zoom,
   });
 
-  // Convierte JSON a objeto con protección anti-nulos
   factory Asesoria.fromJson(Map<String, dynamic> json) {
     return Asesoria(
       id: json['id']?.toString() ?? '',
       cursoId: json['cursoId']?.toString() ?? '',
       curso: json['curso']?.toString() ?? 'Sin curso',
       
-      // Si no viene docente, mandamos un mapa vacío para usar los valores por defecto
       docente: Docente.fromJson(json['docente'] ?? {}),
       
       dia: json['dia']?.toString() ?? 'Por definir',

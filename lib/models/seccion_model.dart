@@ -1,6 +1,7 @@
 import 'package:ulima_plus/models/docente_model.dart';
 
 class Seccion {
+
   final String idSeccion;
   final String codigoSeccion;
   final double promedioSeccion;
@@ -23,7 +24,7 @@ class Seccion {
     required this.total,
   });
 
-  // Convierte JSON a objeto con protección anti-nulos
+  // Convierte JSON a objeto
   factory Seccion.fromJson(Map<String, dynamic> json) {
     return Seccion(
       idSeccion: json['idSeccion']?.toString() ?? '',

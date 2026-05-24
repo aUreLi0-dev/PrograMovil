@@ -7,8 +7,8 @@
       "curso": "INGENIERÍA DE SOFTWARE II",
       "salon": "L3-402",
       "dia": "Lunes",
-      "hora_inicio": "08:00 am",
-      "hora_fin": "10:00 am",
+      "hora_inicio": "10:00 am",
+      "hora_fin": "12:00 pm",
       "color": "blue",
       "docente": {
         "code": "D01",
@@ -92,8 +92,8 @@
       "color": "teal",
       "docente": {
         "code": "D01",
-        "firstName": "Hernan",
-        "lastName": "Quintana"
+        "firstName": "Pepe",
+        "lastName": "Valdivia"
       },
       "promedioSeccion": 17.1,
       "asistido": 29,

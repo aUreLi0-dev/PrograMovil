@@ -10,6 +10,7 @@ import 'package:ulima_plus/pages/malla/malla_page.dart';
 import 'package:ulima_plus/services/auth_service.dart';
 import '../perfil/perfil.dart';
 
+
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,7 +35,6 @@ class _HomePageState extends State<HomePage> {
     // MODULO EXTRA A LOS ALUMNOS CON ROL 'Delegado'
     if (user?.isDelegate ?? false) const Center(child: Text('Delegado')),
 
-    //const Center(child: Text('Perfil')),
     const ProfilePage(),
   ];
 

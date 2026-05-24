@@ -86,6 +86,7 @@ class CourseNode {
     required this.category,
     required this.row,
     required this.specialties,
+    this.externalFaculty,
   });
 
   final String id;
@@ -102,7 +103,11 @@ class CourseNode {
   /// Especialidades que recomiendan este electivo. Vacío para obligatorios.
   final List<String> specialties;
 
+  /// Facultad externa si el curso pertenece a otra carrera (e.g. "Comunicaciones").
+  final String? externalFaculty;
+
   bool get isElective => category == CourseCategory.elective;
+  bool get isExternal => externalFaculty != null;
 
   /// True si el prereq es un marcador "haber culminado X ciclo".
   bool _isCicloMarker(String p) => p.startsWith('_') && p.endsWith('_CICLO_');
@@ -132,6 +137,7 @@ class CourseNode {
       row: (json['row'] as num?)?.toInt() ?? 0,
       specialties:
           (json['specialties'] as List?)?.cast<String>() ?? const <String>[],
+      externalFaculty: json['externalFaculty'] as String?,
     );
   }
 }
@@ -141,12 +147,18 @@ class CourseProgress {
   CourseProgress({
     required this.approvedLevels,
     required this.approvedElectives,
-    required this.currentCourses, // Ahora será List<Map<String, dynamic>>
+    required this.currentCourses,
   });
 
+  /// Niveles cuyos cursos obligatorios están todos aprobados.
   final Set<int> approvedLevels;
+
+  /// Electivos individuales que el alumno ya aprobó.
   final Set<String> approvedElectives;
-  final List<Map<String, dynamic>> currentCourses; // Cambiado de Set<String>
+
+  /// Cursos (id) que el alumno está llevando en este ciclo.
+  //final Set<String> currentCourses;
+  final List<Map<String, dynamic>> currentCourses;
 
   factory CourseProgress.empty() => CourseProgress(
     approvedLevels: <int>{},

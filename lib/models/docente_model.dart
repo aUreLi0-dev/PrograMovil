@@ -11,7 +11,7 @@ class Docente {
 
   String get fullName => '$firstName $lastName';
 
-  // Convierte JSON a objeto con protección anti-nulos
+  // Convierte JSON a objeto
   factory Docente.fromJson(Map<String, dynamic> json) {
     return Docente(
       code: json['code']?.toString() ?? 'Sin código',

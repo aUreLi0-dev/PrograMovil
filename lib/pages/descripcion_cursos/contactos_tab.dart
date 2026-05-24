@@ -9,7 +9,7 @@ class ContactosTab extends StatelessWidget {
   final String idSeccion;
   final DescripCursosController control = Get.find();
 
-  ContactosTab({super.key, required this.idSeccion});
+  ContactosTab({super.key , required this.idSeccion});
 
   @override
   Widget build(BuildContext context) {
