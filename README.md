@@ -5,8 +5,8 @@ App móvil diseñada para estudiantes de la Universidad de Lima que facilita la 
 
 ## Tabla de Contenidos
 * [Descripcion del entorno de desarrollo](#descripcion-del-entorno-de-desarrollo)
-* [Casos de Uso por Paquete](#casos-de-uso-por-paquete)
 * [Catálogo de Requerimientos](#catálogo-de-requerimientos)
+* [Casos de Uso por Paquete](#casos-de-uso-por-paquete)
 * [Diseño de Lógica y Datos](#diseño-de-lógica-y-datos)
 * [Diagrama de Despliegue](#diagrama-de-despliegue)
 * [Mockups](#mockups)
@@ -68,80 +68,6 @@ Desde la carpeta raíz del repositorio en su terminal, ejecute:
 * `flutter pub get`: Para descargar todas las librerías y dependencias necesarias.
 * `flutter doctor`: Para confirmar que el IDE, el SDK y los emuladores estén vinculados y listos para trabajar.
 
-## Casos de Uso por Paquete
-
-### Paquete Autenticación y Seguridad
-Este paquete contiene los casos de uso correspondientes a la Autenticación y Seguridad. Aquí se incluyen los casos de uso que permitirán validar que el usuario ingrese al sistema con sus datos personales y se valide su información.
-| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
-| :--- | :--- | :--- | :--- |
-| **CU1** | **Iniciar sesión** | El propósito de este caso de uso es permitir a los usuarios registrados acceder al sistema mediante sus credenciales y contraseña. |1 |
-| **CU2** | **Cerrar sesión** | El propósito de este caso de uso es permitir al usuario finalizar su sesión activa, protegiendo su información. | 2 |
-
-<div align="center">
-<img src="docs/images/casos_uso/Autenticacion_Seguridad.png" width="500"/>
-</div>
-
-### Paquete Gestión del Perfil Académico
-Este paquete contiene los casos de uso relacionados con la gestión de la información académica del estudiante dentro del sistema. En este paquete se incluyen los casos de uso que permiten al estudiante configurar y mantener actualizados sus datos académicos, tales como carrera, especialidades y preferencias curriculares. 
-| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
-| :--- | :--- | :--- | :--- |
-| **CU3** | **Seleccionar Carrera** | El propósito de este caso de uso es permitir al alumnado seleccionar su carrera universitaria dentro del sistema, lo cual habilita la carga de la malla curricular correspondiente y define el conjunto de cursos obligatorios y electivos que el estudiante deberá cursar. | 3 |
-| **CU4** | **Seleccionar Especialidades** | El propósito de este caso de uso es permitir al alumnado seleccionar una o más especialidades asociadas a su carrera, con el fin de personalizar su trayectoria académica, definiendo los cursos electivos que deberá cursar. |12 |
-| **CU5** | **Visualizar Cursos Electivos por Especialidad** | El propósito de este caso de uso es mostrar al usuario los cursos electivos correspondientes a la especialidad seleccionada, actualizando dinámicamente la información presentada en la malla curricular y facilitando la planificación académica del estudiante. | 13 |
-
-<div align="center">
-<img src="docs/images/casos_uso/Perfil_Academico.png" width="500"/>
-</div>
-
-### Paquete Gestión de Malla Curricular
-En este paquete los casos de uso van relacionados a la visualización y administración del avance académico del alumno dentro de su plan de estudio. En este paquete se brinda un entorno didáctico e informativo.
-| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
-| :--- | :--- | :--- | :--- | 
-| **CU6** | **Visualizar malla curricular** | El propósito de este caso de uso es permitir que el estudiante pueda ver su avance en su carrera, cursos que ha culminado o cursos que tiene disponibles para llevar en su ciclo regular. | 4 |
-| **CU7** | **Actualizar estado de cursos** | El propósito de este caso de uso es permitir seleccionar el estado que se encuentran los cursos del alumnado (Disponible, En Proceso o Finalizado), con el fin de actualizar su avance. |5 |
-| **CU8** | **Visualizar cursos hábiles** | El propósito de este caso de uso es mostrar al estudiante los cursos que se encuentran disponibles para ser cursados, basándose en el cumplimiento de cursos prerrequisitos establecidos en la malla curricular. | 10 |
-| **CU9** | **Visualizar estado de cursos** | El propósito de este caso de uso es permitir al usuario consultar la situación actual de cada curso (Pendiente, Disponible, En Proceso, Finalizado) para un seguimiento detallado. |11 |
-
-<div align="center">
-<img src="docs/images/casos_uso/Malla_Curricular.png" width="500"/>
-</div>
-
-### Paquete Seguimiento Académico
-En este paquete los casos de uso están orientados al registro, visualización y control del rendimiento académico del alumnado durante el desarrollo de sus cursos. Permite gestionar información como notas, sílabos, promedios y evaluaciones, brindando herramientas que facilitan el seguimiento continuo del progreso académico y las evaluaciones durante el ciclo.
-| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
-| :--- | :--- | :--- | :--- |
-| **CU10** | **Ingresar notas por examen** | El propósito de este caso de uso es ingresar las notas por evaluación para simular el rendimiento académico esperado en los cursos matriculados. | 6 |
-| **CU11** | **Subir sílabo por Curso** | El propósito de este caso de uso es permitir seleccionar el estado que se encuentran los cursos del alumnado (Disponible, En Proceso o Finalizado), con el fin de actualizar su avance. | 7 y 8 |
-| **CU12** | **Visualizar promedio por Curso** | El propósito de este caso de uso es permitir al estudiante visualizar el promedio  de los cursos que esté llevando en el ciclo. | 9 y 11 |
-| **CU13** | **Visualizar horarios de asesoría** | El propósito de este caso de uso es que el alumnado pueda visualizar el horario de asesorías de clases matriculadas en el detalle del curso correspondiente, con el objetivo de que pueda organizar mejor su tiempo académico. | 20 |
-| **CU14** | **Visualizar lista de exámenes** | El propósito de este caso de uso es permitir al alumnado visualizar los exámenes del ciclo en su calendario personal, ordenados según la semana y día de cada evaluación. |19|
-
-<div align="center">
-<img src="docs/images/casos_uso/Seguimiento_Academico.png" width="500"/>
-</div>
-
-### Paquete Análisis de Riesgo Académico
-En este paquete los casos de uso están enfocados en la identificación temprana de situaciones que puedan afectar el rendimiento académico del alumnado. A través del análisis del progreso en los cursos y la carga académica, el sistema genera alertas preventivas que permiten al estudiante tomar decisiones oportunas para mejorar su desempeño o evitar sobrecarga académica.
-| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
-| :--- | :--- | :--- | :--- |
-| **CU15** | **Recibir Alertas** | El propósito de este caso de uso es notificar automáticamente al estudiante sobre situaciones de riesgo académico, ya sea por bajo rendimiento (cuando el promedio es crítico al superar el 50% del curso) o por la detección anticipada de semanas de alta carga académica (cuando se detectan tres o más evaluaciones en una semana), permitiéndole tomar medidas correctivas o preventivas a tiempo. | 15, 16, 22 y 23 |
-
-<div align="center">
-<img src="docs/images/casos_uso/Riesgo_Academico.png" width="500"/>
-</div>
-
-### Paquete Gestión de Sección
-En este paquete los casos de uso están relacionados con la comunicación y gestión académica dentro de una sección de clase. Permite a los delegados y subdelegados coordinar información relevante, mientras que los estudiantes pueden mantenerse informados sobre actividades, anuncios y el desempeño general del grupo, promoviendo una mejor organización y colaboración académica.
-| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
-| :--- | :--- | :--- | :--- |
-| **CU16** | **Registrar Anuncios** | El propósito de este caso de uso es permitir al delegado/subdelegado registrar y enviar anuncios al alumnado.  | 17 |
-| **CU17** | **Visualizar Anuncios** | El propósito de este caso de uso es permitir al alumnado ver los anuncios académicos realizados por los delegados de las secciones. | 18 |
-| **CU18** | **Visualizar promedios de la sección** | El propósito de este caso de uso es que el delegado/subdelegado visualice la distribución general de las calificaciones del curso mediante un *dashboard*, con el fin de analizar el rendimiento sin mostrar datos individuales. | 14 y 21 |
-
-<div align="center">
-<img src="docs/images/casos_uso/Gestion_Seccion.png" width="500"/>
-</div>
-
 ## Catálogo de Requerimientos
 
 ### Requerimientos Funcionales
@@ -149,24 +75,24 @@ En este paquete los casos de uso están relacionados con la comunicación y gest
 | :--- | :--- |
 | **R1** | El sistema deberá permitir al usuario iniciar sesión mediante su código y contraseña. |
 | **R2** | El sistema deberá permitir al usuario cerrar sesión de forma segura. |
-| **R3** | El sistema deberá permitir al alumnado seleccionar su carrera. |
-| **R4** | El sistema deberá mostrar una malla curricular interactiva según la carrera del alumnado. |
-| **R5** | El sistema deberá permitir al alumnado actualizar el estado de los cursos directamente desde la interfaz de la malla curricular, siguiendo el flujo: Disponible, En Proceso, Finalizado. |
-| **R6** | El sistema deberá permitir ingresar las notas por examen en los cursos del alumnado. |
-| **R7** | El sistema deberá permitir al alumnado subir los sílabos de sus cursos. |
-| **R8** | El sistema deberá establecer los pesos de las evaluaciones de un curso en base a su sílabo. |
-| **R9** | El sistema deberá calcular automáticamente la nota actual del curso según los pesos establecidos en el sílabo y mostrar el resultado actualizado al alumnado cada vez que se registre una nueva evaluación. |
-| **R10** | El sistema deberá mostrar al alumnado los cursos hábiles en la malla curricular. |
-| **R11** | El sistema deberá mostrar el estado de cada curso matriculado del alumno (Pendiente, Disponible, En Proceso, Finalizado) en la malla curricular interactiva. |
-| **R12** | El sistema deberá brindar la opción al alumnado de seleccionar una o más especialidades. |
-| **R13** | En caso el alumnado seleccione alguna especialidad, el sistema mostrará los cursos electivos correspondientes a cada especialidad. |
-| **R14** | El sistema deberá calcular la nota promedio de cada sección, utilizando las calificaciones finales de todo el alumnado, asegurando que solo se consideren los registros válidos. |
-| **R15** | El sistema deberá identificar una situación de riesgo académico cuando el avance del curso sea superior al 55% y el promedio actual del alumnado sea menor a 10.5 o inferior al promedio de la sección. |
-| **R16** | El sistema deberá notificar al alumnado mediante alertas ante la detección de riesgo académico o semanas de alta carga académica. |
-| **R17** | El sistema deberá permitir al delegado registrar anuncios de evaluaciones como exámenes y otras actividades académicas. |
-| **R18** | El sistema deberá mostrar al alumnado los anuncios realizados por el delegado de su sección. |
-| **R19** | El sistema deberá mostrar al alumnado la lista de exámenes del ciclo, organizada según la semana y el día de cada evaluación. |
-| **R20** | El sistema deberá mostrar el horario de asesoría dentro del detalle de los cursos del alumnado. |
+| **R3** | El sistema debe mostrar una malla curricular interactiva según la carrera del alumnado. |
+| **R4** | El sistema deberá permitir al alumnado actualizar el estado de los cursos directamente desde la interfaz de la malla curricular, siguiendo el flujo: Disponible, En Proceso, Finalizado. |
+| **R5** | El sistema debe permitir ingresar las notas por examen en los cursos del alumnado. |
+| **R6** | El sistema deberá cargar automáticamente los sílabos asociados a los cursos desde la base de datos. |
+| **R7** | El sistema deberá establecer los pesos de las evaluaciones de un curso en base a su sílabo. |
+| **R8** | El sistema deberá calcular automáticamente la nota actual del curso según los pesos establecidos en el sílabo y mostrar el resultado actualizado al alumnado cada vez que se registre una nueva evaluación. |
+| **R9** | El sistema deberá mostrar al alumnado los cursos hábiles en la malla curricular. |
+| **R10** | El sistema deberá mostrar el estado de cada curso matriculado del alumno (Pendiente, Disponible, En Proceso, Finalizado) en la malla curricular interactiva. |
+| **R11** | El sistema deberá brindar la opción al alumnado de seleccionar una o más especialidades. |
+| **R12** | En caso el alumnado seleccione alguna especialidad, el sistema mostrará los cursos electivos correspondientes a cada especialidad. |
+| **R13** | El sistema debe calcular la nota promedio de cada sección, utilizando las calificaciones finales de todo el alumnado, asegurando que solo se consideren los registros válidos. |
+| **R14** | El sistema deberá identificar una situación de riesgo académico cuando el avance del curso sea superior al 55% y el promedio actual del alumnado sea menor a 10.5 o inferior al promedio de la sección. |
+| **R15** | El sistema deberá notificar al alumnado mediante alertas ante la detección de riesgo académico o semanas de alta carga académica. |
+| **R16** | El sistema permitirá al delegado poder registrar anuncios de evaluaciones como exámenes y otras actividades académicas. |
+| **R17** | El sistema deberá mostrar al alumnado los anuncios realizados por el delegado de su sección. |
+| **R18** | El sistema deberá mostrar al alumnado las evaluaciones académicas del ciclo dentro del horario académico, organizadas según la semana correspondiente. |
+| **R19** | El sistema deberá mostrar el horario de asesoría dentro del detalle de los cursos del alumnado. |
+| **R20** | El sistema deberá mostrar la lista de compañeros y docente asignados a su sección, incluyendo información básica de contacto institucional. |
 | **R21** | El sistema deberá permitir al delegado visualizar la distribución de promedios del curso, sin mostrar datos individuales. |
 | **R22** | El sistema deberá calcular el total de evaluaciones programadas por semana. |
 | **R23** | El sistema deberá identificar las semanas de alta carga académica, según el número de evaluaciones y cursos. |
@@ -190,7 +116,83 @@ En este paquete los casos de uso están relacionados con la comunicación y gest
 | **14** |El sistema deberá presentar una interfaz coherente y consistente con los lineamientos de diseño institucional de la universidad. |
 | **15** |El sistema deberá permitir futuras extensiones a otras plataformas móviles sin requerir un rediseño significativo de su arquitectura principal. |
 
+## Casos de Uso por Paquete
+
+### Paquete Autenticación y Seguridad
+<!-- Actualizar diagramas de CU-->
+
+Este paquete contiene los casos de uso correspondientes a la Autenticación y Seguridad. Aquí se incluyen los casos de uso que permitirán validar que el usuario ingrese al sistema con sus datos personales y se valide su información.
+| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
+| :--- | :--- | :--- | :--- |
+| **CU01** | **Iniciar sesión** | El propósito de este caso de uso es permitir a los usuarios registrados acceder al sistema mediante sus credenciales y contraseña. |1 |
+| **CU02** | **Cerrar sesión** | El propósito de este caso de uso es permitir al usuario finalizar su sesión activa, protegiendo su información. | 2 |
+
+<div align="center">
+<img src="docs/images/casos_uso/Autenticacion_Seguridad.png" width="500"/>
+</div>
+
+### Paquete Gestión del Perfil Académico
+Este paquete contiene los casos de uso relacionados con la gestión de la información académica del estudiante dentro del sistema. En este paquete se incluyen los casos de uso que permiten al estudiante configurar y mantener actualizados sus datos académicos, tales como carrera, especialidades y preferencias curriculares. 
+| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
+| :--- | :--- | :--- | :--- |
+| **CU03** | **Seleccionar Especialidades** | El propósito de este caso de uso es permitir al alumnado seleccionar una o más especialidades asociadas a su carrera, con el fin de personalizar su trayectoria académica, definiendo los cursos electivos que deberá cursar. |11 |
+| **CU04** | **Visualizar Cursos Electivos por Especialidad** | El propósito de este caso de uso es mostrar al usuario los cursos electivos correspondientes a la especialidad seleccionada, actualizando dinámicamente la información presentada en la malla curricular y facilitando la planificación académica del estudiante. | 12 |
+
+<div align="center">
+<img src="docs/images/casos_uso/Perfil_Academico.png" width="500"/>
+</div>
+
+### Paquete Gestión de Malla Curricular
+En este paquete los casos de uso van relacionados a la visualización y administración del avance académico del alumno dentro de su plan de estudio. En este paquete se brinda un entorno didáctico e informativo.
+| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
+| :--- | :--- | :--- | :--- | 
+| **CU05** | **Visualizar malla curricular** | El propósito de este caso de uso es permitir que el estudiante pueda ver su avance en su carrera, cursos que ha culminado o cursos que tiene disponibles para llevar en su ciclo regular. | 3|
+| **CU06** | **Actualizar estado de cursos** | El propósito de este caso de uso es permitir seleccionar el estado que se encuentran los cursos del alumnado (Disponible, En Proceso o Finalizado), con el fin de actualizar su avance. |4 |
+| **CU07** | **Visualizar cursos hábiles** | El propósito de este caso de uso es mostrar al estudiante los cursos que se encuentran disponibles para ser cursados, basándose en el cumplimiento de cursos prerrequisitos establecidos en la malla curricular. | 9 |
+| **CU08** | **Visualizar estado de cursos** | El propósito de este caso de uso es permitir al usuario consultar la situación actual de cada curso (Pendiente, Disponible, En Proceso, Finalizado) para un seguimiento detallado. |10 |
+
+<div align="center">
+<img src="docs/images/casos_uso/Malla_Curricular.png" width="500"/>
+</div>
+
+### Paquete Seguimiento Académico
+En este paquete los casos de uso están orientados al registro, visualización y control del rendimiento académico del alumnado durante el desarrollo de sus cursos. Permite gestionar información como notas, sílabos, promedios y evaluaciones, brindando herramientas que facilitan el seguimiento continuo del progreso académico y las evaluaciones durante el ciclo.
+| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
+| :--- | :--- | :--- | :--- |
+| **CU09** | **Ingresar notas por examen** | El propósito de este caso de uso es ingresar las notas por evaluación para simular el rendimiento académico esperado en los cursos matriculados. | 5 y 8 |
+| **CU10** | **Visualizar promedio por Curso** | El propósito de este caso de uso es permitir al estudiante visualizar el promedio  de los cursos que esté llevando en el ciclo. | 6, 7 y 8 |
+| **CU11** | **Visualizar horarios de asesoría** | El propósito de este caso de uso es que el alumnado pueda visualizar el horario de asesorías de clases matriculadas en el detalle del curso correspondiente, con el objetivo de que pueda organizar mejor su tiempo académico. | 19 |
+| **CU12** | **Visualizar lista de exámenes** | El propósito de este caso de uso es permitir al alumnado visualizar su horario de clases integrado con los exámenes del ciclo en su calendario personal, ordenados según la semana de cada evaluación. |18|
+| **CU13** | **Visualizar compañeros de sección** | El propósito de este caso de uso es permitir al alumnado consultar la lista de los compañeros de clase y el docente asignados a su sección para facilitar la comunicación y coordinación académica. |20|
+
+<div align="center">
+<img src="docs/images/casos_uso/Seguimiento_Academico.png" width="500"/>
+</div>
+
+### Paquete Análisis de Riesgo Académico
+En este paquete los casos de uso están enfocados en la identificación temprana de situaciones que puedan afectar el rendimiento académico del alumnado. A través del análisis del progreso en los cursos y la carga académica, el sistema genera alertas preventivas que permiten al estudiante tomar decisiones oportunas para mejorar su desempeño o evitar sobrecarga académica.
+| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
+| :--- | :--- | :--- | :--- |
+| **CU14** | **Recibir Alertas** | El propósito de este caso de uso es notificar automáticamente al estudiante sobre situaciones de riesgo académico, ya sea por bajo rendimiento (cuando el promedio es crítico al superar el 50% del curso) o por la detección anticipada de semanas de alta carga académica (cuando se detectan tres o más evaluaciones en una semana), permitiéndole tomar medidas correctivas o preventivas a tiempo. | 14, 15, 22 y 23 |
+
+<div align="center">
+<img src="docs/images/casos_uso/Riesgo_Academico.png" width="500"/>
+</div>
+
+### Paquete Gestión de Sección
+En este paquete los casos de uso están relacionados con la comunicación y gestión académica dentro de una sección de clase. Permite a los delegados y subdelegados coordinar información relevante, mientras que los estudiantes pueden mantenerse informados sobre actividades, anuncios y el desempeño general del grupo, promoviendo una mejor organización y colaboración académica.
+| Item | Nombre | Caso de Uso | Req. Funcional relacionado |
+| :--- | :--- | :--- | :--- |
+| **CU15** | **Registrar Anuncios** | El propósito de este caso de uso es permitir al delegado/subdelegado registrar y enviar anuncios al alumnado.  | 16 |
+| **CU16** | **Visualizar Anuncios** | El propósito de este caso de uso es permitir al alumnado ver los anuncios académicos realizados por los delegados de las secciones. | 17 |
+| **CU17** | **Visualizar promedios de la sección** | El propósito de este caso de uso es que el delegado/subdelegado visualice la distribución general de las calificaciones del curso mediante un *dashboard*, con el fin de analizar el rendimiento sin mostrar datos individuales. | 13 y 21 |
+
+<div align="center">
+<img src="docs/images/casos_uso/Gestion_Seccion.png" width="500"/>
+</div>
+
 ### Matriz de Trazabilidad
+
 
 | Req \ CU | CU1 | CU2 | CU3 | CU4 | CU5 | CU6 | CU7 | CU8 | CU9 | CU10 | CU11 | CU12 | CU13 | CU14 | CU15 | CU16 | CU17 | CU18 |
 | :------: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
@@ -229,7 +231,7 @@ Este diagrama define la estructura de objetos en Dart/Flutter. Representa cómo 
 <img src="docs/images/arquitectura/diagramaClases.png" width="700"/>
 </div>
 
-<!-- 
+ 
 
 ### Diagrama Entidad-Relación (Base de Datos)
 Este modelo asegura la integridad de los datos de las evaluaciones, sílabos y registros de usuarios.
@@ -316,7 +318,6 @@ La arquitectura implementa un modelo de **cliente-servidor distribuido** con sep
 - **Servicio de Autenticación Externo**: Separado del backend para garantizar disponibilidad 99%, independencia de fallos y escalabilidad (Req #1, #6, #7)
 - **Separación de responsabilidades**: Cada servicio tiene una función específica y bien definida
 - **Tecnologías seleccionadas**: Ruby Sinatra por su simpleza y eficiencia, MySQL por confiabilidad, Redis para caché distribuido, OAuth 2.0/JWT para autenticación segura
--->
 
 ## Mockups
 
