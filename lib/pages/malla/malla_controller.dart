@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../models/malla_models.dart';
 import '../../models/user_model.dart';
+import '../../services/alertas_service.dart';
 import '../../services/auth_service.dart';
 import '../../services/malla_service.dart';
 import '../../services/storage_service.dart';
@@ -230,6 +231,11 @@ class MallaController extends GetxController {
     statuses[courseId] = next;
     _recomputeDerivedAvailability();
     StorageService.to.saveStatuses(statuses);
+    // Regenera las alertas para reflejar el cambio (p. ej. alerta de carga al
+    // pasar un curso a "Cursando") y actualizar el badge de la campana.
+    if (Get.isRegistered<AlertasService>()) {
+      AlertasService.to.generarAlertas();
+    }
   }
 
   // ── Métricas de progreso ────────────────────────────────────────────────────

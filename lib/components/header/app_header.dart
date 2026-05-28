@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ulima_plus/configs/themes.dart';
+import 'package:ulima_plus/pages/alertas/alertas_page.dart';
+import 'package:ulima_plus/services/alertas_service.dart';
+
 class AppHeader extends StatelessWidget {
-
-
   const AppHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+
+    // Garantiza que el servicio exista para que el badge sea reactivo en
+    // cualquier pantalla, sin depender del orden de registro en main().
+    if (!Get.isRegistered<AlertasService>()) {
+      Get.put(AlertasService(), permanent: true);
+      AlertasService.to.generarAlertas();
+    }
 
     return Container(
       padding: const EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 20),
@@ -25,49 +34,46 @@ class AppHeader extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              
-            Text(
-            'ULIMA++',
-
-            style: TextStyle(
-              color: colors.onPrimary,
-              fontSize: 20,
-              fontStyle: FontStyle.italic,
-              fontWeight: FontWeight.bold,
+              Text(
+                'ULIMA++',
+                style: TextStyle(
+                  color: colors.onPrimary,
+                  fontSize: 20,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            
-
-          InkWell(
-                onTap: () {
-                  print('Ir a Alertas'); // Acción al tocar el ícono de notificaciones
-                  //Get.to(() => const AlertasPage()); // Acción al tocar el ícono de notificaciones
-                },
+              InkWell(
+                onTap: () => Get.to(() => const AlertasPage()),
                 child: Stack(
-                children: [
-
-                  Icon(
-                    Icons.notifications_none,
-                    color: colors.onPrimary,
-                    size: 30,
-                  ),
-
-                  //
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 29, 111, 219),
-                        shape: BoxShape.circle,
-                      ),
+                  clipBehavior: Clip.none,
+                  children: [
+                    Icon(
+                      Icons.notifications_none,
+                      color: colors.onPrimary,
+                      size: 30,
                     ),
-                  ),
-                ],
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Obx(() {
+                        final hayNoLeidas =
+                            AlertasService.to.alertas.isNotEmpty &&
+                            AlertasService.to.sinLeer > 0;
+                        if (!hayNoLeidas) return const SizedBox.shrink();
+                        return Container(
+                          width: 10,
+                          height: 10,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 29, 111, 219),
+                            shape: BoxShape.circle,
+                          ),
+                        );
+                      }),
+                    ),
+                  ],
+                ),
               ),
-            ),
             ],
           ),
         ],
@@ -75,12 +81,3 @@ class AppHeader extends StatelessWidget {
     );
   }
 }
-
-/* LOGO SVG
-SvgPicture.asset(
-                  'assets/images/logo.svg',
-                  width: 30,
-                  semanticsLabel: 'Logo',
-                  
-                ),
-*/

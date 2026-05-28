@@ -321,6 +321,45 @@
           }
         ]
       }
+    },
+    {
+      "code": "20225158",
+      "password": "ulima123",
+      "firstName": "Hans Anthony",
+      "lastName": "Quispe Mamani",
+      "email": "20225158@aloe.ulima.edu.pe",
+      "role": "estudiante",
+      "career_id": 1,
+      "especialidades": [
+        3
+      ],
+      "currentCycle": "2026-1",
+      "setupComplete": true,
+      "courseProgress": {
+        "approvedLevels": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "approvedElectives": [
+          "gestion_base_de_datos",
+          "ingenieria_del_conocimiento",
+          "analitica_big_data",
+          "analitica_negocios"
+        ],
+        "currentCourses": [
+          {
+            "idCurso": "1",
+            "idSeccion": "IS-856"
+          }
+        ]
+      }
     }
   ]
 }

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../services/alertas_service.dart';
 import '../../services/auth_service.dart';
 
 class LoginController extends GetxController {
@@ -34,6 +35,11 @@ class LoginController extends GetxController {
       return;
     }
 
+    // Regenera las alertas del alumno que inicia sesión (badge reactivo).
+    // Defensivo: nunca debe bloquear el login si el servicio no está listo.
+    if (Get.isRegistered<AlertasService>()) {
+      AlertasService.to.generarAlertas();
+    }
     Get.offAllNamed('/setup-carrera');
   }
 

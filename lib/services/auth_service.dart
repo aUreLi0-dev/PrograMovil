@@ -6,6 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 
 import '../models/user_model.dart';
+import 'notas_service.dart';
 import 'storage_service.dart';
 
 class AuthService extends GetxService {
@@ -114,6 +115,8 @@ class AuthService extends GetxService {
     }
 
     _currentUser.value = user;
+    // Vincula las notas guardadas a este alumno (clave notas_estudiante_<code>).
+    await NotasService().guardarIdEstudianteActual(code);
     return true;
   }
 
@@ -138,6 +141,8 @@ class AuthService extends GetxService {
         _withEspecialidadesFromRelation(match),
       );
       await _storage.saveCode(normalizedCode);
+      // Vincula las notas guardadas a este alumno (clave notas_estudiante_<code>).
+      await NotasService().guardarIdEstudianteActual(normalizedCode);
       return null;
     } catch (e) {
       return 'Ocurrió un error inesperado: $e';

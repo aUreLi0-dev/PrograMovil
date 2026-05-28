@@ -96,13 +96,23 @@ class CalculadoraController extends GetxController {
     }
   }
 
+
+  /// Promedio ponderado sobre las notas REGISTRADAS (normalizado por la suma
+  /// de pesos). Así refleja el rendimiento actual aunque falten evaluaciones
+  /// (p. ej. la nota final) y se actualiza al agregar cada nota. Cuando los
+  /// pesos suman 100 el resultado coincide con la nota final del curso.
   double calcularPromedio(List notas) {
     if (notas.isEmpty) return 0.0;
-    double suma = 0;
+    double weightedSum = 0;
+    double weightSum = 0;
     for (var n in notas) {
-      suma += (n['valor'] * (n['peso'] / 100));
+      final valor = (n['valor'] as num).toDouble();
+      final peso = (n['peso'] as num).toDouble();
+      weightedSum += valor * peso;
+      weightSum += peso;
     }
-    return suma;
+    if (weightSum == 0) return 0.0;
+    return weightedSum / weightSum;
   }
 
   double sumaPesos(List notas) {
