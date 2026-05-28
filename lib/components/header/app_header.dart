@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ulima_plus/configs/themes.dart';
 import 'package:ulima_plus/pages/alertas/alertas_page.dart';
+import 'package:ulima_plus/pages/login/login_page.dart';
 import 'package:ulima_plus/services/alertas_service.dart';
+import 'package:ulima_plus/services/auth_service.dart';
 
 class AppHeader extends StatelessWidget {
-  const AppHeader({super.key});
+  const AppHeader({super.key, this.showLogout = false});
+
+  /// Muestra el botón de cerrar sesión (solo en la pestaña de Perfil).
+  final bool showLogout;
 
   @override
   Widget build(BuildContext context) {
@@ -43,36 +48,55 @@ class AppHeader extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              InkWell(
-                onTap: () => Get.to(() => const AlertasPage()),
-                child: Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Icon(
-                      Icons.notifications_none,
-                      color: colors.onPrimary,
-                      size: 30,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  InkWell(
+                    onTap: () => Get.to(() => const AlertasPage()),
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Icon(
+                          Icons.notifications_none,
+                          color: colors.onPrimary,
+                          size: 30,
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Obx(() {
+                            final hayNoLeidas =
+                                AlertasService.to.alertas.isNotEmpty &&
+                                AlertasService.to.sinLeer > 0;
+                            if (!hayNoLeidas) return const SizedBox.shrink();
+                            return Container(
+                              width: 10,
+                              height: 10,
+                              decoration: const BoxDecoration(
+                                color: Color.fromARGB(255, 29, 111, 219),
+                                shape: BoxShape.circle,
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
                     ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Obx(() {
-                        final hayNoLeidas =
-                            AlertasService.to.alertas.isNotEmpty &&
-                            AlertasService.to.sinLeer > 0;
-                        if (!hayNoLeidas) return const SizedBox.shrink();
-                        return Container(
-                          width: 10,
-                          height: 10,
-                          decoration: const BoxDecoration(
-                            color: Color.fromARGB(255, 29, 111, 219),
-                            shape: BoxShape.circle,
-                          ),
-                        );
-                      }),
+                  ),
+                  if (showLogout) ...[
+                    const SizedBox(width: 18),
+                    InkWell(
+                      onTap: () {
+                        AuthService.to.logout();
+                        Get.offAll(() => const LoginPage());
+                      },
+                      child: Icon(
+                        Icons.logout,
+                        color: colors.onPrimary,
+                        size: 28,
+                      ),
                     ),
                   ],
-                ),
+                ],
               ),
             ],
           ),

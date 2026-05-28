@@ -36,7 +36,11 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: colors.surface,
       body: Column(
         children: [
-          const AppHeader(),
+          Obx(
+            () => AppHeader(
+              showLogout: control.currentTabIndex.value == _pages.length - 1,
+            ),
+          ),
           Expanded(
             child: Obx(() => _pages[control.currentTabIndex.value]),
           ),
