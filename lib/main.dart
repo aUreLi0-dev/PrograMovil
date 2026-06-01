@@ -1,5 +1,3 @@
-// TERMINAL - flutter pub get
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -13,6 +11,8 @@ import '/services/storage_service.dart';
 import 'pages/home/home_page.dart';
 import 'pages/login/login_page.dart';
 import 'pages/setup_carrera/setup_carrera_page.dart';
+import 'pages/delegado_cursos/delegado_cursos_page.dart';
+import 'pages/delegado_anuncios/delegado_anuncios_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();  
@@ -63,6 +63,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/setup-carrera', page: () => const SetupCarreraPage()),
         GetPage(name: '/home', page: () => const HomePage()),
+        // AQUÍ ESTÁ TU NUEVA RUTA:
+        GetPage(name: '/delegado-cursos', page: () => const DelegadoCursosPage()),
+        GetPage(name: '/delegado-anuncios', page: () => const DelegadoAnunciosPage()),
       ],
     );
   }
