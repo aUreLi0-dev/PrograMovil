@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ulima_plus/configs/themes.dart';
 import 'package:ulima_plus/services/auth_service.dart';
-import '../home/home_controller.dart';
+import '../horario/horario_semanal.dart';
+import '../malla/malla_controller.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -22,20 +23,21 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final auth = AuthService.to;
-    final user = auth.currentUser;
 
-    if (user == null) {
-      return const Center(child: Text('No hay sesión activa.'));
-    }
+    return Obx(() {
+      final user = auth.currentUser;
+      if (user == null) {
+        return const Center(child: Text('No hay sesión activa.'));
+      }
 
-    final nombre = '${user.lastName} ${user.firstName}'.toUpperCase();
-    final carrera = auth.getCareerName(user.careerId);
-    final especialidad = user.especialidades
-        .map((id) => auth.getEspecialidadName(id))
-        .where((n) => n.isNotEmpty)
-        .join(', ');
+      final nombre = '${user.lastName} ${user.firstName}'.toUpperCase();
+      final carrera = auth.getCareerName(user.careerId);
+      final especialidad = user.especialidades
+          .map((id) => auth.getEspecialidadName(id))
+          .where((n) => n.isNotEmpty)
+          .join(', ');
 
-    return SingleChildScrollView(
+      return SingleChildScrollView(
       child: Column(
         children: [
           // Cabecera con datos del alumno.
@@ -106,17 +108,135 @@ class ProfilePage extends StatelessWidget {
                 ? 'Sin especialidad asignada'
                 : especialidad.toUpperCase(),
             subtitleColor: MaterialTheme.primaryColor,
-            onTap: () => Get.toNamed('/setup-carrera'),
+            onTap: () => _mostrarSelectorEspecialidad(context, auth, user),
           ),
           const SizedBox(height: 12),
           _InfoCard(
             icon: Icons.calendar_today,
             iconBg: colors.onSurface.withValues(alpha: 0.45),
             title: 'Horario',
-            onTap: () => HomeController.to.currentTabIndex.value = 2,
+            onTap: () => Get.to(() => const HorarioSemanalPage()),
           ),
         ],
+        ),
+      );
+    });
+  }
+
+  /// Abre un selector (checkboxes) con las especialidades de la carrera del
+  /// alumno. Al guardar, actualiza las especialidades y refresca la malla
+  /// para que se filtren los electivos.
+  void _mostrarSelectorEspecialidad(
+    BuildContext context,
+    AuthService auth,
+    dynamic user,
+  ) {
+    final colors = Theme.of(context).colorScheme;
+    final disponibles = auth.especialidades
+        .where((e) => e['carrera_id'] == user.careerId && e['is_active'] == true)
+        .toList()
+      ..sort((a, b) {
+        final oa = (a['display_order'] as num?)?.toInt() ?? 999;
+        final ob = (b['display_order'] as num?)?.toInt() ?? 999;
+        return oa.compareTo(ob);
+      });
+
+    final seleccion = <int>{...user.especialidades};
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: colors.surface,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (ctx, setSheetState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20 + MediaQuery.of(ctx).viewInsets.bottom,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Selecciona tu especialidad',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: colors.onSurface,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Puedes elegir una o más. La malla mostrará sus electivos.',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: colors.onSurface.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ...disponibles.map((e) {
+                    final id = e['id'] as int;
+                    final checked = seleccion.contains(id);
+                    return CheckboxListTile(
+                      value: checked,
+                      activeColor: MaterialTheme.primaryColor,
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: Text(
+                        e['name'] as String? ?? '',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: colors.onSurface,
+                        ),
+                      ),
+                      onChanged: (v) {
+                        setSheetState(() {
+                          if (v == true) {
+                            seleccion.add(id);
+                          } else {
+                            seleccion.remove(id);
+                          }
+                        });
+                      },
+                    );
+                  }),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: MaterialTheme.primaryColor,
+                        foregroundColor: Colors.white,
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () async {
+                        await auth.updateEspecialidades(seleccion.toList());
+                        // Refresca la malla si ya está construida.
+                        if (Get.isRegistered<MallaController>()) {
+                          Get.find<MallaController>().reloadForUser();
+                        }
+                        if (ctx.mounted) Navigator.pop(ctx);
+                      },
+                      child: const Text('Guardar'),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

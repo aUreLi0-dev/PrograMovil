@@ -4,11 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ulima_plus/models/alerta_model.dart';
-import 'package:ulima_plus/models/malla_models.dart';
 import 'package:ulima_plus/services/auth_service.dart';
-import 'package:ulima_plus/services/malla_service.dart';
 import 'package:ulima_plus/services/notas_service.dart';
-import 'package:ulima_plus/services/storage_service.dart';
 
 class AlertasService extends GetxController {
   static AlertasService get to => Get.find();
@@ -54,30 +51,16 @@ class AlertasService extends GetxController {
     }
   }
 
-  /// Normaliza un nombre de curso para comparar entre la malla y evaluaciones:
-  /// mayúsculas, sin tildes y descartando el alias en inglés tras "/".
-  String _normNombre(String s) {
-    var t = s.toUpperCase().trim();
-    final slash = t.indexOf('/');
-    if (slash != -1) t = t.substring(0, slash);
-    const acentos = {
-      'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U', 'Ü': 'U', 'Ñ': 'N',
-    };
-    acentos.forEach((k, v) => t = t.replaceAll(k, v));
-    return t.replaceAll(RegExp(r'\s+'), ' ').trim();
-  }
-
-  AlertaModel _cargaAlerta(String cursoId, String nombre, int nEvals) {
-    final mensaje = nEvals > 0
-        ? 'Se acerca una etapa de alta carga en $nombre: $nEvals evaluaciones '
-            'programadas este semestre. Organiza tu tiempo con anticipación.'
-        : 'Estás cursando $nombre. Prepárate para sus evaluaciones y organiza '
-            'tu carga académica con anticipación.';
+  /// Alerta estática de semana de alta carga (por mientras, hasta tener las
+  /// fechas reales de cada evaluación para contar 3+ por semana).
+  AlertaModel _cargaAlertaEstatica() {
     return AlertaModel(
-      id: 'alta_carga_$cursoId',
+      id: 'carga_academica_semana',
       tipo: 'alta_carga',
-      titulo: 'SEMANAS DE ALTA CARGA',
-      mensaje: mensaje,
+      titulo: 'CARGA ACADÉMICA ALTA',
+      mensaje:
+          'La semana 8 concentra 3 o más evaluaciones de tus cursos. '
+          'Organiza tu tiempo con anticipación para no sobrecargarte.',
     );
   }
 
@@ -96,11 +79,6 @@ class AlertasService extends GetxController {
           await _notasService.obtenerIdEstudianteActual() ?? 'default';
       final notasGuardadas = await _notasService.cargarNotas(idEstudiante);
 
-      final rawEvals =
-          await rootBundle.loadString('assets/data/evaluaciones.json');
-      final evalsData = (jsonDecode(rawEvals)['cursos'] as List)
-          .cast<Map<String, dynamic>>();
-
       final rawSecciones =
           await rootBundle.loadString('assets/data/secciones.json');
       final seccionesData = (jsonDecode(rawSecciones)['secciones'] as List)
@@ -109,8 +87,6 @@ class AlertasService extends GetxController {
       final currentCourses = user.courseProgress?.currentCourses ?? [];
 
       final List<AlertaModel> riesgoAlertas = [];
-      // Carga académica deduplicada por curso (enrollment + malla).
-      final Map<String, AlertaModel> cargaPorCurso = {};
       final List<AlertaModel> generalAlertas = [];
       final List<AlertaModel> cursoAlertas = [];
 
@@ -125,13 +101,6 @@ class AlertasService extends GetxController {
         );
         final courseName = seccion?['curso'] as String? ?? sectionId;
 
-        final evalEntry = evalsData.firstWhereOrNull(
-          (e) => e['cursoId']?.toString() == sectionId,
-        );
-        final evalsList =
-            (evalEntry?['evaluaciones'] as List?)?.cast<Map<String, dynamic>>() ??
-                [];
-
         // Notas que el alumno registró para esta sección.
         final cursoRegistrado = notasGuardadas.firstWhereOrNull(
           (n) => n['id']?.toString() == sectionId,
@@ -139,14 +108,6 @@ class AlertasService extends GetxController {
         final notasList =
             (cursoRegistrado?['notas'] as List?)?.cast<Map<String, dynamic>>() ??
                 [];
-
-        // SEMANAS DE ALTA CARGA: para los cursos matriculados con evaluaciones.
-        if (evalsList.isNotEmpty) {
-          cargaPorCurso.putIfAbsent(
-            sectionId,
-            () => _cargaAlerta(sectionId, courseName, evalsList.length),
-          );
-        }
 
         // Promedio ponderado con las notas REGISTRADAS.
         double weightedSum = 0;
@@ -197,33 +158,6 @@ class AlertasService extends GetxController {
         }
       }
 
-      // SEMANAS DE ALTA CARGA para los cursos que el alumno marcó como
-      // "Cursando" en la malla. La malla guarda el estado por id de nodo en
-      // StorageService; se mapea a evaluaciones por nombre de curso.
-      final statuses = Get.isRegistered<StorageService>()
-          ? StorageService.to.savedStatuses
-          : null;
-      if (statuses != null && Get.isRegistered<MallaService>()) {
-        for (final node in MallaService.to.courses) {
-          if (statuses[node.id] != CourseStatus.current) continue;
-
-          final evalEntry = evalsData.firstWhereOrNull(
-            (e) =>
-                _normNombre(e['cursoNombre']?.toString() ?? '') ==
-                _normNombre(node.name),
-          );
-          final evalsList =
-              (evalEntry?['evaluaciones'] as List?)?.cast<Map<String, dynamic>>() ??
-                  const [];
-
-          final cursoId = evalEntry?['cursoId']?.toString() ?? node.id;
-          cargaPorCurso.putIfAbsent(
-            cursoId,
-            () => _cargaAlerta(cursoId, node.name, evalsList.length),
-          );
-        }
-      }
-
       // PROMEDIO GENERAL (solo si registró notas en al menos un curso).
       if (cursosConNotas > 0) {
         final avg = sumaPromedios / cursosConNotas;
@@ -239,7 +173,7 @@ class AlertasService extends GetxController {
 
       final nuevas = [
         ...riesgoAlertas,
-        ...cargaPorCurso.values,
+        _cargaAlertaEstatica(),
         ...generalAlertas,
         ...cursoAlertas,
       ];

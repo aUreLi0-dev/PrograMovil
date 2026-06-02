@@ -88,6 +88,22 @@ class MallaController extends GetxController {
     }
   }
 
+  /// Recalcula la malla para el usuario actual conservando los estados
+  /// guardados. Se usa cuando cambian las especialidades desde el perfil
+  /// (para refiltrar los electivos visibles) sin recrear el controlador.
+  void reloadForUser() {
+    _refresh();
+    final saved = StorageService.to.savedStatuses;
+    if (saved != null) {
+      final visible = cards.map((c) => c.id).toSet();
+      final filtered = Map.fromEntries(
+        saved.entries.where((e) => visible.contains(e.key)),
+      );
+      statuses.addAll(filtered);
+    }
+    _recomputeDerivedAvailability();
+  }
+
   void _refresh() {
     final u = user;
     if (u == null) {

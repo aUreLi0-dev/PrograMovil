@@ -7,7 +7,7 @@ import 'package:ulima_plus/pages/home/home_controller.dart';
 import 'package:ulima_plus/services/alertas_service.dart';
 
 class AlertasPage extends StatefulWidget {
-  const AlertasPage({super.key});
+  const AlertasPage({super.key});     
 
   @override
   State<AlertasPage> createState() => _AlertasPageState();

@@ -169,6 +169,23 @@ class AuthService extends GetxService {
     );
   }
 
+  /// Actualiza solo las especialidades del alumno (desde el perfil) y las
+  /// persiste, sin tocar el flag de setup ni navegar.
+  Future<void> updateEspecialidades(List<int> especialidades) async {
+    final u = _currentUser.value;
+    if (u == null) return;
+    u.especialidades = List.of(especialidades);
+    _currentUser.refresh();
+    final careerId = u.careerId;
+    if (careerId != null) {
+      await _storage.saveSetup(
+        careerId: careerId,
+        especialidades: especialidades,
+        setupComplete: u.setupComplete,
+      );
+    }
+  }
+
   Future<void> logout() async {
     _currentUser.value = null;
     await _storage.clearSession();
