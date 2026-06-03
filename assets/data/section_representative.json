@@ -7,7 +7,7 @@
     },
     {
       "id":"2",
-      "enrollmentId":"11",
+      "enrollmentId":"2",
       "role":"subdelegado"
     },
     {
@@ -18,6 +18,11 @@
     {
       "id":"4",
       "enrollmentId":"10",
+      "role":"subdelegado"
+    },
+    {
+      "id":"5",
+      "enrollmentId":"11",
       "role":"subdelegado"
     }
   ]

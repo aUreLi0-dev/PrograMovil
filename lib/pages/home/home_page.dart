@@ -7,6 +7,8 @@ import 'package:ulima_plus/pages/horario/horario.dart';
 import 'package:ulima_plus/pages/malla/malla_page.dart';
 import 'package:ulima_plus/services/auth_service.dart';
 import '../perfil/perfil.dart';
+import 'package:ulima_plus/pages/delegado_cursos/delegado_cursos_page.dart';
+
 import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     const MallaPage(),
     const CalculadoraPage(),
     const HorarioPage(),
-    if (user?.isDelegate ?? false) const Center(child: Text('Delegado')),
+    if (user?.isDelegate ?? false) const DelegadoCursosPage(),
     const ProfilePage(),
   ];
 
