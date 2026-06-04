@@ -2,7 +2,6 @@ import 'package:ulima_plus/services/auth_service.dart';
 import 'package:ulima_plus/services/section_representative_service.dart';
 import 'package:ulima_plus/services/courses_service.dart';
 import 'package:ulima_plus/services/enrollment_service.dart';
-import 'package:ulima_plus/models/enrollment_model.dart'; 
 
 class DelegadoCursosController {
   List<Map<String, dynamic>> cursosDelegado = [];
@@ -33,9 +32,11 @@ class DelegadoCursosController {
               
               for (var s in secciones) {
                 if (s['idSeccion'].toString() == enrollment.idSeccion.toString()) {
+                  final idSeccion = enrollment.idSeccion.toString();
                   tempCursos.add({
                     "curso": curso['nombre'],
-                    "seccion": enrollment.idSeccion,
+                    "seccion": idSeccion,
+                    "idSeccion": idSeccion,
                   });
                 }
               }

@@ -12,7 +12,7 @@ class DelegadoAnunciosPage extends StatefulWidget {
 
 class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
   final DelegadoAnunciosController _controller = DelegadoAnunciosController();
-  
+
   String nombreCurso = "";
   String idSeccion = "";
 
@@ -29,6 +29,7 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
   }
 
   void _mostrarDialogoAgregar() {
+    final colors = Theme.of(context).colorScheme;
     final TextEditingController tituloCtrl = TextEditingController();
     final TextEditingController mensajeCtrl = TextEditingController();
 
@@ -37,6 +38,7 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
       builder: (context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          backgroundColor: colors.surface,
           title: const Text('Nuevo Anuncio', style: TextStyle(fontWeight: FontWeight.bold)),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -89,7 +91,10 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Scaffold(
+      backgroundColor: colors.surface,
       appBar: AppBar(
         title: Text(nombreCurso, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
         centerTitle: true,
@@ -102,9 +107,10 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
               itemCount: _controller.anuncios.length,
               itemBuilder: (context, index) {
                 final anuncio = _controller.anuncios[index];
-                
+
                 return Card(
                   elevation: 2,
+                  color: colors.surface,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   margin: const EdgeInsets.only(bottom: 12),
                   child: Padding(
@@ -119,7 +125,11 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
                             Expanded(
                               child: Text(
                                 anuncio.titulo,
-                                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                  color: colors.onSurface,
+                                ),
                               ),
                             ),
                             GestureDetector(
@@ -131,21 +141,36 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        Text(anuncio.mensaje, style: const TextStyle(fontSize: 14, height: 1.4)),
+                        Text(
+                          anuncio.mensaje,
+                          style: TextStyle(fontSize: 14, height: 1.4, color: colors.onSurface),
+                        ),
                         const SizedBox(height: 16),
-                        Divider(height: 1, color: Colors.grey.shade300),
+                        Divider(height: 1, color: colors.outline.withValues(alpha: 0.5)),
                         const SizedBox(height: 12),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               children: [
-                                Icon(LucideIcons.user, size: 14, color: Colors.grey.shade600),
+                                Icon(LucideIcons.user, size: 14, color: colors.onSurface.withValues(alpha: 0.5)),
                                 const SizedBox(width: 4),
-                                Text(anuncio.autorCode, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                                Text(
+                                  anuncio.autorName,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: colors.onSurface.withValues(alpha: 0.5),
+                                  ),
+                                ),
                               ],
                             ),
-                            Text(anuncio.fecha, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                            Text(
+                              anuncio.fecha,
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: colors.onSurface.withValues(alpha: 0.5),
+                              ),
+                            ),
                           ],
                         ),
                       ],

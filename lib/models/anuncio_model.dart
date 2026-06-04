@@ -1,13 +1,12 @@
-import 'package:ulima_plus/models/user_model.dart';
-
-class Anuncio{
+class Anuncio {
   final String id;
   final String idSeccion;
   final String titulo;
   final String mensaje;
   final String fecha;
   final String autorCode;
-  final UserModel autor;
+  final String autorName;
+  final String autorRole;
 
   Anuncio({
     required this.id,
@@ -16,18 +15,24 @@ class Anuncio{
     required this.mensaje,
     required this.fecha,
     required this.autorCode,
-    required this.autor,
+    this.autorName = '',
+    this.autorRole = 'estudiante',
   });
 
-  factory Anuncio.fromJson(Map<String,dynamic> json,{required UserModel autor}){
+  factory Anuncio.fromJson(
+    Map<String, dynamic> json, {
+    String? autorName,
+    String? autorRole,
+  }) {
     return Anuncio(
-      id:json['id'].toString(),
-      idSeccion:json['idSeccion'].toString(),
-      titulo:json['titulo'].toString(),
-      mensaje:json['mensaje'].toString(),
-      fecha:json['fecha'].toString(),
-      autorCode:json['autorCode'].toString(),
-      autor:autor,
+      id: json['id'].toString(),
+      idSeccion: json['idSeccion'].toString(),
+      titulo: json['titulo'].toString(),
+      mensaje: json['mensaje'].toString(),
+      fecha: json['fecha'].toString(),
+      autorCode: json['autorCode'].toString(),
+      autorName: autorName ?? '',
+      autorRole: autorRole ?? 'estudiante',
     );
   }
 }

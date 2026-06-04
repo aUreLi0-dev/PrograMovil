@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../constants/calculadora_constants.dart';
+import '../../models/curso_seccion_model.dart';
 import 'nota_tile.dart';
 
 class CursoCard extends StatelessWidget {
-  final Map curso;
+  final CursoSeccion curso;
   final double promedio;
   final double sumaPesos;
   final int cursoIndex;
-  final Function(int, int) onDeleteNota;
+  final void Function(int, int) onDeleteNota;
 
   const CursoCard({
     super.key,
@@ -30,7 +32,6 @@ class CursoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Header Naranja - Parte Superior
           Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -53,10 +54,8 @@ class CursoCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Cambia tu Text temporalmente por esto para ver qué hay en "curso":
-                          // En lib/components/calculadora/curso_card.dart
                           Text(
-                            "Sección: ${curso['codigoSeccion'] ?? 'Sin sección'}",
+                            'Sección: ${curso.codigoSeccion}',
                             style: TextStyle(
                               color: colors.onPrimary,
                               fontWeight: FontWeight.bold,
@@ -64,7 +63,7 @@ class CursoCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            curso['nombre'],
+                            curso.nombre,
                             style: TextStyle(
                               color: colors.onPrimary,
                               fontSize: 16,
@@ -72,7 +71,7 @@ class CursoCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            "Ciclo: ${curso['ciclo']}",
+                            'Ciclo: ${curso.ciclo}',
                             style: TextStyle(
                               color: colors.onPrimary.withOpacity(0.8),
                               fontSize: 11,
@@ -92,7 +91,7 @@ class CursoCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        if (promedio < 11.0)
+                        if (promedio < CalculadoraConstantes.notaMinimaAprobatoria)
                           Row(
                             children: [
                               Icon(
@@ -101,7 +100,7 @@ class CursoCard extends StatelessWidget {
                                 size: 14,
                               ),
                               Text(
-                                " Desaprobado",
+                                " ${CalculadoraConstantes.desaprobado}",
                                 style: TextStyle(
                                   color: colors.onPrimary,
                                   fontSize: 11,
@@ -134,7 +133,7 @@ class CursoCard extends StatelessWidget {
                       ),
                       Center(
                         child: Text(
-                          "Suma de pesos: ${sumaPesos.toStringAsFixed(1)}% / 100%",
+                          'Suma de pesos: ${sumaPesos.toStringAsFixed(1)}% / 100%',
                           style: TextStyle(
                             color: colors.onPrimary,
                             fontWeight: FontWeight.bold,
@@ -152,7 +151,7 @@ class CursoCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Obx(() {
-              final listasNotas = curso['notas'] as List;
+              final listasNotas = curso.notas;
               return Column(
                 children: List.generate(listasNotas.length, (index) {
                   final nota = listasNotas[index];

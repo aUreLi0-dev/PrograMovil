@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../services/auth_service.dart';
+import '../../services/enrollment_service.dart';
 
 class DaySchedule {
   final String dayName;
@@ -17,12 +18,22 @@ class HorarioController extends GetxController {
   final daysList = <DaySchedule>[].obs;
 
   List<Map<String, dynamic>> _todasLasSecciones = [];
+  Set<String> _enrolledSectionIds = {};
 
   @override
   void onInit() {
     super.onInit();
     _loadDays();
     _loadSecciones();
+    _loadEnrollments();
+  }
+
+  Future<void> _loadEnrollments() async {
+    final user = AuthService.to.currentUser;
+    if (user == null) return;
+    final enrollments = await EnrollmentService().fetchByStudentCode(user.code);
+    _enrolledSectionIds = enrollments.map((e) => e.idSeccion).toSet();
+    update();
   }
 
   Future<void> _loadDays() async {
@@ -68,24 +79,13 @@ class HorarioController extends GetxController {
     final activeDay = currentDay;
     if (activeDay == null || _todasLasSecciones.isEmpty) return const [];
 
-    // 1. Obtener los IDs de las secciones donde el usuario está inscrito
-    final user = AuthService.to.currentUser;
-    final List<dynamic> inscritas = user?.courseProgress?.currentCourses ?? [];
-    
-    // Extraemos solo los IDs de sección para comparar rápidamente
-    final List<String> idsInscritos = inscritas
-        .map((i) => (i['idSeccion'] as String? ?? ''))
-        .where((id) => id.isNotEmpty)
-        .toList();
-
-    // 2. Filtrar secciones: deben coincidir con el día y estar en los inscritos del usuario
     final currentDayName = activeDay.dayName.toLowerCase();
 
     return _todasLasSecciones.where((s) {
       final courseDay = (s['dia'] as String? ?? '').toLowerCase();
       final esMismoDia = courseDay == currentDayName;
-      final estaInscrito = idsInscritos.contains(s['idSeccion']);
-      
+      final estaInscrito = _enrolledSectionIds.contains(s['idSeccion']);
+
       return esMismoDia && estaInscrito;
     }).toList();
   }

@@ -48,7 +48,7 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  _roleLabel(user.role),
+                  _roleLabel(auth.role),
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,

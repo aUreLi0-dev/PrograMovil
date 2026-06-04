@@ -20,15 +20,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeController control = Get.put(HomeController());
-  final user = AuthService.to.currentUser;
 
-  late final List<Widget> _pages = [
-    const MallaPage(),
-    const CalculadoraPage(),
-    const HorarioPage(),
-    if (user?.isDelegate ?? false) const DelegadoCursosPage(),
-    const ProfilePage(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    control.loadDelegateStatus();
+  }
+
+  List<Widget> _buildPages() {
+    final isDelegate = AuthService.to.isDelegate;
+    return [
+      const MallaPage(),
+      const CalculadoraPage(),
+      const HorarioPage(),
+      if (isDelegate) const DelegadoCursosPage(),
+      const ProfilePage(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +48,16 @@ class _HomePageState extends State<HomePage> {
         children: [
           Obx(
             () => AppHeader(
-              showLogout: control.currentTabIndex.value == _pages.length - 1,
+              showLogout: control.currentTabIndex.value ==
+                  (_buildPages().length - 1),
             ),
           ),
           Expanded(
-            child: Obx(() => _pages[control.currentTabIndex.value]),
+            child: Obx(() {
+              final pages = _buildPages();
+              final idx = control.currentTabIndex.value.clamp(0, pages.length - 1);
+              return pages[idx];
+            }),
           ),
         ],
       ),

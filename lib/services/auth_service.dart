@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../models/user_model.dart';
 import 'notas_service.dart';
+import 'section_representative_service.dart';
 import 'storage_service.dart';
 
 class AuthService extends GetxService {
@@ -20,10 +21,14 @@ class AuthService extends GetxService {
   final RxList<Map<String, dynamic>> _userEspecialidades =
       <Map<String, dynamic>>[].obs;
   final RxBool _loading = false.obs;
+  final RxBool _isDelegate = false.obs;
+  final RxString _role = 'estudiante'.obs;
 
   UserModel? get currentUser => _currentUser.value;
   bool get isLoggedIn => _currentUser.value != null;
   bool get isLoading => _loading.value;
+  bool get isDelegate => _isDelegate.value;
+  String get role => _role.value;
 
   StorageService get _storage => StorageService.to;
 
@@ -117,6 +122,7 @@ class AuthService extends GetxService {
     _currentUser.value = user;
     // Vincula las notas guardadas a este alumno (clave notas_estudiante_<code>).
     await NotasService().guardarIdEstudianteActual(code);
+    await refreshDelegateStatus();
     return true;
   }
 
@@ -143,6 +149,7 @@ class AuthService extends GetxService {
       await _storage.saveCode(normalizedCode);
       // Vincula las notas guardadas a este alumno (clave notas_estudiante_<code>).
       await NotasService().guardarIdEstudianteActual(normalizedCode);
+      await refreshDelegateStatus();
       return null;
     } catch (e) {
       return 'Ocurrió un error inesperado: $e';
@@ -186,8 +193,18 @@ class AuthService extends GetxService {
     }
   }
 
+  Future<void> refreshDelegateStatus() async {
+    final code = _currentUser.value?.code;
+    if (code == null) return;
+    final repService = SectionRepresentativeService();
+    _isDelegate.value = await repService.isRepresentativeInAnySection(code);
+    _role.value = await repService.findHighestRoleByStudentCode(code);
+  }
+
   Future<void> logout() async {
     _currentUser.value = null;
+    _isDelegate.value = false;
+    _role.value = 'estudiante';
     await _storage.clearSession();
   }
 }

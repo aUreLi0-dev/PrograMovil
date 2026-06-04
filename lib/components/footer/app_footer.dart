@@ -1,9 +1,8 @@
-// lib/components/app_footer.dart
+// lib/components/footer/app_footer.dart
 
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:ulima_plus/services/auth_service.dart';
-
 
 class AppFooter extends StatelessWidget {
   final int currentIndex;
@@ -19,7 +18,7 @@ class AppFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     ColorScheme colors = Theme.of(context).colorScheme;
 
-    final user = AuthService.to.currentUser;
+    final isDelegate = AuthService.to.isDelegate;
 
     return BottomNavigationBar(
       currentIndex: currentIndex,
@@ -53,7 +52,7 @@ class AppFooter extends StatelessWidget {
         ),
 
         // MODULO EXTRA A LOS ALUMNOS CON ROL 'Delegado'
-        if (user?.isDelegate ?? false)
+        if (isDelegate)
         const BottomNavigationBarItem(
           icon: Icon(LucideIcons.shield),
           label: 'Delegado',

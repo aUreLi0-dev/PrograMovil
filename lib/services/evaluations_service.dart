@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import '../models/evaluation_model.dart';
+import '../models/course_syllabus_model.dart';
 
 /// Servicio para cargar y gestionar los datos de evaluaciones del sílabo
 class EvaluationSyllabusService {

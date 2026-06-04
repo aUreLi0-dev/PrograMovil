@@ -28,7 +28,6 @@ void main() async {
   Get.put<AuthService>(AuthService(), permanent: true);
   Get.put<MallaService>(MallaService(), permanent: true);
   Get.put<AlertasService>(AlertasService(), permanent: true);
-  Get.lazyPut(() => CalculadoraController());
 
   await Future.wait([
     EvaluationSyllabusService().loadEvaluationData(),
@@ -49,6 +48,7 @@ void main() async {
     initialRoute = '/login';
   }
 
+  Get.put(CalculadoraController(), permanent: true);
   runApp(MyApp(initialRoute: initialRoute));
 }
 

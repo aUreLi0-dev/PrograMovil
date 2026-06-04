@@ -1,5 +1,7 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../constants/calculadora_constants.dart';
 
 class NotaTile extends StatelessWidget {
   final String titulo;
@@ -46,9 +48,9 @@ class NotaTile extends StatelessWidget {
                   text: TextSpan(
                     style: TextStyle(fontSize: 12, color: colors.onSurfaceVariant.withOpacity(0.6)),
                     children: [
-                      TextSpan(text: "Peso: $peso%  •  "),
+                      TextSpan(text: 'Peso: $peso%  •  '),
                       TextSpan(
-                        text: "Nota: ${nota.toStringAsFixed(1)}/20",
+                        text: 'Nota: ${nota.toStringAsFixed(1)}/${CalculadoraConstantes.notaMaxima.toInt()}',
                         style: TextStyle(
                           color: colors.primary, 
                           fontWeight: FontWeight.bold,
@@ -68,18 +70,18 @@ class NotaTile extends StatelessWidget {
             ),
             onPressed: () {
               Get.defaultDialog(
-                title: "Eliminar Nota",
+                title: CalculadoraConstantes.eliminarNota,
                 titleStyle: TextStyle(color: colors.onSurface),
                 middleTextStyle: TextStyle(color: colors.onSurfaceVariant),
                 backgroundColor: colors.surface,
-                middleText: "¿Estás seguro de que quieres eliminar '$titulo'?",
-                textConfirm: "Eliminar",
-                textCancel: "Cancelar",
+                middleText: "${CalculadoraConstantes.eliminarConfirmacion} '$titulo'?",
+                textConfirm: CalculadoraConstantes.eliminar,
+                textCancel: CalculadoraConstantes.cancelar,
                 confirmTextColor: colors.onError,
                 buttonColor: colors.error,
                 onConfirm: () {
                   onDelete();
-                  print("✅ ÉXITO: Se eliminó la nota '$titulo' correctamente.");
+                  developer.log("✅ ÉXITO: Se eliminó la nota '$titulo' correctamente.");
                   Get.back();
                 },
               );

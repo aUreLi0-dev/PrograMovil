@@ -40,7 +40,8 @@ class AnunciosTab extends StatelessWidget {
                 // Mensaje
                 descripcion: anuncio.mensaje,
                 // Nombre + rol
-                autor: '${anuncio.autor.fullName} - ${anuncio.autor.role}'.toUpperCase(),
+                autor:
+                    '${anuncio.autorName} - ${anuncio.autorRole}'.toUpperCase(),
                 fecha: anuncio.fecha,
               ),
             );

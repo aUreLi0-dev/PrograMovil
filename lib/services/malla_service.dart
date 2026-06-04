@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import '../models/malla_models.dart';
 import '../models/user_model.dart';
 import 'auth_service.dart';
+import 'enrollment_service.dart';
 
 class MallaService extends GetxService {
   static MallaService get to => Get.find();
@@ -29,6 +30,7 @@ class MallaService extends GetxService {
 
   final RxList<CourseNode> _courses = <CourseNode>[].obs;
   final RxList<String> _specialties = <String>[].obs;
+  Set<String> _currentCourseIds = {};
 
   List<CourseNode> get courses => _courses;
   List<String> get availableSpecialties => _specialties;
@@ -46,6 +48,12 @@ class MallaService extends GetxService {
     _specialties.assignAll(
       ((decoded['specialties'] as List?) ?? const []).cast<String>(),
     );
+
+    final user = AuthService.to.currentUser;
+    if (user != null) {
+      final enrollments = await EnrollmentService().fetchByStudentCode(user.code);
+      _currentCourseIds = enrollments.map((e) => e.idCurso).toSet();
+    }
   }
 
   /// Cantidad máxima de filas observadas en un mismo nivel (para sizing del canvas).
@@ -70,8 +78,7 @@ class MallaService extends GetxService {
 
     final result = <String, CourseStatus>{};
     for (final c in _courses) {
-      // Si está en curso → current.
-      if (progress.currentCourses.contains(c.id)) {
+      if (_currentCourseIds.contains(c.id)) {
         result[c.id] = CourseStatus.current;
         continue;
       }
@@ -202,17 +209,13 @@ class MallaService extends GetxService {
     return elective.specialties.any(userEspNames.contains);
   }
 
-  /// Lista filtrada: obligatorios siempre; electivos visibles si coinciden con
-  /// la especialidad elegida O si el alumno ya los aprobó/está cursando
-  /// (independientemente de la especialidad).
   List<CourseNode> visibleCoursesFor(UserModel user) {
     final progress = user.courseProgress ?? CourseProgress.empty();
     final approved = approvedCourseIdsFor(progress);
-    final enrolled = progress.currentCourses;
 
     return _courses.where((c) {
       if (!c.isElective) return true;
-      if (approved.contains(c.id) || enrolled.contains(c.id)) return true;
+      if (approved.contains(c.id) || _currentCourseIds.contains(c.id)) return true;
       return electiveMatchesUserSpecialties(c, user.especialidades);
     }).toList();
   }
