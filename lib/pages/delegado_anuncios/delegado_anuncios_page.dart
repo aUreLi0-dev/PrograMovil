@@ -14,11 +14,6 @@ class DelegadoAnunciosPage extends StatefulWidget {
 class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
   late final DelegadoAnunciosController control;
 
-  static const Color _orange = Color(0xFFFF5A1F);
-  static const Color _background = Color(0xFFF4F5F7);
-  static const Color _text = Color(0xFF1F2933);
-  static const Color _mutedText = Color(0xFF6B7280);
-
   @override
   void initState() {
     super.initState();
@@ -34,9 +29,10 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
   }
 
   Widget _topBar(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
-      color: _orange,
+      color: colors.primary,
       padding: EdgeInsets.fromLTRB(
         18,
         MediaQuery.paddingOf(context).top + 12,
@@ -48,15 +44,15 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
         children: [
           InkWell(
             onTap: () => Get.back(),
-            child: const Row(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(LucideIcons.chevronLeft, color: Colors.white, size: 18),
-                SizedBox(width: 4),
+                Icon(LucideIcons.chevronLeft, color: colors.onPrimary, size: 18),
+                const SizedBox(width: 4),
                 Text(
                   'Volver',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: colors.onPrimary,
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                   ),
@@ -67,8 +63,8 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
           const SizedBox(height: 12),
           Text(
             'Gestion de Delegado: ${control.codigoSeccion}',
-            style: const TextStyle(
-              color: Colors.white,
+            style: TextStyle(
+              color: colors.onPrimary,
               fontSize: 18,
               fontWeight: FontWeight.w800,
             ),
@@ -76,8 +72,8 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
           const SizedBox(height: 4),
           Text(
             control.nombreCurso,
-            style: const TextStyle(
-              color: Color(0xFFFFE7DA),
+            style: TextStyle(
+              color: colors.onPrimary.withOpacity(0.8),
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),
@@ -87,14 +83,15 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
     );
   }
 
-  Widget _courseSummary() {
+  Widget _courseSummary(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        border: Border.all(color: colors.outline),
       ),
       child: Row(
         children: [
@@ -102,10 +99,10 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: const Color(0xFFFFE5D4),
+              color: colors.primary.withOpacity(0.15),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(LucideIcons.shield, color: _orange),
+            child: Icon(LucideIcons.shield, color: colors.primary),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -114,8 +111,8 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
               children: [
                 Text(
                   control.rol,
-                  style: const TextStyle(
-                    color: _text,
+                  style: TextStyle(
+                    color: colors.onSurface,
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                   ),
@@ -124,7 +121,10 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
                 Text(
                   'Seccion ${control.codigoSeccion} - '
                   '${control.alumnosMatriculados} alumnos',
-                  style: const TextStyle(color: _mutedText, fontSize: 13),
+                  style: TextStyle(
+                    color: colors.onSurface.withOpacity(0.6),
+                    fontSize: 13,
+                  ),
                 ),
               ],
             ),
@@ -134,61 +134,65 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
     );
   }
 
-  Widget _label(String text) {
+  Widget _label(BuildContext context, String text) {
+    final colors = Theme.of(context).colorScheme;
     return Text(
       text,
-      style: const TextStyle(
-        color: _mutedText,
+      style: TextStyle(
+        color: colors.onSurface.withOpacity(0.6),
         fontSize: 12,
         fontWeight: FontWeight.w900,
       ),
     );
   }
 
-  InputDecoration _inputDecoration(String hint) {
+  InputDecoration _inputDecoration(BuildContext context, String hint) {
+    final colors = Theme.of(context).colorScheme;
     return InputDecoration(
       hintText: hint,
+      hintStyle: TextStyle(color: colors.onSurface.withOpacity(0.4)),
       filled: true,
-      fillColor: const Color(0xFFF9FAFB),
+      fillColor: colors.tertiaryContainer.withOpacity(0.3),
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
+        borderSide: BorderSide(color: colors.outline),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: const BorderSide(color: _orange, width: 1.5),
+        borderSide: BorderSide(color: colors.primary, width: 1.5),
       ),
     );
   }
 
-  Widget _announcementForm() {
+  Widget _announcementForm(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.surface,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
-        boxShadow: const [
+        border: Border.all(color: colors.outline),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x14000000),
+            color: colors.shadow.withOpacity(0.05),
             blurRadius: 10,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(LucideIcons.send, color: _orange, size: 20),
-              SizedBox(width: 8),
+              Icon(LucideIcons.send, color: colors.primary, size: 20),
+              const SizedBox(width: 8),
               Text(
                 'Nuevo Anuncio',
                 style: TextStyle(
-                  color: _text,
+                  color: colors.onSurface,
                   fontSize: 17,
                   fontWeight: FontWeight.w900,
                 ),
@@ -196,19 +200,22 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
             ],
           ),
           const SizedBox(height: 18),
-          _label('TITULO'),
+          _label(context, 'TITULO'),
           const SizedBox(height: 8),
           TextField(
             controller: control.titulo,
-            decoration: _inputDecoration('Fecha de exposiciones'),
+            style: TextStyle(color: colors.onSurface),
+            decoration: _inputDecoration(context, 'Fecha de exposiciones'),
           ),
           const SizedBox(height: 16),
-          _label('MENSAJE'),
+          _label(context, 'MENSAJE'),
           const SizedBox(height: 8),
           TextField(
             controller: control.mensaje,
             maxLines: 6,
+            style: TextStyle(color: colors.onSurface),
             decoration: _inputDecoration(
+              context,
               'Escribe aqui el mensaje para la seccion',
             ),
           ),
@@ -216,15 +223,15 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton.icon(
-              onPressed: control.publicarAnuncioPendiente,
+              onPressed: control.publicarAnuncio,
               icon: const Icon(LucideIcons.send, size: 18),
               label: const Text(
                 'Publicar Anuncio',
                 style: TextStyle(fontWeight: FontWeight.w800),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: _orange,
-                foregroundColor: Colors.white,
+                backgroundColor: colors.primary,
+                foregroundColor: colors.onPrimary,
                 elevation: 0,
                 padding: const EdgeInsets.symmetric(vertical: 15),
                 shape: RoundedRectangleBorder(
@@ -238,25 +245,26 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(18),
       children: [
-        _courseSummary(),
+        _courseSummary(context),
         const SizedBox(height: 16),
-        _announcementForm(),
+        _announcementForm(context),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: _background,
+      backgroundColor: colors.surface,
       body: Column(
         children: [
           _topBar(context),
-          Expanded(child: _buildBody()),
+          Expanded(child: _buildBody(context)),
         ],
       ),
     );

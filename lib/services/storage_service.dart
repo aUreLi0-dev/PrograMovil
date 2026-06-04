@@ -20,6 +20,7 @@ class StorageService extends GetxService {
   static const _kSetupComplete = 'session_setup_complete';
   static const _kStatuses = 'session_statuses_v2';
   static const _kLegacyStatuses = 'session_statuses';
+  static const _kLocalAnuncios = 'local_anuncios_v1';
 
   Future<StorageService> init() async {
     _prefs = await SharedPreferences.getInstance();
@@ -87,6 +88,13 @@ class StorageService extends GetxService {
         e.key: CourseStatus.values[(e.value as num).toInt()],
     };
   }
+
+  // ── Anuncios locales ────────────────────────────────────────────────────────
+
+  String? get savedLocalAnuncios => _prefs.getString(_kLocalAnuncios);
+
+  Future<void> saveLocalAnuncios(String jsonStr) =>
+      _prefs.setString(_kLocalAnuncios, jsonStr);
 
   // ── Limpieza ────────────────────────────────────────────────────────────────
 

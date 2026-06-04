@@ -17,42 +17,38 @@ class _DelegadoCursosPageState extends State<DelegadoCursosPage> {
     DelegadoCursosController(),
   );
 
-  static const Color _orange = Color(0xFFFF5A1F);
-  static const Color _background = Color(0xFFF4F5F7);
-  static const Color _text = Color(0xFF1F2933);
-  static const Color _mutedText = Color(0xFF6B7280);
-
   @override
   void initState() {
     super.initState();
     control.cargarCursos();
   }
 
-  Widget _header() {
+  Widget _header(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(22, 22, 22, 14),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(LucideIcons.users, color: _orange, size: 28),
+          Icon(LucideIcons.users, color: colors.primary, size: 28),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
                   'Delegado de Aula',
                   style: TextStyle(
-                    color: _orange,
+                    color: colors.primary,
                     fontSize: 22,
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
                   'Gestiona tus cursos asignados',
                   style: TextStyle(
-                    color: _mutedText,
+                    color: colors.onSurface.withOpacity(0.6),
                     fontSize: 13,
                   ),
                 ),
@@ -64,17 +60,18 @@ class _DelegadoCursosPageState extends State<DelegadoCursosPage> {
     );
   }
 
-  Widget _sectionChip(String codigoSeccion) {
+  Widget _sectionChip(BuildContext context, String codigoSeccion) {
+    final colors = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFE5D4),
+        color: colors.primary.withOpacity(0.15),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
         'Seccion $codigoSeccion',
-        style: const TextStyle(
-          color: _orange,
+        style: TextStyle(
+          color: colors.primary,
           fontSize: 12,
           fontWeight: FontWeight.w800,
         ),
@@ -82,7 +79,8 @@ class _DelegadoCursosPageState extends State<DelegadoCursosPage> {
     );
   }
 
-  Widget _courseCard(CursoDelegado curso) {
+  Widget _courseCard(BuildContext context, CursoDelegado curso) {
+    final colors = Theme.of(context).colorScheme;
     return InkWell(
       onTap: () => control.abrirGestionCurso(curso),
       borderRadius: BorderRadius.circular(10),
@@ -90,14 +88,14 @@ class _DelegadoCursosPageState extends State<DelegadoCursosPage> {
         margin: const EdgeInsets.only(bottom: 14),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: const Color(0xFFE5E7EB)),
-          boxShadow: const [
+          border: Border.all(color: colors.outline),
+          boxShadow: [
             BoxShadow(
-              color: Color(0x1A000000),
+              color: colors.shadow.withOpacity(0.05),
               blurRadius: 8,
-              offset: Offset(0, 3),
+              offset: const Offset(0, 3),
             ),
           ],
         ),
@@ -108,12 +106,12 @@ class _DelegadoCursosPageState extends State<DelegadoCursosPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _sectionChip(curso.codigoSeccion),
+                  _sectionChip(context, curso.codigoSeccion),
                   const SizedBox(height: 10),
                   Text(
                     curso.nombreCurso,
-                    style: const TextStyle(
-                      color: _text,
+                    style: TextStyle(
+                      color: colors.onSurface,
                       fontSize: 16,
                       fontWeight: FontWeight.w900,
                     ),
@@ -121,16 +119,16 @@ class _DelegadoCursosPageState extends State<DelegadoCursosPage> {
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      const Icon(
+                      Icon(
                         LucideIcons.users,
                         size: 16,
-                        color: _mutedText,
+                        color: colors.onSurface.withOpacity(0.6),
                       ),
                       const SizedBox(width: 6),
                       Text(
                         '${curso.alumnosMatriculados} alumnos matriculados',
-                        style: const TextStyle(
-                          color: _mutedText,
+                        style: TextStyle(
+                          color: colors.onSurface.withOpacity(0.6),
                           fontSize: 13,
                           fontWeight: FontWeight.w500,
                         ),
@@ -141,40 +139,42 @@ class _DelegadoCursosPageState extends State<DelegadoCursosPage> {
               ),
             ),
             const SizedBox(width: 10),
-            const Icon(LucideIcons.bookOpen, color: Color(0xFF9CA3AF)),
+            Icon(LucideIcons.bookOpen, color: colors.onSurface.withOpacity(0.4)),
           ],
         ),
       ),
     );
   }
 
-  Widget _emptyState() {
-    return const Center(
+  Widget _emptyState(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Center(
       child: Text(
         'No tienes cursos asignados como delegado.',
         textAlign: TextAlign.center,
-        style: TextStyle(color: _mutedText, fontSize: 15),
+        style: TextStyle(color: colors.onSurface.withOpacity(0.6), fontSize: 15),
       ),
     );
   }
 
-  Widget _courseList() {
+  Widget _courseList(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Obx(() {
       if (control.cargando.value) {
-        return const Center(
-          child: CircularProgressIndicator(color: _orange),
+        return Center(
+          child: CircularProgressIndicator(color: colors.primary),
         );
       }
 
       if (control.cursosDelegado.isEmpty) {
-        return _emptyState();
+        return _emptyState(context);
       }
 
       return ListView.builder(
         padding: const EdgeInsets.fromLTRB(18, 4, 18, 24),
         itemCount: control.cursosDelegado.length,
         itemBuilder: (context, index) {
-          return _courseCard(control.cursosDelegado[index]);
+          return _courseCard(context, control.cursosDelegado[index]);
         },
       );
     });
@@ -182,13 +182,14 @@ class _DelegadoCursosPageState extends State<DelegadoCursosPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      backgroundColor: _background,
+      backgroundColor: colors.surface,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _header(),
-          Expanded(child: _courseList()),
+          _header(context),
+          Expanded(child: _courseList(context)),
         ],
       ),
     );
