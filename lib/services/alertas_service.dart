@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ulima_plus/models/alerta_model.dart';
 import 'package:ulima_plus/services/auth_service.dart';
 import 'package:ulima_plus/services/notas_service.dart';
+import 'package:ulima_plus/services/enrollment_service.dart';
 
 class AlertasService extends GetxController {
   static AlertasService get to => Get.find();
@@ -84,7 +85,7 @@ class AlertasService extends GetxController {
       final seccionesData = (jsonDecode(rawSecciones)['secciones'] as List)
           .cast<Map<String, dynamic>>();
 
-      final currentCourses = user.courseProgress?.currentCourses ?? [];
+      final currentEnrollments = await EnrollmentService().fetchByStudentCode(user.code);
 
       final List<AlertaModel> riesgoAlertas = [];
       final List<AlertaModel> generalAlertas = [];
@@ -93,8 +94,8 @@ class AlertasService extends GetxController {
       double sumaPromedios = 0;
       int cursosConNotas = 0;
 
-      for (final enrollment in currentCourses) {
-        final sectionId = enrollment['idSeccion']?.toString() ?? '';
+      for (final enrollment in currentEnrollments) {
+        final sectionId = enrollment.idSeccion;
 
         final seccion = seccionesData.firstWhereOrNull(
           (s) => s['idSeccion']?.toString() == sectionId,

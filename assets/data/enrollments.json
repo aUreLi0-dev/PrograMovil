@@ -107,6 +107,12 @@
       "studentCode": "20231483",
       "idCurso": "1",
       "idSeccion": "IS-856"
+    },
+    {
+      "id": "19",
+      "studentCode": "20232907",
+      "idCurso": "3",
+      "idSeccion": "GDO-754"
     }
   ]
 }

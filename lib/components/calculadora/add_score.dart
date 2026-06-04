@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../constants/calculadora_constants.dart';
 import '../../models/evaluation_model.dart';
+import '../../models/curso_seccion_model.dart';
 import '../../pages/calculadora/calculadora_controller.dart';
 
-class AddNotaWithSyllabusModal extends StatefulWidget {
+class AddNota extends StatefulWidget {
   final int cursoIndex;
-  final Map cursoData;
+  final CursoSeccion cursoData;
 
-  const AddNotaWithSyllabusModal({
+  const AddNota({
     super.key,
     required this.cursoIndex,
     required this.cursoData,
   });
 
   @override
-  State<AddNotaWithSyllabusModal> createState() =>
-      _AddNotaWithSyllabusModalState();
+  State<AddNota> createState() =>
+      _AddNotaState();
 }
 
-class _AddNotaWithSyllabusModalState extends State<AddNotaWithSyllabusModal> {
+class _AddNotaState extends State<AddNota> {
   late TextEditingController _valorController;
   EvaluationComponent? _evaluacionSeleccionada;
   String? _valorError;
@@ -44,18 +46,18 @@ class _AddNotaWithSyllabusModalState extends State<AddNotaWithSyllabusModal> {
 
   bool _validarValor(String valor) {
     if (valor.isEmpty) {
-      setState(() => _valorError = 'La nota es requerida');
+      setState(() => _valorError = CalculadoraConstantes.notaRequerida);
       return false;
     }
 
     final nota = double.tryParse(valor);
     if (nota == null) {
-      setState(() => _valorError = 'Ingresa un número válido');
+      setState(() => _valorError = CalculadoraConstantes.numeroInvalido);
       return false;
     }
 
-    if (nota < 0 || nota > 20) {
-      setState(() => _valorError = 'La nota debe estar entre 0 y 20');
+    if (nota < CalculadoraConstantes.notaMinima || nota > CalculadoraConstantes.notaMaxima) {
+      setState(() => _valorError = CalculadoraConstantes.notaRango);
       return false;
     }
 
@@ -66,8 +68,8 @@ class _AddNotaWithSyllabusModalState extends State<AddNotaWithSyllabusModal> {
   void _agregarNota() {
     if (_evaluacionSeleccionada == null) {
       Get.snackbar(
-        'Atención',
-        'Por favor selecciona una evaluación',
+        CalculadoraConstantes.atencion,
+        CalculadoraConstantes.seleccionaEvaluacion,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Theme.of(context).colorScheme.surface,
         colorText: Theme.of(context).colorScheme.onSurface,
@@ -89,12 +91,13 @@ class _AddNotaWithSyllabusModalState extends State<AddNotaWithSyllabusModal> {
       _evaluacionSeleccionada!.id,
     );
 
+    final themeColors = Theme.of(context).colorScheme;
     Get.snackbar(
-      'Éxito',
-      '${_evaluacionSeleccionada!.sigla} registrada',
+      CalculadoraConstantes.exito,
+      '${_evaluacionSeleccionada!.sigla} ${CalculadoraConstantes.registrada}',
       snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.green.shade700,
-      colorText: Colors.white,
+      backgroundColor: themeColors.primary,
+      colorText: themeColors.onPrimary,
       duration: const Duration(seconds: 2),
     );
 
@@ -130,7 +133,7 @@ class _AddNotaWithSyllabusModalState extends State<AddNotaWithSyllabusModal> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Registrar Nota',
+                          CalculadoraConstantes.registrarNota,
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -138,7 +141,7 @@ class _AddNotaWithSyllabusModalState extends State<AddNotaWithSyllabusModal> {
                           ),
                         ),
                         Text(
-                          widget.cursoData['nombre'] ?? '',
+                          widget.cursoData.nombre,
                           style: TextStyle(
                             fontSize: 12,
                             color: colors.onSurfaceVariant,
@@ -158,7 +161,7 @@ class _AddNotaWithSyllabusModalState extends State<AddNotaWithSyllabusModal> {
               const SizedBox(height: 24),
 
               Text(
-                'Evaluación (del Sílabo)',
+                CalculadoraConstantes.evaluacionLabel,
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
@@ -181,7 +184,7 @@ class _AddNotaWithSyllabusModalState extends State<AddNotaWithSyllabusModal> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Todas las evaluaciones han sido registradas',
+                          CalculadoraConstantes.todasRegistradas,
                           style: TextStyle(color: colors.secondary),
                         ),
                       ),

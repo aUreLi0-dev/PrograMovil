@@ -1,23 +1,24 @@
-// lib/components/app_footer.dart
+// lib/components/footer/app_footer.dart
 
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:ulima_plus/services/auth_service.dart';
 
 class AppFooter extends StatelessWidget {
   final int currentIndex;
   final Function(int)? onTap;
-  final bool mostrarDelegado;
 
   const AppFooter({
     super.key,
     required this.currentIndex,
     this.onTap,
-    this.mostrarDelegado = false,
   });
 
   @override
   Widget build(BuildContext context) {
     ColorScheme colors = Theme.of(context).colorScheme;
+
+    final isDelegate = AuthService.to.isDelegate;
 
     return BottomNavigationBar(
       currentIndex: currentIndex,
@@ -50,11 +51,12 @@ class AppFooter extends StatelessWidget {
           label: 'Horario',
         ),
 
-        if (mostrarDelegado)
-          const BottomNavigationBarItem(
-            icon: Icon(LucideIcons.shield),
-            label: 'Delegado',
-          ),
+        // MODULO EXTRA A LOS ALUMNOS CON ROL 'Delegado'
+        if (isDelegate)
+        const BottomNavigationBarItem(
+          icon: Icon(LucideIcons.shield),
+          label: 'Delegado',
+        ),
 
         const BottomNavigationBarItem(
           icon: Icon(LucideIcons.user),

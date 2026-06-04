@@ -31,7 +31,7 @@ class Curso {
 List<Map<String, dynamic>> getCursosActivos() {
   final service = CoursesService();
   if (!service.isLoaded) {
-    print('⚠️ Advertencia: Datos de cursos no cargados aún');
+    print('Advertencia: Datos de cursos no cargados aún');
     return [];
   }
   return service.allCourses;

@@ -1,20 +1,23 @@
+import 'dart:developer' as developer;
 import 'package:get/get.dart';
 import '../../models/evaluation_model.dart';
+import '../../models/course_syllabus_model.dart';
+import '../../models/curso_seccion_model.dart';
 import '../../services/evaluations_service.dart';
 import '../../services/courses_service.dart';
 import '../../services/notas_service.dart';
 import '../../services/auth_service.dart';
+import '../../services/enrollment_service.dart';
+import '../../constants/calculadora_constants.dart';
 
 class CalculadoraController extends GetxController {
-  late var cursos = <Map<String, dynamic>>[].obs;
+  final cursos = <CursoSeccion>[].obs;
 
   late EvaluationSyllabusService _syllabusService;
   late CoursesService _coursesService;
   late NotasService _notasService;
 
-  late String _idEstudianteActual;
-
-  late var syllabusData = <String, CourseSyllabus>{}.obs;
+  final syllabusData = <String, CourseSyllabus>{}.obs;
 
   @override
   void onInit() {
@@ -22,37 +25,46 @@ class CalculadoraController extends GetxController {
     _syllabusService = EvaluationSyllabusService();
     _coursesService = CoursesService();
     _notasService = NotasService();
-
-    _cargarDatosSyllabus();
-    _inicializarCursos();
+    _init();
   }
 
-  void _cargarDatosSyllabus() async {
+  Future<void> _init() async {
+    await _cargarDatosSyllabus();
+    await _inicializarCursos();
+  }
+
+  Future<void> reload() async {
+    cursos.clear();
+    syllabusData.clear();
+    await _init();
+  }
+
+  Future<void> _cargarDatosSyllabus() async {
     try {
       await _syllabusService.loadEvaluationData();
       for (var syllabus in _syllabusService.allSyllabuses) {
         syllabusData[syllabus.cursoId] = syllabus;
       }
-      print('✓ Datos del sílabo cargados en el controlador');
+      developer.log('✓ Datos del sílabo cargados en el controlador');
     } catch (e) {
-      print('✗ Error al cargar datos del sílabo: $e');
+      developer.log('✗ Error al cargar datos del sílabo: $e');
     }
   }
 
-  void _inicializarCursos() async {
+  Future<void> _inicializarCursos() async {
     try {
       final user = AuthService.to.currentUser;
 
-      final List<Map<String, dynamic>> seccionesInscritas =
-          user?.courseProgress?.currentCourses ?? [];
-      _idEstudianteActual =
+      final enrollments = await EnrollmentService().fetchByStudentCode(user?.code ?? '');
+      final seccionesInscritas = enrollments
+          .map((e) => {'idSeccion': e.idSeccion, 'idCurso': e.idCurso})
+          .toList();
+      final idEstudiante =
           await _notasService.obtenerIdEstudianteActual() ?? 'default';
       final cursosData = _coursesService.allCourses;
-      final notasGuardadas = await _notasService.cargarNotas(
-        _idEstudianteActual,
-      );
+      final notasGuardadas = await _notasService.cargarNotas(idEstudiante);
 
-      List<Map<String, dynamic>> cursosExpandidos = [];
+      final cursosExpandidos = <CursoSeccion>[];
 
       for (var curso in cursosData) {
         List<dynamic> seccionesDelCurso = curso['secciones'] ?? [];
@@ -76,33 +88,32 @@ class CalculadoraController extends GetxController {
             );
           }
 
-          cursosExpandidos.add({
-            'id': seccion['idSeccion'],
-            'nombre': curso['nombre']?.toString() ?? 'Curso sin nombre',
-            'ciclo': curso['ciclo']?.toString() ?? '2026-1',
-            'codigoSeccion':
-                seccion['codigoSeccion']?.toString() ?? 'Sin sección',
-            'notas': notasRx,
-          });
+          cursosExpandidos.add(CursoSeccion(
+            id: seccion['idSeccion'],
+            nombre: curso['nombre']?.toString() ?? CalculadoraConstantes.cursoSinNombre,
+            ciclo: curso['ciclo']?.toString() ?? CalculadoraConstantes.cicloDefault,
+            codigoSeccion:
+                seccion['codigoSeccion']?.toString() ?? CalculadoraConstantes.sinSeccion,
+            notas: notasRx,
+          ));
         }
       }
 
-      cursos.value = cursosExpandidos;
-      print(
+      cursos.assignAll(cursosExpandidos);
+      developer.log(
         '✓ Cursos y secciones cargados correctamente: ${cursos.length} secciones.',
       );
     } catch (e) {
-      print('✗ Error al inicializar cursos: $e');
+      developer.log('✗ Error al inicializar cursos: $e');
     }
   }
 
 
-  /// Promedio ponderado sobre las notas REGISTRADAS (normalizado por la suma
-  /// de pesos). Así refleja el rendimiento actual aunque falten evaluaciones
-  /// (p. ej. la nota final) y se actualiza al agregar cada nota. Cuando los
-  /// pesos suman 100 el resultado coincide con la nota final del curso.
-  double calcularPromedio(List notas) {
+  double calcularPromedio(int cursoIndex) {
+    if (cursoIndex < 0 || cursoIndex >= cursos.length) return 0.0;
+    final notas = cursos[cursoIndex].notas;
     if (notas.isEmpty) return 0.0;
+
     double weightedSum = 0;
     double weightSum = 0;
     for (var n in notas) {
@@ -111,11 +122,19 @@ class CalculadoraController extends GetxController {
       weightedSum += valor * peso;
       weightSum += peso;
     }
-    if (weightSum == 0) return 0.0;
-    return weightedSum / weightSum;
+
+    final syllabus = getSyllabusForCourse(cursoIndex);
+    if (syllabus != null) {
+      final totalWeight = syllabus.evaluaciones.fold<double>(
+        0.0, (sum, e) => sum + e.peso,
+      );
+      if (totalWeight > 0) return weightedSum / totalWeight;
+    }
+
+    return weightSum > 0 ? weightedSum / weightSum : 0.0;
   }
 
-  double sumaPesos(List notas) {
+  double sumaPesos(List<Map<String, dynamic>> notas) {
     return notas.fold(0, (sum, item) => sum + (item['peso'] as num));
   }
 
@@ -127,8 +146,7 @@ class CalculadoraController extends GetxController {
     String evaluacionId,
   ) {
     if (cursoIndex >= 0 && cursoIndex < cursos.length) {
-      final notas = cursos[cursoIndex]['notas'] as RxList<dynamic>;
-      notas.add({
+      cursos[cursoIndex].notas.add({
         'titulo': titulo,
         'peso': peso,
         'valor': valor,
@@ -141,7 +159,7 @@ class CalculadoraController extends GetxController {
 
   void eliminarNota(int cursoIndex, int notaIndex) {
     if (cursoIndex >= 0 && cursoIndex < cursos.length) {
-      final notas = cursos[cursoIndex]['notas'] as RxList<dynamic>;
+      final notas = cursos[cursoIndex].notas;
       if (notaIndex >= 0 && notaIndex < notas.length) {
         notas.removeAt(notaIndex);
         cursos.refresh();
@@ -152,16 +170,25 @@ class CalculadoraController extends GetxController {
 
   void _guardarNotasLocal() async {
     try {
-      await _notasService.guardarNotas(_idEstudianteActual, cursos);
+      final idEstudiante =
+          await _notasService.obtenerIdEstudianteActual() ?? 'default';
+      final cursosMap = cursos.map((c) => {
+        'id': c.id,
+        'nombre': c.nombre,
+        'ciclo': c.ciclo,
+        'codigoSeccion': c.codigoSeccion,
+        'notas': c.notas.toList(),
+      }).toList();
+      await _notasService.guardarNotas(idEstudiante, cursosMap);
     } catch (e) {
-      print('✗ Error al guardar notas localmente: $e');
+      developer.log('✗ Error al guardar notas localmente: $e');
     }
   }
 
   CourseSyllabus? getSyllabusForCourse(int cursoIndex) {
     if (cursoIndex >= 0 && cursoIndex < cursos.length) {
-      final cursoId = cursos[cursoIndex]['id'] as String?;
-      if (cursoId != null && syllabusData.containsKey(cursoId)) {
+      final cursoId = cursos[cursoIndex].id;
+      if (syllabusData.containsKey(cursoId)) {
         return syllabusData[cursoId];
       }
     }
@@ -173,18 +200,9 @@ class CalculadoraController extends GetxController {
     return syllabus?.evaluaciones ?? [];
   }
 
-  bool hasSyllabusData(int cursoIndex) {
-    if (cursoIndex >= 0 && cursoIndex < cursos.length) {
-      final cursoId = cursos[cursoIndex]['id'] as String?;
-      return cursoId != null && syllabusData.containsKey(cursoId);
-    }
-    return false;
-  }
-
   List<String> getRegisteredEvaluationIds(int cursoIndex) {
     if (cursoIndex >= 0 && cursoIndex < cursos.length) {
-      final notas = cursos[cursoIndex]['notas'] as List?;
-      return (notas ?? [])
+      return cursos[cursoIndex].notas
           .map((nota) => nota['evaluacionId'] as String? ?? '')
           .where((id) => id.isNotEmpty)
           .toList();

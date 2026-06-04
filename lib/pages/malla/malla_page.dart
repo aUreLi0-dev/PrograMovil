@@ -21,7 +21,7 @@ class MallaPage extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Container(
-      color: const Color(0xFFF8FAFC),
+      color: colors.surface,
       child: Column(
         children: [
           _ProgressBar(controller: c, colors: colors),
@@ -51,11 +51,12 @@ class _ProgressBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final surface = Theme.of(context).colorScheme.surface;
     return Obx(() {
       return Container(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: surface,
           border: Border(
             bottom: BorderSide(color: colors.outline.withValues(alpha: 0.5)),
           ),
@@ -90,15 +91,20 @@ class _ProgressBar extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: controller.approvedRatio,
                 minHeight: 6,
-                backgroundColor: const Color(0xFFE2E8F0),
+                backgroundColor: Theme.of(context)
+                    .colorScheme
+                    .surfaceContainerHighest,
                 color: MaterialTheme.primaryColor,
               ),
             ),
             const SizedBox(height: 4),
             Text(
               'Avance: ${controller.approvedCount} / ${controller.totalVisible} cursos',
-              style: const TextStyle(
-                color: Color(0xFF64748B),
+              style: TextStyle(
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.55),
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
               ),
@@ -118,6 +124,7 @@ class _Chip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -150,8 +157,8 @@ class _Chip extends StatelessWidget {
                   Text(
                     label,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF334155),
+                    style: TextStyle(
+                      color: colors.onSurface.withValues(alpha: 0.75),
                       fontSize: 10,
                       fontWeight: FontWeight.w700,
                     ),
@@ -173,8 +180,9 @@ class _ZoomToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Container(
-      color: Colors.white,
+      color: colors.surface,
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
       child: Row(
         children: [
@@ -186,8 +194,8 @@ class _ZoomToolbar extends StatelessWidget {
               child: Text(
                 '${(controller.zoom.value * 100).round()}%',
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Color(0xFF334155),
+                style: TextStyle(
+                  color: colors.onSurface.withValues(alpha: 0.75),
                   fontWeight: FontWeight.w900,
                   fontSize: 13,
                 ),
@@ -209,15 +217,15 @@ class _ZoomToolbar extends StatelessWidget {
                 width: 18,
                 height: 2.5,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF64748B),
+                  color: colors.onSurface.withValues(alpha: 0.5),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               const SizedBox(width: 5),
-              const Text(
+              Text(
                 'Obligatorio',
                 style: TextStyle(
-                  color: Color(0xFF475569),
+                  color: colors.onSurface.withValues(alpha: 0.65),
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                 ),
@@ -235,7 +243,7 @@ class _ZoomToolbar extends StatelessWidget {
                     width: 5,
                     height: 2.5,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF64748B),
+                      color: colors.onSurface.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -244,7 +252,7 @@ class _ZoomToolbar extends StatelessWidget {
                     width: 5,
                     height: 2.5,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF64748B),
+                      color: colors.onSurface.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
@@ -253,17 +261,17 @@ class _ZoomToolbar extends StatelessWidget {
                     width: 5,
                     height: 2.5,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF64748B),
+                      color: colors.onSurface.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ],
               ),
               const SizedBox(width: 5),
-              const Text(
+              Text(
                 'Electivo',
                 style: TextStyle(
-                  color: Color(0xFF475569),
+                  color: colors.onSurface.withValues(alpha: 0.65),
                   fontSize: 10,
                   fontWeight: FontWeight.w700,
                 ),
@@ -283,8 +291,9 @@ class _IconBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Material(
-      color: const Color(0xFFF1F5F9),
+      color: colors.surfaceContainerHighest,
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
@@ -293,7 +302,7 @@ class _IconBtn extends StatelessWidget {
           width: 32,
           height: 32,
           child: Center(
-            child: Icon(icon, size: 18, color: const Color(0xFF334155)),
+            child: Icon(icon, size: 18, color: colors.onSurface),
           ),
         ),
       ),
@@ -521,6 +530,7 @@ class _MallaCanvasState extends State<_MallaCanvas> {
     List<CourseNode> cards, {
     required double yOffset,
   }) {
+    final colors = Theme.of(context).colorScheme;
     if (cards.isEmpty) return const [];
     final levels = cards.map((c) => c.level).toSet().toList()..sort();
     return [
@@ -537,8 +547,8 @@ class _MallaCanvasState extends State<_MallaCanvas> {
             child: Center(
               child: Text(
                 'NIVEL $lvl',
-                style: const TextStyle(
-                  color: Color(0xFF334155),
+                style: TextStyle(
+                  color: colors.onSurface.withValues(alpha: 0.75),
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 1.2,
@@ -555,10 +565,10 @@ class _MallaCanvasState extends State<_MallaCanvas> {
     CourseNode course,
     Map<String, CourseStatus> statuses,
   ) {
-    showModalBottomSheet<void>(
+      showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -575,6 +585,8 @@ class _PoolDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final dividerColor = colors.outline.withValues(alpha: 0.4);
     return SizedBox(
       width: width,
       height: 36,
@@ -584,12 +596,12 @@ class _PoolDivider extends StatelessWidget {
           Expanded(
             child: Container(
               height: 1.5,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color(0x00CBD5E1),
-                    Color(0xFFCBD5E1),
-                    Color(0x00CBD5E1),
+                    dividerColor.withValues(alpha: 0.0),
+                    dividerColor,
+                    dividerColor.withValues(alpha: 0.0),
                   ],
                 ),
               ),
@@ -610,15 +622,17 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final color = colors.onSurface.withValues(alpha: 0.55);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 13, color: const Color(0xFF64748B)),
+        Icon(icon, size: 13, color: color),
         const SizedBox(width: 5),
         Text(
           text,
-          style: const TextStyle(
-            color: Color(0xFF64748B),
+          style: TextStyle(
+            color: color,
             fontSize: 11,
             fontWeight: FontWeight.w900,
             letterSpacing: 1.4,
@@ -637,6 +651,7 @@ class _CourseDetailSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final controller = Get.find<MallaController>();
     final currentStatus = statuses[course.id] ?? CourseStatus.locked;
     return Padding(
@@ -655,7 +670,7 @@ class _CourseDetailSheet extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: const Color(0xFFE2E8F0),
+                color: colors.outline.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(99),
               ),
             ),
@@ -688,13 +703,13 @@ class _CourseDetailSheet extends StatelessWidget {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF0F4FF),
+                    color: colors.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
                     course.externalFaculty!,
-                    style: const TextStyle(
-                      color: Color(0xFF4B5563),
+                    style: TextStyle(
+                      color: colors.onSurface.withValues(alpha: 0.65),
                       fontWeight: FontWeight.w800,
                       fontSize: 11,
                     ),
@@ -706,8 +721,8 @@ class _CourseDetailSheet extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             course.name,
-            style: const TextStyle(
-              color: Color(0xFF0F172A),
+            style: TextStyle(
+              color: colors.onSurface,
               fontSize: 18,
               fontWeight: FontWeight.w900,
             ),
@@ -730,10 +745,10 @@ class _CourseDetailSheet extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'Prerrequisitos',
             style: TextStyle(
-              color: Color(0xFF334155),
+              color: colors.onSurface.withValues(alpha: 0.75),
               fontSize: 13,
               fontWeight: FontWeight.w900,
               letterSpacing: 0.4,
@@ -743,10 +758,10 @@ class _CourseDetailSheet extends StatelessWidget {
           _PrereqList(course: course, statuses: statuses),
           if (course.isElective && course.specialties.isNotEmpty) ...[
             const SizedBox(height: 12),
-            const Text(
+            Text(
               'Forma parte de los diplomas',
               style: TextStyle(
-                color: Color(0xFF334155),
+                color: colors.onSurface.withValues(alpha: 0.75),
                 fontSize: 13,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 0.4,
@@ -803,18 +818,19 @@ class _CourseDetailSheet extends StatelessWidget {
               width: double.infinity,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF1F5F9),
+                color: colors.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.lock_outline, size: 16, color: Color(0xFF64748B)),
-                  SizedBox(width: 8),
+                  Icon(Icons.lock_outline, size: 16,
+                      color: colors.onSurface.withValues(alpha: 0.5)),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'Este curso está bloqueado hasta que cumplas sus prerrequisitos.',
                       style: TextStyle(
-                        color: Color(0xFF475569),
+                        color: colors.onSurface.withValues(alpha: 0.65),
                         fontSize: 12,
                         fontWeight: FontWeight.w700,
                       ),
@@ -849,6 +865,7 @@ class _PrereqList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final mallaController = Get.find<MallaController>();
     final byId = {for (final c in mallaController.cards) c.id: c};
     final concrete = course.coursePrerequisites;
@@ -858,10 +875,10 @@ class _PrereqList extends StatelessWidget {
         : mallaController.hasCompletedMandatoryCycles(cycleReq, statuses);
 
     if (concrete.isEmpty && cycleReq == null) {
-      return const Text(
+      return Text(
         'Este curso no tiene prerrequisitos.',
         style: TextStyle(
-          color: Color(0xFF64748B),
+          color: colors.onSurface.withValues(alpha: 0.55),
           fontSize: 12,
           fontWeight: FontWeight.w600,
         ),
@@ -899,6 +916,7 @@ class _PrereqRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     final color = ok ? const Color(0xFF10B981) : const Color(0xFFEF4444);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 3),
@@ -909,8 +927,8 @@ class _PrereqRow extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                color: Color(0xFF334155),
+              style: TextStyle(
+                color: colors.onSurface.withValues(alpha: 0.75),
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
               ),
@@ -929,21 +947,22 @@ class _InfoTag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
+        color: colors.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(99),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 13, color: const Color(0xFF334155)),
+          Icon(icon, size: 13, color: colors.onSurface),
           const SizedBox(width: 5),
           Text(
             text,
-            style: const TextStyle(
-              color: Color(0xFF334155),
+            style: TextStyle(
+              color: colors.onSurface,
               fontSize: 11,
               fontWeight: FontWeight.w800,
             ),

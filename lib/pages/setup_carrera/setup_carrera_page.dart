@@ -17,9 +17,10 @@ class SetupCarreraPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(SetupCarreraController());
     final user = AuthService.to.currentUser;
+    final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F8),
+      backgroundColor: colors.surface,
       body: SafeArea(
         child: Column(
           children: [
@@ -125,6 +126,8 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -145,8 +148,8 @@ class _SectionLabel extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  color: Color(0xFF1A1A1A),
+                style: TextStyle(
+                  color: colors.onSurface,
                   fontSize: 15,
                   fontWeight: FontWeight.w800,
                 ),
@@ -154,8 +157,8 @@ class _SectionLabel extends StatelessWidget {
               const SizedBox(height: 2),
               Text(
                 subtitle,
-                style: const TextStyle(
-                  color: Color(0xFF6B6B6B),
+                style: TextStyle(
+                  color: colors.onSurface.withValues(alpha: 0.55),
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                   height: 1.3,
@@ -175,13 +178,15 @@ class _LockedCarreraCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Obx(
       () => Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.surface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE5E5E5)),
+          border: Border.all(color: colors.outline.withValues(alpha: 0.5)),
         ),
         child: Row(
           children: [
@@ -204,10 +209,10 @@ class _LockedCarreraCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Carrera asignada',
                     style: TextStyle(
-                      color: Color(0xFF777777),
+                      color: colors.onSurface.withValues(alpha: 0.55),
                       fontSize: 11,
                       fontWeight: FontWeight.w800,
                     ),
@@ -217,8 +222,8 @@ class _LockedCarreraCard extends StatelessWidget {
                     controller.selectedCarreraName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Color(0xFF1A1A1A),
+                    style: TextStyle(
+                      color: colors.onSurface,
                       fontSize: 15,
                       fontWeight: FontWeight.w900,
                     ),
@@ -230,18 +235,22 @@ class _LockedCarreraCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
               decoration: BoxDecoration(
-                color: const Color(0xFFF2F2F2),
+                color: colors.surfaceContainerHighest.withValues(alpha: 0.7),
                 borderRadius: BorderRadius.circular(999),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.lock_outline, size: 14, color: Color(0xFF777777)),
-                  SizedBox(width: 4),
+                  Icon(
+                    Icons.lock_outline,
+                    size: 14,
+                    color: colors.onSurface.withValues(alpha: 0.5),
+                  ),
+                  const SizedBox(width: 4),
                   Text(
                     'Fija',
                     style: TextStyle(
-                      color: Color(0xFF777777),
+                      color: colors.onSurface.withValues(alpha: 0.5),
                       fontSize: 11,
                       fontWeight: FontWeight.w800,
                     ),
@@ -262,6 +271,8 @@ class _EspecialidadesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     return Obx(
       () => Column(
         children: controller.especialidadesDisponibles.map((esp) {
@@ -281,12 +292,14 @@ class _EspecialidadesList extends StatelessWidget {
                   vertical: 12,
                 ),
                 decoration: BoxDecoration(
-                  color: selected ? const Color(0xFFFFF1EA) : Colors.white,
+                  color: selected
+                      ? const Color(0xFFFFF1EA)
+                      : colors.surface,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
                     color: selected
                         ? MaterialTheme.primaryColor
-                        : const Color(0xFFE5E5E5),
+                        : colors.outline.withValues(alpha: 0.5),
                     width: selected ? 1.6 : 1,
                   ),
                 ),
@@ -303,7 +316,7 @@ class _EspecialidadesList extends StatelessWidget {
                         border: Border.all(
                           color: selected
                               ? MaterialTheme.primaryColor
-                              : const Color(0xFFCCCCCC),
+                              : colors.outline.withValues(alpha: 0.7),
                           width: 1.6,
                         ),
                       ),
@@ -326,7 +339,7 @@ class _EspecialidadesList extends StatelessWidget {
                             style: TextStyle(
                               color: selected
                                   ? MaterialTheme.primaryDark
-                                  : const Color(0xFF1A1A1A),
+                                  : colors.onSurface,
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
@@ -340,7 +353,7 @@ class _EspecialidadesList extends StatelessWidget {
                                     ? MaterialTheme.primaryDark.withValues(
                                         alpha: 0.8,
                                       )
-                                    : const Color(0xFF666666),
+                                    : colors.onSurface.withValues(alpha: 0.55),
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
                               ),
