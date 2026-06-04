@@ -1,43 +1,38 @@
-import '../../models/anuncio_model.dart';
-import '../../services/anuncio_service.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class DelegadoAnunciosController {
-  final AnuncioService _service = AnuncioService();
-  
-  List<Anuncio> anuncios = [];
-  bool cargando = true;
+class DelegadoAnunciosController extends GetxController {
+  final TextEditingController titulo = TextEditingController();
+  final TextEditingController mensaje = TextEditingController();
 
-  Future<void> cargarAnuncios(String idSeccion, Function actualizarVista) async {
-    try {
-      anuncios = await _service.fetchAnuncios(idSeccion);
-    } catch (e) {
-      print("Error cargando datos: \$e");
-    } finally {
-      cargando = false;
-      actualizarVista(); 
-    }
+  String nombreCurso = 'Curso no especificado';
+  String idSeccion = '';
+  String codigoSeccion = '';
+  String rol = 'Delegado';
+  int alumnosMatriculados = 0;
+
+  void cargarCurso(Map<String, dynamic> args) {
+    nombreCurso = args['curso']?.toString() ?? nombreCurso;
+    idSeccion = args['idSeccion']?.toString() ?? idSeccion;
+    codigoSeccion = args['codigoSeccion']?.toString() ?? idSeccion;
+    rol = args['rol']?.toString() ?? rol;
+    alumnosMatriculados = (args['alumnos'] as num?)?.toInt() ?? 0;
+    titulo.clear();
+    mensaje.clear();
   }
 
-  void eliminarAnuncioLocal(int index, Function actualizarVista) {
-    anuncios.removeAt(index);
-    actualizarVista(); 
-  }
-
-  void agregarAnuncioLocal(String titulo, String mensaje, String idSeccion, Function actualizarVista) {
-    final autorPorDefecto = anuncios.isNotEmpty ? anuncios.first.autor : null;
-    final autorCodePorDefecto = anuncios.isNotEmpty ? anuncios.first.autorCode : "20230000";
-
-    final nuevoAnuncio = Anuncio(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      idSeccion: idSeccion,
-      titulo: titulo,
-      mensaje: mensaje,
-      fecha: "31-05-2026", 
-      autorCode: autorCodePorDefecto,
-      autor: autorPorDefecto!, 
+  void publicarAnuncioPendiente() {
+    Get.snackbar(
+      'Nuevo anuncio',
+      'La publicacion se conectara con anuncios del curso mas adelante.',
+      snackPosition: SnackPosition.BOTTOM,
     );
+  }
 
-    anuncios.insert(0, nuevoAnuncio);
-    actualizarVista();
+  @override
+  void onClose() {
+    titulo.dispose();
+    mensaje.dispose();
+    super.onClose();
   }
 }

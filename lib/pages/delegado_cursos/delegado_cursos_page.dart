@@ -1,96 +1,196 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:ulima_plus/models/curso_delegado_model.dart';
+
 import 'delegado_cursos_controller.dart';
 
 class DelegadoCursosPage extends StatefulWidget {
-  const DelegadoCursosPage({Key? key}) : super(key: key);
+  const DelegadoCursosPage({super.key});
 
   @override
   State<DelegadoCursosPage> createState() => _DelegadoCursosPageState();
 }
 
 class _DelegadoCursosPageState extends State<DelegadoCursosPage> {
-  final DelegadoCursosController _controller = DelegadoCursosController();
+  final DelegadoCursosController control = Get.put(
+    DelegadoCursosController(),
+  );
+
+  static const Color _orange = Color(0xFFFF5A1F);
+  static const Color _background = Color(0xFFF4F5F7);
+  static const Color _text = Color(0xFF1F2933);
+  static const Color _mutedText = Color(0xFF6B7280);
 
   @override
   void initState() {
     super.initState();
-    _controller.cargarCursos(() {
-      setState(() {});
+    control.cargarCursos();
+  }
+
+  Widget _header() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(22, 22, 22, 14),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(LucideIcons.users, color: _orange, size: 28),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Delegado de Aula',
+                  style: TextStyle(
+                    color: _orange,
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  'Gestiona tus cursos asignados',
+                  style: TextStyle(
+                    color: _mutedText,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _sectionChip(String codigoSeccion) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: const Color(0xFFFFE5D4),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Text(
+        'Seccion $codigoSeccion',
+        style: const TextStyle(
+          color: _orange,
+          fontSize: 12,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
+  }
+
+  Widget _courseCard(CursoDelegado curso) {
+    return InkWell(
+      onTap: () => control.abrirGestionCurso(curso),
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFE5E7EB)),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x1A000000),
+              blurRadius: 8,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _sectionChip(curso.codigoSeccion),
+                  const SizedBox(height: 10),
+                  Text(
+                    curso.nombreCurso,
+                    style: const TextStyle(
+                      color: _text,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Icon(
+                        LucideIcons.users,
+                        size: 16,
+                        color: _mutedText,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '${curso.alumnosMatriculados} alumnos matriculados',
+                        style: const TextStyle(
+                          color: _mutedText,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 10),
+            const Icon(LucideIcons.bookOpen, color: Color(0xFF9CA3AF)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _emptyState() {
+    return const Center(
+      child: Text(
+        'No tienes cursos asignados como delegado.',
+        textAlign: TextAlign.center,
+        style: TextStyle(color: _mutedText, fontSize: 15),
+      ),
+    );
+  }
+
+  Widget _courseList() {
+    return Obx(() {
+      if (control.cargando.value) {
+        return const Center(
+          child: CircularProgressIndicator(color: _orange),
+        );
+      }
+
+      if (control.cursosDelegado.isEmpty) {
+        return _emptyState();
+      }
+
+      return ListView.builder(
+        padding: const EdgeInsets.fromLTRB(18, 4, 18, 24),
+        itemCount: control.cursosDelegado.length,
+        itemBuilder: (context, index) {
+          return _courseCard(control.cursosDelegado[index]);
+        },
+      );
     });
   }
 
   @override
-Widget build(BuildContext context) {
-  final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-  final textColor = isDarkMode ? Colors.white : Colors.black87;
-  final subTitleColor = isDarkMode ? Colors.white70 : Colors.grey.shade600;
-  final cardColor = isDarkMode ? const Color(0xFF2D3035) : Colors.white;
-
-  return Scaffold(
-    backgroundColor: isDarkMode ? const Color(0xFF1A1C1E) : Colors.grey.shade50,
-    body: SafeArea(
-      child: _controller.cargando
-          ? const Center(child: CircularProgressIndicator())
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Encabezado compacto
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Delegado',
-                        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: textColor),
-                      ),
-                      Text(
-                        'Tus cursos a cargo',
-                        style: TextStyle(fontSize: 15, color: subTitleColor),
-                      ),
-                    ],
-                  ),
-                ),
-                
-                // Lista de cursos
-                Expanded(
-                  child: _controller.cursosDelegado.isEmpty
-                      ? Center(child: Text("No tienes cursos a cargo", style: TextStyle(color: subTitleColor)))
-                      : ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          itemCount: _controller.cursosDelegado.length,
-                          itemBuilder: (context, index) {
-                            final curso = _controller.cursosDelegado[index];
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              decoration: BoxDecoration(
-                                color: cardColor,
-                                borderRadius: BorderRadius.circular(12),
-                                border: isDarkMode ? null : Border.all(color: Colors.grey.shade200),
-                                boxShadow: isDarkMode ? [] : [
-                                  BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5, offset: const Offset(0, 2)),
-                                ],
-                              ),
-                              child: ListTile(
-                                title: Text(curso["curso"], style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
-                                subtitle: Text('Sección ${curso["seccion"]}', style: TextStyle(color: isDarkMode ? Colors.orangeAccent : Colors.grey.shade700)),
-                                trailing: Icon(LucideIcons.chevronRight, size: 18, color: textColor),
-                                onTap: () {
-                                  Get.toNamed('/delegado-anuncios', arguments: {
-                                    'curso': curso["curso"],
-                                    'idSeccion': curso["idSeccion"]
-                                  });
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                ),
-              ],
-            ),
-    ),
-  );
-}
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: _background,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _header(),
+          Expanded(child: _courseList()),
+        ],
+      ),
+    );
+  }
 }

@@ -5,7 +5,6 @@ import 'package:ulima_plus/components/header/app_header.dart';
 import 'package:ulima_plus/pages/calculadora/calculadora_page.dart';
 import 'package:ulima_plus/pages/horario/horario.dart';
 import 'package:ulima_plus/pages/malla/malla_page.dart';
-import 'package:ulima_plus/services/auth_service.dart';
 import '../perfil/perfil.dart';
 import 'package:ulima_plus/pages/delegado_cursos/delegado_cursos_page.dart';
 
@@ -20,42 +19,45 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeController control = Get.put(HomeController());
-  final user = AuthService.to.currentUser;
 
-  late final List<Widget> _pages = [
-    const MallaPage(),
-    const CalculadoraPage(),
-    const HorarioPage(),
-    if (user?.isDelegate ?? false) const DelegadoCursosPage(),
-    const ProfilePage(),
-  ];
+  List<Widget> _pages(bool mostrarDelegado) {
+    return [
+      const MallaPage(),
+      const CalculadoraPage(),
+      const HorarioPage(),
+      if (mostrarDelegado) const DelegadoCursosPage(),
+      const ProfilePage(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      backgroundColor: colors.surface,
-      body: Column(
-        children: [
-          Obx(
-            () => AppHeader(
-              showLogout: control.currentTabIndex.value == _pages.length - 1,
-            ),
-          ),
-          Expanded(
-            child: Obx(() => _pages[control.currentTabIndex.value]),
-          ),
-        ],
-      ),
-      bottomNavigationBar: Obx(
-        () => AppFooter(
-          currentIndex: control.currentTabIndex.value,
+    return Obx(() {
+      final mostrarDelegado = control.mostrarDelegado.value;
+      final pages = _pages(mostrarDelegado);
+      final currentIndex = control.currentTabIndex.value.clamp(
+        0,
+        pages.length - 1,
+      ).toInt();
+
+      return Scaffold(
+        backgroundColor: colors.surface,
+        body: Column(
+          children: [
+            AppHeader(showLogout: currentIndex == pages.length - 1),
+            Expanded(child: pages[currentIndex]),
+          ],
+        ),
+        bottomNavigationBar: AppFooter(
+          currentIndex: currentIndex,
+          mostrarDelegado: mostrarDelegado,
           onTap: (index) {
             control.currentTabIndex.value = index;
           },
         ),
-      ),
-    );
+      );
+    });
   }
 }
