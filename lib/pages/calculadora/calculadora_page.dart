@@ -6,6 +6,7 @@ import '../../components/calculadora/add_score.dart';
 import '../../components/calculadora/seleccionar_curso_dialog.dart';
 import 'calculadora_controller.dart';
 
+// pantalla principal de la calculadora, embedida en home como un tab
 class CalculadoraPage extends StatelessWidget {
   const CalculadoraPage({super.key});
 
@@ -15,11 +16,10 @@ class CalculadoraPage extends StatelessWidget {
     final colors = Theme.of(context).colorScheme;
 
     return Scaffold(
-      // En tu darkScheme pusiste surface: Color(0xFF1F1F1F)
       backgroundColor: colors.surface, 
       body: Column(
         children: [ 
-          // Header de Calculadora de Notas
+          // header con el titulo y contador de cursos con notas
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(20),
@@ -35,6 +35,7 @@ class CalculadoraPage extends StatelessWidget {
                     color: colors.onSurface,
                   ),
                 ),
+                // contador reactivo: solo cursos que tienen al menos 1 nota
                 Obx(() {
                   final cursosConNotas = controller.cursos
                       .where((curso) => curso.notas.isNotEmpty)
@@ -52,13 +53,14 @@ class CalculadoraPage extends StatelessWidget {
             ),
           ),
 
-          // Lista de cursos (solo los que tienen notas registradas)
+          // lista de cursos o pantalla de vacio
           Expanded(
             child: Obx(() {
               final cursosConNotas = controller.cursos
                   .where((curso) => curso.notas.isNotEmpty)
                   .toList();
 
+              // estado vacio: no hay ninguna nota registrada aun
               if (cursosConNotas.isEmpty) {
                 return Center(
                   child: Column(
@@ -111,7 +113,7 @@ class CalculadoraPage extends StatelessWidget {
             }),
           ),
 
-          // Botón Agregar Nota - Versión mejorada
+          // boton flotante para agregar nota
           Padding(
             padding: const EdgeInsets.all(20),
             child: Obx(() {
@@ -119,10 +121,11 @@ class CalculadoraPage extends StatelessWidget {
               return ElevatedButton.icon(
                 onPressed: tieneNotas
                     ? () {
-                        // Mostrar diálogo para seleccionar curso si hay múltiples
+                        // si solo hay 1 curso, va directo al modal
                         if (controller.cursos.length == 1) {
                           _mostrarModalAgregarNota(context, 0, controller);
                         } else {
+                          // si hay varios, primero pregunta cual
                           _mostrarDialogoSeleccionarCurso(
                             context,
                             controller,
@@ -151,7 +154,7 @@ class CalculadoraPage extends StatelessWidget {
     );
   }
 
-  /// Muestra el modal para agregar nota para un curso específico
+  // abre el modal para registrar nota de un curso especifico
   void _mostrarModalAgregarNota(
     BuildContext context,
     int cursoIndex,
@@ -172,7 +175,7 @@ class CalculadoraPage extends StatelessWidget {
     );
   }
 
-  /// Muestra un diálogo para seleccionar el curso antes de agregar nota
+  // dialogo para elegir un curso cuando hay varios
   void _mostrarDialogoSeleccionarCurso(
     BuildContext context,
     CalculadoraController controller,

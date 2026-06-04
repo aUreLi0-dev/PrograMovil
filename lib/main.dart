@@ -29,6 +29,7 @@ void main() async {
   Get.put<MallaService>(MallaService(), permanent: true);
   Get.put<AlertasService>(AlertasService(), permanent: true);
 
+  // precarga los datos de la calculadora (silabo y cursos) en paralelo
   await Future.wait([
     EvaluationSyllabusService().loadEvaluationData(),
     CoursesService().loadCoursesData(),
@@ -48,6 +49,7 @@ void main() async {
     initialRoute = '/login';
   }
 
+  // registramos el controller de la calculadora como singleton permanente
   Get.put(CalculadoraController(), permanent: true);
   runApp(MyApp(initialRoute: initialRoute));
 }

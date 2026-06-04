@@ -5,6 +5,7 @@ import '../../models/evaluation_model.dart';
 import '../../models/curso_seccion_model.dart';
 import '../../pages/calculadora/calculadora_controller.dart';
 
+// modal bottom sheet para registrar una nota en un curso
 class AddNota extends StatefulWidget {
   final int cursoIndex;
   final CursoSeccion cursoData;
@@ -31,7 +32,7 @@ class _AddNotaState extends State<AddNota> {
     super.initState();
     _valorController = TextEditingController();
 
-    // Obtenemos las evaluaciones que NO se han registrado aún
+    // solo mostramos evaluaciones que aun no se han registrado
     final controller = Get.find<CalculadoraController>();
     _evaluacionesDisponibles = controller.getAvailableEvaluations(
       widget.cursoIndex,
@@ -44,6 +45,7 @@ class _AddNotaState extends State<AddNota> {
     super.dispose();
   }
 
+  // valida que la nota sea un numero entre 0 y 20
   bool _validarValor(String valor) {
     if (valor.isEmpty) {
       setState(() => _valorError = CalculadoraConstantes.notaRequerida);
@@ -82,7 +84,7 @@ class _AddNotaState extends State<AddNota> {
     final controller = Get.find<CalculadoraController>();
     final valor = double.parse(_valorController.text);
 
-    // Guardar la nota
+    // llama al controller que agrega la nota y persiste
     controller.agregarNota(
       widget.cursoIndex,
       _evaluacionSeleccionada!.nombre,
@@ -124,7 +126,7 @@ class _AddNotaState extends State<AddNota> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header
+              // header con nombre del curso y boton cerrar
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -170,6 +172,7 @@ class _AddNotaState extends State<AddNota> {
               ),
               const SizedBox(height: 12),
 
+              // si ya registro todo, mostramos mensaje
               if (_evaluacionesDisponibles.isEmpty)
                 Container(
                   padding: const EdgeInsets.all(16),
@@ -192,6 +195,7 @@ class _AddNotaState extends State<AddNota> {
                   ),
                 )
               else
+                // dropdown para elegir la evaluacion
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   decoration: BoxDecoration(
@@ -268,6 +272,7 @@ class _AddNotaState extends State<AddNota> {
 
               const SizedBox(height: 20),
 
+              // info del peso auto (tomado del silabo)
               if (_evaluacionSeleccionada != null)
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -308,6 +313,7 @@ class _AddNotaState extends State<AddNota> {
 
               const SizedBox(height: 20),
 
+              // input para la nota
               if (_evaluacionesDisponibles.isNotEmpty)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -362,6 +368,7 @@ class _AddNotaState extends State<AddNota> {
 
               const SizedBox(height: 24),
 
+              // botones cancelar / registrar
               Row(
                 children: [
                   Expanded(

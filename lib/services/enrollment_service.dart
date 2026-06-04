@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import '../models/enrollment_model.dart';
 
+// servicio singleton que carga las matriculas desde el json
 class EnrollmentService {
   static final EnrollmentService _instance = EnrollmentService._internal();
 
@@ -12,6 +13,7 @@ class EnrollmentService {
 
   List<Enrollment>? _cachedEnrollments;
 
+  // carga el json completo y lo cachea
   Future<List<Enrollment>> fetchEnrollments() async {
     if (_cachedEnrollments != null) return _cachedEnrollments!;
     try {
@@ -28,11 +30,13 @@ class EnrollmentService {
     }
   }
 
+  // filtra por seccion
   Future<List<Enrollment>> fetchBySection(String idSeccion) async {
     final enrollments = await fetchEnrollments();
     return enrollments.where((e) => e.idSeccion == idSeccion).toList();
   }
 
+  // busca una matricula por su id
   Future<Enrollment?> findById(String id) async {
     final enrollments = await fetchEnrollments();
     try {
@@ -42,6 +46,7 @@ class EnrollmentService {
     }
   }
 
+  // filtra por codigo de alumno (el que usa el controller)
   Future<List<Enrollment>> fetchByStudentCode(String studentCode) async {
     final enrollments = await fetchEnrollments();
     return enrollments

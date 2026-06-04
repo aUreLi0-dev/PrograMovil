@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../models/course_syllabus_model.dart';
 
-/// Servicio para cargar y gestionar los datos de evaluaciones del sílabo
+// servicio singleton que carga el silabo (evaluaciones) desde el json
 class EvaluationSyllabusService {
   static final EvaluationSyllabusService _instance =
       EvaluationSyllabusService._internal();
@@ -16,7 +16,7 @@ class EvaluationSyllabusService {
   late List<CourseSyllabus> _syllabusData;
   bool _isLoaded = false;
 
-  /// Carga el archivo JSON con los datos de evaluaciones
+  // lee evaluaciones.json y lo convierte en lista de cursos con sus evaluaciones
   Future<void> loadEvaluationData() async {
     if (_isLoaded) return;
 
@@ -40,6 +40,5 @@ class EvaluationSyllabusService {
     }
   }
 
-  /// Obtiene todos los sílabos cargados
   List<CourseSyllabus> get allSyllabuses => _syllabusData;
 }

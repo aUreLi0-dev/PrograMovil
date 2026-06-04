@@ -48,8 +48,8 @@ class AnuncioService {
       final filtrados =
           combined.where((a) => a.idSeccion == idSeccion).toList();
       
-      // Ordenar por ID descendente de forma simple (o fecha) para mostrar los nuevos arriba
-      filtrados.sort((a, b) => b.id.compareTo(a.id));
+      // ordenar por fecha descendente (mas nuevos primero)
+      filtrados.sort((a, b) => _parseFecha(b.fecha).compareTo(_parseFecha(a.fecha)));
 
       return GenericResponse(
         success: true,
@@ -91,6 +91,16 @@ class AnuncioService {
         message: 'Error al guardar el anuncio',
         error: stack.toString(),
       );
+    }
+  }
+
+  // convierte fecha "dd/M/yyyy" a datetime para ordenar
+  DateTime _parseFecha(String fecha) {
+    try {
+      final parts = fecha.split('/');
+      return DateTime(int.parse(parts[2]), int.parse(parts[1]), int.parse(parts[0]));
+    } catch (e) {
+      return DateTime(2000);
     }
   }
 }

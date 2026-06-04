@@ -1,4 +1,4 @@
-// ALUMNOS MATRICULADOS EN UNA SECCION
+// alumno matriculado en una seccion
 class Enrollment{
   final String id;
   final String studentCode;
@@ -12,6 +12,7 @@ class Enrollment{
     required this.idSeccion,
   });
 
+  // construye desde el json de enrollments
   factory Enrollment.fromJson(Map<String,dynamic> json){
     return Enrollment(
       id:json['id'].toString(),

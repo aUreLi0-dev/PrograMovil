@@ -3,6 +3,7 @@ import '../../constants/calculadora_constants.dart';
 import '../../models/curso_seccion_model.dart';
 import '../../pages/calculadora/calculadora_controller.dart';
 
+// dialogo para elegir un curso antes de agregar nota (cuando hay varios)
 class SeleccionarCursoDialog extends StatelessWidget {
   final CalculadoraController controller;
   final BuildContext parentContext;
@@ -34,6 +35,7 @@ class SeleccionarCursoDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
+          // genera un item por cada curso
           ...List.generate(
             controller.cursos.length,
             (index) {
@@ -53,6 +55,7 @@ class SeleccionarCursoDialog extends StatelessWidget {
   }
 }
 
+// item individual de curso en el dialogo
 class _CursoItem extends StatelessWidget {
   final CursoSeccion curso;
   final VoidCallback onTap;
