@@ -20,7 +20,7 @@ class NotasService {
           'id': curso['id'],
           'nombre': curso['nombre'],
           'ciclo': curso['ciclo'],
-          'idSeccion': curso['idSeccion'],
+          'idSeccion': curso['id'],
           'notas': (curso['notas'] as List).toList(),
         };
       }).toList();
@@ -48,16 +48,6 @@ class NotasService {
     } catch (e) {
       print('✗ Error al cargar notas: $e');
       return [];
-    }
-  }
-
-  Future<void> eliminarNotas(String idEstudiante) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('${_notasKey}_$idEstudiante');
-      print('✓ Notas eliminadas para: $idEstudiante');
-    } catch (e) {
-      print('✗ Error al eliminar notas: $e');
     }
   }
 

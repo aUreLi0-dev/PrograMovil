@@ -3,22 +3,22 @@ import 'package:get/get.dart';
 import '../../models/evaluation_model.dart';
 import '../../pages/calculadora/calculadora_controller.dart';
 
-class AddNotaWithSyllabusModal extends StatefulWidget {
+class AddNota extends StatefulWidget {
   final int cursoIndex;
   final Map cursoData;
 
-  const AddNotaWithSyllabusModal({
+  const AddNota({
     super.key,
     required this.cursoIndex,
     required this.cursoData,
   });
 
   @override
-  State<AddNotaWithSyllabusModal> createState() =>
-      _AddNotaWithSyllabusModalState();
+  State<AddNota> createState() =>
+      _AddNotaState();
 }
 
-class _AddNotaWithSyllabusModalState extends State<AddNotaWithSyllabusModal> {
+class _AddNotaState extends State<AddNota> {
   late TextEditingController _valorController;
   EvaluationComponent? _evaluacionSeleccionada;
   String? _valorError;

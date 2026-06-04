@@ -4,17 +4,13 @@ import '../../components/calculadora/curso_card.dart';
 import '../../components/calculadora/add_score.dart';
 import 'calculadora_controller.dart';
 
-// Usamos GetView para evitar el Get.put manual si ya está en los bindings,
-// o simplemente para tener acceso directo a 'controller'.
-class CalculadoraPage extends GetView<CalculadoraController> {
+class CalculadoraPage extends StatelessWidget {
   const CalculadoraPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 1. Extraemos el esquema de colores (cambiará solo si el sistema está en Dark Mode)
+    final controller = Get.find<CalculadoraController>();
     final colors = Theme.of(context).colorScheme;
-    
-    Get.lazyPut(() => CalculadoraController());
 
     return Scaffold(
       // En tu darkScheme pusiste surface: Color(0xFF1F1F1F)
@@ -167,7 +163,7 @@ class CalculadoraPage extends GetView<CalculadoraController> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
       ),
-      builder: (_) => AddNotaWithSyllabusModal(
+      builder: (_) => AddNota(
         cursoIndex: cursoIndex,
         cursoData: controller.cursos[cursoIndex],
       ),

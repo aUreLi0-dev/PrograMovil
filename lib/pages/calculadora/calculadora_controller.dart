@@ -173,14 +173,6 @@ class CalculadoraController extends GetxController {
     return syllabus?.evaluaciones ?? [];
   }
 
-  bool hasSyllabusData(int cursoIndex) {
-    if (cursoIndex >= 0 && cursoIndex < cursos.length) {
-      final cursoId = cursos[cursoIndex]['id'] as String?;
-      return cursoId != null && syllabusData.containsKey(cursoId);
-    }
-    return false;
-  }
-
   List<String> getRegisteredEvaluationIds(int cursoIndex) {
     if (cursoIndex >= 0 && cursoIndex < cursos.length) {
       final notas = cursos[cursoIndex]['notas'] as List?;

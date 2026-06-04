@@ -40,24 +40,6 @@ class EvaluationSyllabusService {
     }
   }
 
-  /// Obtiene el sílabo de un curso específico por su ID
-  CourseSyllabus? getSyllabusByCourseId(String cursoId) {
-    try {
-      return _syllabusData.firstWhere((syllabus) => syllabus.cursoId == cursoId);
-    } catch (e) {
-      return null;
-    }
-  }
-
-  /// Obtiene las evaluaciones de un curso específico
-  List<EvaluationComponent> getEvaluationsByCourseId(String cursoId) {
-    final syllabus = getSyllabusByCourseId(cursoId);
-    return syllabus?.evaluaciones ?? [];
-  }
-
   /// Obtiene todos los sílabos cargados
   List<CourseSyllabus> get allSyllabuses => _syllabusData;
-
-  /// Verifica si los datos ya están cargados
-  bool get isLoaded => _isLoaded;
 }

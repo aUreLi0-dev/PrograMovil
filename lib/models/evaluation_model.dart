@@ -23,16 +23,6 @@ class EvaluationComponent {
       tipo: json['tipo'] ?? '',
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'nombre': nombre,
-      'sigla': sigla,
-      'peso': peso,
-      'tipo': tipo,
-    };
-  }
 }
 
 class CourseSyllabus {
@@ -46,8 +36,6 @@ class CourseSyllabus {
     required this.evaluaciones,
   });
 
-  double get pesoTotal => evaluaciones.fold(0, (sum, eval) => sum + eval.peso);
-
   /// Convertir desde JSON
   factory CourseSyllabus.fromJson(Map<String, dynamic> json) {
     final evaluacionesList = (json['evaluaciones'] as List<dynamic>? ?? [])
@@ -59,15 +47,5 @@ class CourseSyllabus {
       cursoNombre: json['cursoNombre'] ?? '',
       evaluaciones: evaluacionesList,
     );
-  }
-
-  /// Convertir a Map
-  Map<String, dynamic> toMap() {
-    return {
-      'cursoId': cursoId,
-      'cursoNombre': cursoNombre,
-      'evaluaciones': evaluaciones.map((e) => e.toMap()).toList(),
-      'pesoTotal': pesoTotal,
-    };
   }
 }
