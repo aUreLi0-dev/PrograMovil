@@ -72,7 +72,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/setup-carrera', page: () => const SetupCarreraPage()),
         GetPage(name: '/home', page: () => const HomePage()),
-        // AQUÍ ESTÁ TU NUEVA RUTA:
         GetPage(name: '/delegado-cursos', page: () => const DelegadoCursosPage()),
         GetPage(name: '/delegado-anuncios', page: () => const DelegadoAnunciosPage()),
       ],

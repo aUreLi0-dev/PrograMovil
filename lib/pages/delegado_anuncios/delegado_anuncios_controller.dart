@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ulima_plus/models/anuncio_model.dart';
+import 'package:ulima_plus/models/estadisticas_seccion_model.dart';
 import 'package:ulima_plus/services/anuncio_service.dart';
 import 'package:ulima_plus/services/auth_service.dart';
 
@@ -137,21 +138,4 @@ class DelegadoAnunciosController extends GetxController {
   }
 }
 
-class EstadisticasSeccion {
-  final double promedioGeneral;
-  final int porcentajeAprobados;
-  final int rango0_10;
-  final int rango11_13;
-  final int rango14_16;
-  final int rango17_20;
-
-  EstadisticasSeccion({
-    required this.promedioGeneral,
-    required this.porcentajeAprobados,
-    required this.rango0_10,
-    required this.rango11_13,
-    required this.rango14_16,
-    required this.rango17_20,
-  });
-}
 
