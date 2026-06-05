@@ -36,10 +36,10 @@ class UserModel {
       code: json['code'] as String,
       firstName:
           json['firstName'] as String? ??
-          (nameParts.isNotEmpty ? nameParts.first : ''),
+          (nameParts.isNotEmpty ? _extractFirstName(nameParts) : ''),
       lastName:
           json['lastName'] as String? ??
-          (nameParts.length > 1 ? nameParts.skip(1).join(' ') : ''),
+          (nameParts.length > 1 ? _extractLastName(nameParts) : ''),
       careerId: json['career_id'] as int?,
       especialidades: (json['especialidades'] as List?)?.cast<int>() ?? <int>[],
       currentCycle: json['currentCycle'] as String? ?? '2026-1',
@@ -63,6 +63,16 @@ class UserModel {
               approvedElectives: <String>{},
             ),
     );
+  }
+
+  static String _extractFirstName(List<String> parts) {
+    if (parts.length <= 2) return parts.first;
+    return parts.sublist(0, parts.length - 2).join(' ');
+  }
+
+  static String _extractLastName(List<String> parts) {
+    if (parts.length == 2) return parts.last;
+    return parts.sublist(parts.length - 2).join(' ');
   }
 
   Map<String, dynamic> toJson() => {
