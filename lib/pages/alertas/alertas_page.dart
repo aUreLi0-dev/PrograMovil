@@ -5,9 +5,10 @@ import 'package:ulima_plus/components/header/app_header.dart';
 import 'package:ulima_plus/models/alerta_model.dart';
 import 'package:ulima_plus/pages/home/home_controller.dart';
 import 'package:ulima_plus/services/alertas_service.dart';
+import 'package:ulima_plus/services/auth_service.dart';
 
 class AlertasPage extends StatefulWidget {
-  const AlertasPage({super.key});     
+  const AlertasPage({super.key});
 
   @override
   State<AlertasPage> createState() => _AlertasPageState();
@@ -51,7 +52,10 @@ class _AlertasPageState extends State<AlertasPage> {
                   icon: Icon(Icons.arrow_back, color: colors.onSurface),
                   onPressed: () => Get.back(),
                   padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
+                  constraints: const BoxConstraints(
+                    minWidth: 40,
+                    minHeight: 40,
+                  ),
                 ),
                 const SizedBox(width: 4),
                 Icon(Icons.notifications_none, color: colors.primary, size: 22),
@@ -102,9 +106,13 @@ class _AlertasPageState extends State<AlertasPage> {
               }
 
               return ListView.separated(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 14,
+                ),
                 itemCount: _service.alertas.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 10),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 10),
                 itemBuilder: (context, index) {
                   return _AlertCard(
                     alerta: _service.alertas[index],
@@ -116,15 +124,22 @@ class _AlertasPageState extends State<AlertasPage> {
           ),
         ],
       ),
-      bottomNavigationBar: Obx(
-        () => AppFooter(
-          currentIndex: HomeController.to.currentTabIndex.value,
+      bottomNavigationBar: Obx(() {
+        final isDelegate = AuthService.to.isDelegate;
+        final lastIndex = isDelegate ? 4 : 3;
+
+        return AppFooter(
+          currentIndex: HomeController.to.currentTabIndex.value.clamp(
+            0,
+            lastIndex,
+          ),
+          isDelegate: isDelegate,
           onTap: (index) {
             HomeController.to.currentTabIndex.value = index;
             Get.back();
           },
-        ),
-      ),
+        );
+      }),
     );
   }
 }
@@ -197,7 +212,10 @@ class _AlertCard extends StatelessWidget {
               ),
               if (!alerta.leido)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: colors.primary,
                     borderRadius: BorderRadius.circular(20),

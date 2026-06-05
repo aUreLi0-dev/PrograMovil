@@ -7,6 +7,7 @@ App móvil diseñada para estudiantes de la Universidad de Lima que facilita la 
 * [Descripcion del entorno de desarrollo](#descripcion-del-entorno-de-desarrollo)
 * [Catálogo de Requerimientos](#catálogo-de-requerimientos)
 * [Casos de Uso por Paquete](#casos-de-uso-por-paquete)
+* [Historias de Usuario](#historias-de-usuario)
 * [Diseño de Lógica y Datos](#diseño-de-lógica-y-datos)
 * [Diagrama de Despliegue](#diagrama-de-despliegue)
 * [Mockups](#mockups)
@@ -193,32 +194,50 @@ En este paquete los casos de uso están relacionados con la comunicación y gest
 
 ### Matriz de Trazabilidad
 
+| Req \ CU | CU01 | CU02 | CU03 | CU04 | CU05 | CU06 | CU07 | CU08 | CU09 | CU10 | CU11 | CU12 | CU13 | CU14 | CU15 | CU16 | CU17 |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **R1**  | X |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+| **R2**  |   | X |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+| **R3**  |   |   |   |   | X |   |   |   |   |   |   |   |   |   |   |   |   |
+| **R4**  |   |   |   |   |   | X |   |   |   |   |   |   |   |   |   |   |   |
+| **R5**  |   |   |   |   |   |   |   |   | X |   |   |   |   |   |   |   |   |
+| **R6**  |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |   |   |
+| **R7**  |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |   |   |
+| **R8**  |   |   |   |   |   |   |   |   | X | X |   |   |   |   |   |   |   |
+| **R9**  |   |   |   |   |   |   | X |   |   |   |   |   |   |   |   |   |   |
+| **R10** |   |   |   |   |   |   |   | X |   |   |   |   |   |   |   |   |   |
+| **R11** |   |   | X |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+| **R12** |   |   |   | X |   |   |   |   |   |   |   |   |   |   |   |   |   |
+| **R13** |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |
+| **R14** |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |
+| **R15** |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |
+| **R16** |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |
+| **R17** |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |
+| **R18** |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |
+| **R19** |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |   |
+| **R20** |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |
+| **R21** |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |
+| **R22** |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |
+| **R23** |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |
 
-| Req \ CU | CU1 | CU2 | CU3 | CU4 | CU5 | CU6 | CU7 | CU8 | CU9 | CU10 | CU11 | CU12 | CU13 | CU14 | CU15 | CU16 | CU17 | CU18 |
-| :------: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: | :--: |
-| R1  | X |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
-| R2  |   | X |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
-| R3  |   |   | X |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
-| R4  |   |   |   |   |   | X |   |   |   |   |   |   |   |   |   |   |   |   |
-| R5  |   |   |   |   |   |   | X |   |   |   |   |   |   |   |   |   |   |   |
-| R6  |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |   |   |   |
-| R7  |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |   |   |
-| R8  |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |   |   |
-| R9  |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |   |
-| R10 |   |   |   |   |   |   |   | X |   |   |   |   |   |   |   |   |   |   |
-| R11 |   |   |   |   |   |   |   |   | X |   |   | X |   |   |   |   |   |   |
-| R12 |   |   |   | X |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
-| R13 |   |   |   |   | X |   |   |   |   |   |   |   |   |   |   |   |   |   |
-| R14 |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |
-| R15 |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |
-| R16 |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |
-| R17 |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |
-| R18 |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |
-| R19 |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |
-| R20 |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |
-| R21 |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |
-| R22 |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |
-| R23 |   |   |   |   |   |   |   |   |   |   |   |   |   |   | X |   |   |   |
+## Historias de Usuario
+| ID | Historia de Usuario | Descripción |
+| :--- | :--- | :--- |
+| **US01** | Iniciar Sesión | Como usuario, quiero iniciar sesión con mi código y contraseña para acceder de forma segura a mi información académica. |
+| **US02** | Cerrar Sesión | Como usuario, quiero cerrar sesión para proteger mi información cuando termine de usar el sistema. |
+| **US03** | Visualizar Malla Curricular | Como alumnado, quiero visualizar una malla curricular interactiva para conocer mi avance académico y los cursos hábiles. |
+| **US04** | Actualizar Estados de Cursos | Como alumnado, quiero seleccionar el estado de los cursos de mi carrera para reflejar mi avance en la malla curricular. |
+| **US05** | Seleccionar Especialidad | Como alumnado, quiero seleccionar una especialidad de mi carrera para identificar los cursos que necesito llevar para obtener dicha línea de carrera. |
+| **US06** | Registrar Notas por Curso | Como alumnado, quiero ingresar mis notas por examen para simular mi promedio por curso. |
+| **US07** | Visualizar Promedio por Curso | Como alumnado, quiero ver el promedio calculado de mis cursos para monitorear mi actual rendimiento académico individual. |
+| **US08** | Recibir Alertas | Como alumnado, quiero recibir alertas de riesgo académico para tomar acciones oportunas y mejorar mi rendimiento. |
+| **US09** | Visualizar Horario y Calendario Académico | Como alumnado, quiero visualizar mi horario de clases semanal junto con las fechas de mis evaluaciones programadas para organizar mejor mi tiempo durante el ciclo. |
+| **US10** | Registrar anuncios académicos | Como delegado, quiero enviar anuncios a mi sección para notificar a mis compañeros sobre exámenes y mensajes del docente. |
+| **US11** | Visualizar estadísticas del curso | Como delegado, quiero visualizar estadísticas generales del curso para analizar el rendimiento de mi sección sin exponer datos personales. |
+| **US12** | Visualizar anuncios académicos | Como alumnado, quiero visualizar los anuncios académicos publicados por el delegado de mi sección para estar pendiente de las actualizaciones del curso. |
+| **US13** | Visualizar Horario de Asesoría | Como alumnado, quiero ver las horas de asesoría de mis profesores en el detalle del curso para saber cuándo resolver mis dudas y acceder a sus enlaces de conexión. |
+| **US14** | Visualizar Contactos de la Sección | Como alumnado, quiero ver la lista de mis compañeros y del docente asignado a mi sección para conocer a mis compañeros y facilitar la comunicación. |
+| **US15** | Visualizar Perfil | Como estudiante, quiero visualizar mis datos personales en la pantalla de perfil, para verificar que mi información acádemica esté correcta y actualizada. |
 
 ## Diseño de Lógica y Datos
 
@@ -230,14 +249,13 @@ Este diagrama define la estructura de objetos en Dart/Flutter. Representa cómo 
 <div align="center">
 <img src="docs/images/arquitectura/diagramaClases.png" width="700"/>
 </div>
-
  
 
-### Diagrama Entidad-Relación (Base de Datos)
+### Modelo de Base de Datos
 Este modelo asegura la integridad de los datos de las evaluaciones, sílabos y registros de usuarios.
 
 <div align="center">
-<img src="docs/images/arquitectura/diagramaER.png" width="700"/>
+<img src="docs/images/arquitectura/diagrama db.png" width="700"/>
 </div>
 
 ---
@@ -319,6 +337,7 @@ La arquitectura implementa un modelo de **cliente-servidor distribuido** con sep
 - **Separación de responsabilidades**: Cada servicio tiene una función específica y bien definida
 - **Tecnologías seleccionadas**: Ruby Sinatra por su simpleza y eficiencia, MySQL por confiabilidad, Redis para caché distribuido, OAuth 2.0/JWT para autenticación segura
 
+
 ## Mockups
 
 > Esta sección presenta la propuesta de diseño de la interfaz de usuario (IU) para **ULima++**, basada en el prototipo desarrollado en Figma.
@@ -351,9 +370,9 @@ La arquitectura implementa un modelo de **cliente-servidor distribuido** con sep
 ## Calculadora de Notas
 <div align="center">
 
-| Gestión de Sílabo | Agregar Nota | Visualización de Notas |
-| :---: | :---: | :---: |
-| <img src="docs/images/UI/SubirSilabo.png" width="250"/> | <img src="docs/images/UI/AgregarNota.png" width="250"/> | <img src="docs/images/UI/NotasPorCurso.png" width="250"/> |
+| Agregar Nota | Visualización de Notas |
+| :---: | :---: |
+| <img src="docs/images/UI/AgregarNota.png" width="250"/> | <img src="docs/images/UI/NotasPorCurso.png" width="250"/> |
 
 
 </div>
@@ -388,10 +407,3 @@ El actor 'Delegado' contará con un módulo exclusivo que integra las siguientes
 | <img src="docs/images/UI/GestionCursosDelegado.png" width="250"/> | <img src="docs/images/UI/GestionAnunciosDelegado.png" width="250"/> | <img src="docs/images/UI/SeguimientoProgresoSeccion.png" width="250"/> |
 
 </div>
-
-
-
-
-
-
-
