@@ -17,13 +17,17 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
   @override
   void initState() {
     super.initState();
+    // 1. Inicializar el controlador e insertarlo en la memoria RAM del celular (Get.put)
     control = Get.put(DelegadoAnunciosController());
+    
+    // 2. Recuperar los datos enviados desde la pantalla anterior (Curso, Sección, Alumnos)
     final args = Get.arguments as Map<String, dynamic>? ?? {};
     control.cargarCurso(args);
   }
 
   @override
   void dispose() {
+    // 3. Liberar la memoria RAM eliminando el controlador al cerrar o salir de la pantalla
     Get.delete<DelegadoAnunciosController>();
     super.dispose();
   }
@@ -252,34 +256,35 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
     required Color color,
     required int maxCantidad,
   }) {
+    // Obtener los colores dinámicos del tema (soporte Light y Dark Mode)
     final colors = Theme.of(context).colorScheme;
     
-    // Altura máxima reservada para la barra física en píxeles
+    // 1. Altura máxima reservada para la barra física en píxeles
     double alturaMaximaGrafico = 70.0;
     
-    // Regla de tres simple para calcular la altura de cada barra de forma proporcional
+    // 2. Regla de tres simple para calcular la altura de cada barra de forma proporcional al salón
     double alturaCalculada = maxCantidad > 0 
         ? (cantidad / maxCantidad) * alturaMaximaGrafico 
         : 0;
 
-    // Altura mínima para que la barra se note aunque tenga valor bajo
+    // 3. Altura mínima (8px) para que la barra sea visible aunque tenga valores bajos (ej. 1 alumno)
     double alturaMinima = cantidad > 0 ? 8.0 : 0.0;
     double alturaFinal = alturaCalculada < alturaMinima ? alturaMinima : alturaCalculada;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        // Cantidad de alumnos encima de la barra
+        // Pintar la cantidad de alumnos sobre la barra
         Text(
           '$cantidad',
           style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.bold,
-            color: colors.onSurface,
+            color: colors.onSurface, // Cambia automáticamente según tema claro/oscuro
           ),
         ),
         const SizedBox(height: 4),
-        // La barra física de color
+        // La barra física rectangular de color
         Container(
           width: 28,
           height: alturaFinal,
@@ -289,7 +294,7 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
           ),
         ),
         const SizedBox(height: 6),
-        // Etiqueta del rango de notas debajo
+        // Etiqueta del rango de notas (ej: "14-16") debajo de la barra
         Text(
           rango,
           style: TextStyle(

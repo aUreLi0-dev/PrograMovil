@@ -14,14 +14,15 @@ class AnuncioService {
 
   Future<GenericResponse<List<Anuncio>>> fetchAnuncios(String idSeccion) async {
     try {
-      // 1. Cargar anuncios estáticos del JSON en assets
+      // 1. Cargar anuncios estáticos desde el archivo JSON de assets
       final String response =
           await rootBundle.loadString('assets/data/anuncios.json');
-      final data = json.decode(response);
+      final data = json.decode(response); // Deserializar texto JSON a mapa de Dart
       final List<dynamic> anunciosRaw = data['anuncios'] ?? [];
 
       final List<Anuncio> combined = [];
 
+      // Cruzar la información del autor para obtener su nombre real y rol
       for (final a in anunciosRaw) {
         final autorCode = a['autorCode'].toString();
         final user = await _userService.findUserByCode(autorCode);
@@ -35,20 +36,20 @@ class AnuncioService {
         ));
       }
 
-      // 2. Cargar anuncios locales guardados por el delegado
+      // 2. Cargar anuncios locales (nuevos) creados por el delegado y guardados en memoria del teléfono
       final String? localRaw = StorageService.to.savedLocalAnuncios;
       if (localRaw != null) {
         final List<dynamic> localDecoded = json.decode(localRaw);
         final List<Anuncio> localAnuncios =
             localDecoded.map((x) => Anuncio.fromJson(x)).toList();
-        combined.addAll(localAnuncios);
+        combined.addAll(localAnuncios); // Combinar los anuncios estáticos y los creados en el celular
       }
 
-      // 3. Filtrar por sección y ordenar por fecha/ID (los más nuevos primero)
+      // 3. Filtrar los anuncios para mostrar solo los de la sección actual
       final filtrados =
           combined.where((a) => a.idSeccion == idSeccion).toList();
       
-      // ordenar por fecha descendente (mas nuevos primero)
+      // 4. Ordenar los anuncios por fecha descendente (los más recientes arriba)
       filtrados.sort((a, b) => _parseFecha(b.fecha).compareTo(_parseFecha(a.fecha)));
 
       return GenericResponse(
@@ -69,13 +70,17 @@ class AnuncioService {
 
   Future<GenericResponse<bool>> addAnuncio(Anuncio nuevo) async {
     try {
+      // 1. Leer los anuncios guardados localmente como texto String
       final String? localRaw = StorageService.to.savedLocalAnuncios;
       List<dynamic> localDecoded = [];
       if (localRaw != null) {
-        localDecoded = json.decode(localRaw);
+        localDecoded = json.decode(localRaw); // Convertir texto plano a lista Dart
       }
 
+      // 2. Agregar el nuevo anuncio (convertido a mapa JSON) a la lista
       localDecoded.add(nuevo.toJson());
+      
+      // 3. Guardar la lista actualizada serializándola nuevamente a texto plano
       await StorageService.to.saveLocalAnuncios(json.encode(localDecoded));
 
       return GenericResponse(

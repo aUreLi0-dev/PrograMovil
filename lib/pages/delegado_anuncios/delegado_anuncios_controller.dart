@@ -19,15 +19,18 @@ class DelegadoAnunciosController extends GetxController {
   final Rxn<EstadisticasSeccion> estadisticas = Rxn<EstadisticasSeccion>();
 
   void cargarCurso(Map<String, dynamic> args) {
+    // 1. Extraer los datos enviados desde la pantalla anterior mediante la navegación
     nombreCurso = args['curso']?.toString() ?? nombreCurso;
     idSeccion = args['idSeccion']?.toString() ?? idSeccion;
     codigoSeccion = args['codigoSeccion']?.toString() ?? idSeccion;
     rol = args['rol']?.toString() ?? rol;
     alumnosMatriculados = (args['alumnos'] as num?)?.toInt() ?? 0;
+    
+    // Limpiar los campos de entrada de anuncios previos
     titulo.clear();
     mensaje.clear();
 
-    // Cargar estadísticas realistas según la sección
+    // 2. Cargar estadísticas estáticas simuladas del salón según la sección para la gráfica de barras
     if (codigoSeccion.contains('854') || nombreCurso.toLowerCase().contains('móvil') || nombreCurso.toLowerCase().contains('movil')) {
       estadisticas.value = EstadisticasSeccion(
         promedioGeneral: 14.5,
@@ -47,7 +50,7 @@ class DelegadoAnunciosController extends GetxController {
         rango17_20: 9,
       );
     } else {
-      // Valores por defecto consistentes para cualquier otro curso
+      // Valores por defecto si se entra a otra sección
       estadisticas.value = EstadisticasSeccion(
         promedioGeneral: 15.0,
         porcentajeAprobados: 80,
@@ -60,7 +63,7 @@ class DelegadoAnunciosController extends GetxController {
   }
 
   void publicarAnuncio() async {
-    // 1. Validar que los campos no estén vacíos
+    // Paso 1: Validar que los campos de texto no estén vacíos
     if (titulo.text.trim().isEmpty || mensaje.text.trim().isEmpty) {
       Get.snackbar(
         'Campos vacíos',
@@ -72,7 +75,7 @@ class DelegadoAnunciosController extends GetxController {
       return;
     }
 
-    // 2. Obtener el usuario logueado
+    // Paso 2: Obtener los datos del usuario logueado en la aplicación
     final user = AuthService.to.currentUser;
     if (user == null) {
       Get.snackbar(
@@ -85,11 +88,11 @@ class DelegadoAnunciosController extends GetxController {
       return;
     }
 
-    // 3. Obtener la fecha actual (ej. 23/2/2026)
+    // Paso 3: Formatear la fecha actual del sistema
     final ahora = DateTime.now();
     final fechaFormateada = '${ahora.day}/${ahora.month}/${ahora.year}';
 
-    // 4. Instanciar el objeto Anuncio con un ID único basado en el tiempo
+    // Paso 4: Crear el objeto Anuncio usando el modelo, asignándole un ID único basado en el tiempo
     final nuevoAnuncio = Anuncio(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       idSeccion: idSeccion,
@@ -101,9 +104,10 @@ class DelegadoAnunciosController extends GetxController {
       autorRole: rol,
     );
 
-    // 5. Guardar mediante el servicio
+    // Paso 5: Llamar al servicio asíncrono para guardar el anuncio localmente
     final response = await AnuncioService().addAnuncio(nuevoAnuncio);
 
+    // Paso 6: Si se guardó correctamente, notificar al usuario, limpiar formulario y regresar
     if (response.success) {
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         const SnackBar(
@@ -113,13 +117,14 @@ class DelegadoAnunciosController extends GetxController {
         ),
       );
       
-      // Limpiar campos del formulario
+      // Limpiar inputs del formulario
       titulo.clear();
       mensaje.clear();
 
-      // Regresar a la pantalla anterior
+      // Regresar a la pantalla anterior del listado de cursos
       Get.back();
     } else {
+      // Notificar si hubo un error al guardar
       Get.snackbar(
         'Error',
         'No se pudo publicar el anuncio: ${response.message}',
