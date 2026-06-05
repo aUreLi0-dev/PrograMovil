@@ -4,18 +4,18 @@ import '../../models/evaluation_model.dart';
 import '../../models/course_syllabus_model.dart';
 import '../../models/curso_seccion_model.dart';
 import '../../services/evaluations_service.dart';
-import '../../services/courses_service.dart';
 import '../../services/notas_service.dart';
 import '../../services/auth_service.dart';
 import '../../services/enrollment_service.dart';
+import '../../services/seccion_service.dart';
 import '../../constants/calculadora_constants.dart';
 
 class CalculadoraController extends GetxController {
   final cursos = <CursoSeccion>[].obs;
 
   late EvaluationSyllabusService _syllabusService;
-  late CoursesService _coursesService;
   late NotasService _notasService;
+  late SeccionService _seccionService;
 
   final syllabusData = <String, CourseSyllabus>{}.obs;
 
@@ -23,8 +23,8 @@ class CalculadoraController extends GetxController {
   void onInit() {
     super.onInit();
     _syllabusService = EvaluationSyllabusService();
-    _coursesService = CoursesService();
     _notasService = NotasService();
+    _seccionService = SeccionService();
     _init();
   }
 
@@ -42,7 +42,7 @@ class CalculadoraController extends GetxController {
   Future<void> _cargarDatosSyllabus() async {
     try {
       await _syllabusService.loadEvaluationData();
-      for (var syllabus in _syllabusService.allSyllabuses) {
+      for (final syllabus in _syllabusService.allSyllabuses) {
         syllabusData[syllabus.cursoId] = syllabus;
       }
       developer.log('✓ Datos del sílabo cargados en el controlador');
@@ -55,48 +55,48 @@ class CalculadoraController extends GetxController {
     try {
       final user = AuthService.to.currentUser;
 
-      final enrollments = await EnrollmentService().fetchByStudentCode(user?.code ?? '');
-      final seccionesInscritas = enrollments
-          .map((e) => {'idSeccion': e.idSeccion, 'idCurso': e.idCurso})
-          .toList();
+      final enrollments = await EnrollmentService().fetchByStudentCode(
+        user?.code ?? '',
+      );
+      final secciones = await _seccionService.fetchSecciones();
+      final seccionesById = {
+        for (final seccion in secciones) seccion.idSeccion: seccion,
+      };
       final idEstudiante =
           await _notasService.obtenerIdEstudianteActual() ?? 'default';
-      final cursosData = _coursesService.allCourses;
       final notasGuardadas = await _notasService.cargarNotas(idEstudiante);
 
       final cursosExpandidos = <CursoSeccion>[];
 
-      for (var curso in cursosData) {
-        List<dynamic> seccionesDelCurso = curso['secciones'] ?? [];
+      for (final enrollment in enrollments) {
+        final seccion = seccionesById[enrollment.idSeccion];
+        if (seccion == null) continue;
 
-        for (var seccion in seccionesDelCurso) {
-          bool estaInscrito = seccionesInscritas.any(
-            (inscrito) => inscrito['idSeccion'] == seccion['idSeccion'],
+        final notasRx = <Map<String, dynamic>>[].obs;
+
+        final cursoBuscado = notasGuardadas.firstWhereOrNull(
+          (n) => n['id'] == seccion.idSeccion,
+        );
+
+        if (cursoBuscado != null && cursoBuscado['notas'] != null) {
+          notasRx.addAll(
+            List<Map<String, dynamic>>.from(cursoBuscado['notas']),
           );
-
-          if (!estaInscrito) continue;
-
-          var notasRx = <Map<String, dynamic>>[].obs;
-
-          Map<String, dynamic>? cursoBuscado = notasGuardadas.firstWhereOrNull(
-            (n) => n['id'] == seccion['idSeccion'],
-          );
-
-          if (cursoBuscado != null && cursoBuscado['notas'] != null) {
-            notasRx.addAll(
-              List<Map<String, dynamic>>.from(cursoBuscado['notas']),
-            );
-          }
-
-          cursosExpandidos.add(CursoSeccion(
-            id: seccion['idSeccion'],
-            nombre: curso['nombre']?.toString() ?? CalculadoraConstantes.cursoSinNombre,
-            ciclo: curso['ciclo']?.toString() ?? CalculadoraConstantes.cicloDefault,
-            codigoSeccion:
-                seccion['codigoSeccion']?.toString() ?? CalculadoraConstantes.sinSeccion,
-            notas: notasRx,
-          ));
         }
+
+        cursosExpandidos.add(
+          CursoSeccion(
+            id: seccion.idSeccion,
+            nombre: seccion.curso.isNotEmpty
+                ? seccion.curso
+                : CalculadoraConstantes.cursoSinNombre,
+            ciclo: user?.currentCycle ?? CalculadoraConstantes.cicloDefault,
+            codigoSeccion: seccion.codigoSeccion.isNotEmpty
+                ? seccion.codigoSeccion
+                : CalculadoraConstantes.sinSeccion,
+            notas: notasRx,
+          ),
+        );
       }
 
       cursos.assignAll(cursosExpandidos);
@@ -108,7 +108,6 @@ class CalculadoraController extends GetxController {
     }
   }
 
-
   double calcularPromedio(int cursoIndex) {
     if (cursoIndex < 0 || cursoIndex >= cursos.length) return 0.0;
     final notas = cursos[cursoIndex].notas;
@@ -116,7 +115,7 @@ class CalculadoraController extends GetxController {
 
     double weightedSum = 0;
     double weightSum = 0;
-    for (var n in notas) {
+    for (final n in notas) {
       final valor = (n['valor'] as num).toDouble();
       final peso = (n['peso'] as num).toDouble();
       weightedSum += valor * peso;
@@ -126,7 +125,8 @@ class CalculadoraController extends GetxController {
     final syllabus = getSyllabusForCourse(cursoIndex);
     if (syllabus != null) {
       final totalWeight = syllabus.evaluaciones.fold<double>(
-        0.0, (sum, e) => sum + e.peso,
+        0.0,
+        (sum, e) => sum + e.peso,
       );
       if (totalWeight > 0) return weightedSum / totalWeight;
     }
@@ -172,13 +172,17 @@ class CalculadoraController extends GetxController {
     try {
       final idEstudiante =
           await _notasService.obtenerIdEstudianteActual() ?? 'default';
-      final cursosMap = cursos.map((c) => {
-        'id': c.id,
-        'nombre': c.nombre,
-        'ciclo': c.ciclo,
-        'codigoSeccion': c.codigoSeccion,
-        'notas': c.notas.toList(),
-      }).toList();
+      final cursosMap = cursos
+          .map(
+            (c) => {
+              'id': c.id,
+              'nombre': c.nombre,
+              'ciclo': c.ciclo,
+              'codigoSeccion': c.codigoSeccion,
+              'notas': c.notas.toList(),
+            },
+          )
+          .toList();
       await _notasService.guardarNotas(idEstudiante, cursosMap);
     } catch (e) {
       developer.log('✗ Error al guardar notas localmente: $e');

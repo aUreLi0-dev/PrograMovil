@@ -1,7 +1,7 @@
 import 'package:ulima_plus/services/auth_service.dart';
 import 'package:ulima_plus/services/section_representative_service.dart';
-import 'package:ulima_plus/services/courses_service.dart';
 import 'package:ulima_plus/services/enrollment_service.dart';
+import 'package:ulima_plus/services/seccion_service.dart';
 
 class DelegadoCursosController {
   List<Map<String, dynamic>> cursosDelegado = [];
@@ -14,36 +14,33 @@ class DelegadoCursosController {
     try {
       final user = AuthService.to.currentUser;
       if (user != null) {
-        final allRepresentatives = await SectionRepresentativeService().fetchRepresentatives();
+        final allRepresentatives = await SectionRepresentativeService()
+            .fetchRepresentatives();
         final enrollmentService = EnrollmentService();
-        final allCourses = CoursesService().allCourses;
+        final secciones = await SeccionService().fetchSecciones();
+        final seccionesById = {
+          for (final seccion in secciones) seccion.idSeccion: seccion,
+        };
 
-        List<Map<String, dynamic>> tempCursos = [];
+        final tempCursos = <Map<String, dynamic>>[];
 
-        for (var rep in allRepresentatives) {
+        for (final rep in allRepresentatives) {
           final enrollment = await enrollmentService.findById(rep.enrollmentId);
-          
-          if (enrollment != null && 
-              enrollment.studentCode == user.code && 
+
+          if (enrollment != null &&
+              enrollment.studentCode == user.code &&
               (rep.role == 'delegado' || rep.role == 'subdelegado')) {
-            
-            for (var curso in allCourses) {
-              final secciones = curso['secciones'] as List;
-              
-              for (var s in secciones) {
-                if (s['idSeccion'].toString() == enrollment.idSeccion.toString()) {
-                  final idSeccion = enrollment.idSeccion.toString();
-                  tempCursos.add({
-                    "curso": curso['nombre'],
-                    "seccion": idSeccion,
-                    "idSeccion": idSeccion,
-                  });
-                }
-              }
+            final seccion = seccionesById[enrollment.idSeccion];
+            if (seccion != null) {
+              tempCursos.add({
+                "curso": seccion.curso,
+                "seccion": seccion.codigoSeccion,
+                "idSeccion": seccion.idSeccion,
+              });
             }
           }
         }
-        
+
         cursosDelegado = tempCursos;
       }
     } catch (e) {
