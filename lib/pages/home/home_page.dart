@@ -20,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeController control = Get.put(HomeController());
+  final AuthService auth = AuthService.to;
 
   @override
   void initState() {
@@ -28,12 +29,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> _buildPages() {
-    final isDelegate = AuthService.to.isDelegate;
     return [
       const MallaPage(),
       const CalculadoraPage(),
       const HorarioPage(),
-      if (isDelegate) const DelegadoCursosPage(),
+      if (auth.isDelegate) const DelegadoCursosPage(),
       const ProfilePage(),
     ];
   }
@@ -48,14 +48,17 @@ class _HomePageState extends State<HomePage> {
         children: [
           Obx(
             () => AppHeader(
-              showLogout: control.currentTabIndex.value ==
-                  (_buildPages().length - 1),
+              showLogout:
+                  control.currentTabIndex.value == (_buildPages().length - 1),
             ),
           ),
           Expanded(
             child: Obx(() {
               final pages = _buildPages();
-              final idx = control.currentTabIndex.value.clamp(0, pages.length - 1);
+              final idx = control.currentTabIndex.value.clamp(
+                0,
+                pages.length - 1,
+              );
               return pages[idx];
             }),
           ),
@@ -63,7 +66,11 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: Obx(
         () => AppFooter(
-          currentIndex: control.currentTabIndex.value,
+          currentIndex: control.currentTabIndex.value.clamp(
+            0,
+            _buildPages().length - 1,
+          ),
+          isDelegate: auth.isDelegate,
           onTap: (index) {
             control.currentTabIndex.value = index;
           },

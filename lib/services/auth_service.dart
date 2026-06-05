@@ -195,7 +195,12 @@ class AuthService extends GetxService {
 
   Future<void> refreshDelegateStatus() async {
     final code = _currentUser.value?.code;
-    if (code == null) return;
+    if (code == null) {
+      _isDelegate.value = false;
+      _role.value = 'estudiante';
+      return;
+    }
+
     final repService = SectionRepresentativeService();
     _isDelegate.value = await repService.isRepresentativeInAnySection(code);
     _role.value = await repService.findHighestRoleByStudentCode(code);
