@@ -101,6 +101,24 @@
       "studentCode": "20232907",
       "idCurso": "3",
       "idSeccion": "GDO-754"
+    },
+    {
+      "id": "20",
+      "studentCode": "20231098",
+      "idCurso": "3",
+      "idSeccion": "GDO-754"
+    },
+    {
+      "id": "21",
+      "studentCode": "20231098",
+      "idCurso": "2",
+      "idSeccion": "ML-753"
+    },
+    {
+      "id": "22",
+      "studentCode": "20231098",
+      "idCurso": "5",
+      "idSeccion": "SIE-755"
     }
   ]
 }

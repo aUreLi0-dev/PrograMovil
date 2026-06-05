@@ -32,7 +32,13 @@ class HorarioSemanalPage extends StatelessWidget {
   }
 
   List<Map<String, dynamic>> _getClasesForDay(HorarioController controller, String day) {
-    final daySchedule = controller.daysList.firstWhereOrNull((d) => d.dayName == day);
+    if (controller.daysList.isEmpty) return const [];
+    final activeDayIdx = controller.currentDayIndex.value;
+    final startOfWeekIdx = (activeDayIdx ~/ 7) * 7;
+    final endOfWeekIdx = (startOfWeekIdx + 7).clamp(0, controller.daysList.length);
+    final activeWeekDays = controller.daysList.sublist(startOfWeekIdx, endOfWeekIdx);
+    
+    final daySchedule = activeWeekDays.firstWhereOrNull((d) => d.dayName == day);
     if (daySchedule == null) return const [];
     return controller.getCoursesForDay(daySchedule);
   }
@@ -94,7 +100,11 @@ class HorarioSemanalPage extends StatelessWidget {
                         const SizedBox(width: gutter),
                         for (final day in _days)
                           (() {
-                            final daySchedule = controller.daysList.firstWhereOrNull((d) => d.dayName == day);
+                            final activeDayIdx = controller.currentDayIndex.value;
+                            final startOfWeekIdx = (activeDayIdx ~/ 7) * 7;
+                            final endOfWeekIdx = (startOfWeekIdx + 7).clamp(0, controller.daysList.length);
+                            final activeWeekDays = controller.daysList.sublist(startOfWeekIdx, endOfWeekIdx);
+                            final daySchedule = activeWeekDays.firstWhereOrNull((d) => d.dayName == day);
                             final dateText = daySchedule?.dateText ?? '';
 
                             return Container(
