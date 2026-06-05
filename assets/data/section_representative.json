@@ -6,24 +6,14 @@
       "role": "delegado"
     },
     {
-      "id": "2",
-      "enrollmentId": "2",
+      "id": "6",
+      "enrollmentId": "13",
       "role": "subdelegado"
     },
     {
       "id": "3",
       "enrollmentId": "7",
       "role": "delegado"
-    },
-    {
-      "id": "4",
-      "enrollmentId": "10",
-      "role": "subdelegado"
-    },
-    {
-      "id": "5",
-      "enrollmentId": "11",
-      "role": "subdelegado"
     },
     {
       "id": "6",
