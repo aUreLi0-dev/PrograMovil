@@ -1,130 +1,125 @@
 {
   "users": [
     {
+      "id": 1,
       "code": "20235218",
-      "password": "ulima123",
-      "firstName": "Jefferson Angelo",
-      "lastName": "Sanchez Palacios",
+      "full_name": "Jefferson Angelo Sanchez Palacios",
+      "institutional_email": "20235218@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 1,
       "career_id": 1,
-      "especialidades": [1],
-      "currentCycle": "2026-1",
-      "setupComplete": true,
-      "courseProgress": {
-        "approvedLevels": [1, 2, 3, 4, 5, 6, 7],
-        "approvedElectives": ["paradigmas_programacion", "analisis_diseno_algoritmos"]
-      }
+      "curriculum_id": 1,
+      "current_level": 7,
+      "specialty_setup_completed": true
     },
     {
+      "id": 2,
       "code": "20232548",
-      "password": "ulima123",
-      "firstName": "Samantha Camila",
-      "lastName": "Rodríguez Melendez",
+      "full_name": "Samantha Camila Rodríguez Melendez",
+      "institutional_email": "20232548@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 2,
       "career_id": 1,
-      "especialidades": [1],
-      "currentCycle": "2026-1",
-      "setupComplete": true,
-      "courseProgress": {
-        "approvedLevels": [1, 2, 3, 4, 5, 6],
-        "approvedElectives": ["paradigmas_programacion"]
-      }
+      "curriculum_id": 1,
+      "current_level": 6,
+      "specialty_setup_completed": true
     },
     {
+      "id": 3,
       "code": "20232907",
-      "password": "ulima123",
-      "firstName": "Martín Rodrigo",
-      "lastName": "Tejada Montesinos",
+      "full_name": "Martín Rodrigo Tejada Montesinos",
+      "institutional_email": "20232907@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 3,
       "career_id": 1,
-      "especialidades": [1],
-      "currentCycle": "2026-1",
-      "setupComplete": true,
-      "courseProgress": {
-        "approvedLevels": [1, 2, 3, 4, 5],
-        "approvedElectives": []
-      }
+      "curriculum_id": 1,
+      "current_level": 5,
+      "specialty_setup_completed": true
     },
     {
+      "id": 4,
       "code": "20232637",
-      "password": "ulima123",
-      "firstName": "Melissa Alexandra",
-      "lastName": "Ruiz Delgado",
+      "full_name": "Melissa Alexandra Ruiz Delgado",
+      "institutional_email": "20232637@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 4,
       "career_id": 1,
-      "especialidades": [1],
-      "currentCycle": "2026-1",
-      "setupComplete": true,
-      "courseProgress": {
-        "approvedLevels": [1, 2, 3, 4],
-        "approvedElectives": []
-      }
+      "curriculum_id": 1,
+      "current_level": 7,
+      "specialty_setup_completed": true
     },
     {
+      "id": 5,
       "code": "20232685",
-      "password": "ulima123",
-      "firstName": "Julio Gabriel",
-      "lastName": "Salazar Torres",
+      "full_name": "Julio Gabriel Salazar Torres",
+      "institutional_email": "20232685@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 5,
       "career_id": 1,
-      "especialidades": [1],
-      "currentCycle": "2026-1",
-      "setupComplete": true,
-      "courseProgress": {
-        "approvedLevels": [1, 2, 3, 4, 5, 6, 7],
-        "approvedElectives": ["paradigmas_programacion", "programacion_movil"]
-      }
+      "curriculum_id": 1,
+      "current_level": 7,
+      "specialty_setup_completed": true
     },
     {
+      "id": 6,
       "code": "20231098",
-      "password": "ulima123",
-      "firstName": "Nehemias Luis",
-      "lastName": "Falcon Farfan",
+      "full_name": "Nehemias Luis Falcon Farfan",
+      "institutional_email": "20231098@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 6,
       "career_id": 1,
-      "especialidades": [1],
-      "currentCycle": "2026-1",
-      "setupComplete": true,
-      "courseProgress": {
-        "approvedLevels": [1, 2, 3],
-        "approvedElectives": []
-      }
+      "curriculum_id": 1,
+      "current_level": 3,
+      "specialty_setup_completed": true
     },
     {
+      "id": 7,
       "code": "20225158",
-      "password": "ulima123",
-      "firstName": "Hans Anthony",
-      "lastName": "Quispe Mamani",
+      "full_name": "Hans Anthony Quispe Mamani",
+      "institutional_email": "20225158@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 7,
       "career_id": 1,
-      "especialidades": [1],
-      "currentCycle": "2026-1",
-      "setupComplete": true,
-      "courseProgress": {
-        "approvedLevels": [1, 2, 3],
-        "approvedElectives": []
-      }
+      "curriculum_id": 1,
+      "current_level": 3,
+      "specialty_setup_completed": true
     },
     {
-      "code": "20245100",
-      "password": "ulima123",
-      "firstName": "Carlos",
-      "lastName": "Mendoza",
-      "career_id": 1,
-      "especialidades": [1],
-      "currentCycle": "2026-1",
-      "setupComplete": true,
-      "courseProgress": {
-        "approvedLevels": [1, 2, 3, 4],
-        "approvedElectives": []
-      }
-    },
-    {
+      "id": 8,
       "code": "20231483",
-      "password": "ulima123",
-      "firstName": "Ronald Alfredo",
-      "lastName": "Hurtado Lago",
+      "full_name": "Ronald Alfredo Hurtado Lago",
+      "institutional_email": "20231483@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 9,
       "career_id": 1,
-      "especialidades": [3],
-      "currentCycle": "2026-1",
-      "setupComplete": true,
-      "courseProgress": {
-        "approvedLevels": [1, 2, 3, 4, 5, 6, 7, 8, 9],
-        "approvedElectives": ["gestion_base_de_datos", "ingenieria_del_conocimiento", "analitica_big_data", "analitica_negocios"]
+      "curriculum_id": 1,
+      "current_level": 9,
+      "specialty_setup_completed": true
+      },
+    {
+      "id": 9,
+      "code": "20230000",
+      "full_name": "Prueba - SetUpEspecialidad",
+      "institutional_email": "20230000@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 9,
+      "career_id": 1,
+      "curriculum_id": 1,
+      "current_level": 9,
+      "specialty_setup_completed": false
       }
-    }
+      ,
+    {
+      "id": 9,
+      "code": "20240000",
+      "full_name": "Prueba2 - SetUpEspecialidad",
+      "institutional_email": "20240000@aloe.ulima.edu.pe",
+      "password_hash": "ulima123",
+      "student_id": 9,
+      "career_id": 1,
+      "curriculum_id": 1,
+      "current_level": 9,
+      "specialty_setup_completed": false
+      }
   ]
 }

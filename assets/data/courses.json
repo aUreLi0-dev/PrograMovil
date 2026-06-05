@@ -1,296 +1,618 @@
-{
-  "cursos": [
-    {
-      "id": "1",
-      "nombre": "INGENIERÍA DE SOFTWARE II",
-      "default_credit": 4,
-      "is_active": true,
-      "ciclo": "2026-1",
-      "secciones": [
-        { "idSeccion": "IS-856", "codigoSeccion": "856" }
-      ]
-    },
-    {
-      "id": "2",
-      "nombre": "APRENDIZAJE DE MÁQUINA/MACHINE LEARNING",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2026-1",
-      "secciones": [
-        { "idSeccion": "ML-753", "codigoSeccion": "753" }
-      ]
-    },
-    {
-      "id": "3",
-      "nombre": "GESTIÓN DE OPERACIONES",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2026-1",
-      "secciones": [
-        { "idSeccion": "GDO-754", "codigoSeccion": "754" },
-        { "idSeccion": "GDO-755", "codigoSeccion": "755" }
-      ]
-    },
-    {
-      "id": "4",
-      "nombre": "PROGRAMACIÓN MÓVIL",
-      "default_credit": 4,
-      "is_active": false,
-      "secciones": [
-        { "idSeccion": "PM-854", "codigoSeccion": "854" }
-      ]
-    },
-    {
-      "id": "5",
-      "nombre": "SISTEMAS DE INTELIGENCIA EMPRESARIAL",
-      "default_credit": 4,
-      "is_active": false,
-      "ciclo": "2026-1",
-      "secciones": [
-        { "idSeccion": "SIE-755", "codigoSeccion": "755" }
-      ]
-    },
-    {
-      "id": "6",
-      "nombre": "PROGRAMACIÓN WEB",
-      "default_credit": 3,
-      "is_active": true,
-      "ciclo": "2026-1",
-      "secciones": [
-        { "idSeccion": "PW-855", "codigoSeccion": "855" }
-      ]
-    },
-    {
-      "id": "7",
-      "nombre": "GESTIÓN DE PROYECTOS",
-      "name": "GESTIÓN DE PROYECTOS",
-      "default_credit": 3,
-      "is_active": true,
-      "ciclo": "2026-1",
-      "secciones": [
-        { "idSeccion": "GP-802", "codigoSeccion": "802" },
-        { "idSeccion": "GP-804", "codigoSeccion": "804" }
-      ]
-    },
-    {
-      "id": "8",
-      "nombre": "CÁLCULO III",
-      "name": "CÁLCULO III",
-      "default_credit": 3,
-      "is_active": true,
-      "ciclo": "2026-1",
-      "secciones": [
-        { "idSeccion": "CALCIII-403", "codigoSeccion": "403" }
-      ]
-    },
-    {
-      "id": "9",
-      "nombre": "COMPUTACIÓN EN LA NUBE / CLOUD COMPUTING",
-      "name": "CLOUD COMPUTING",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "CND-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "10",
-      "nombre": "SEMINARIO DE INVESTIGACIÓN II",
-      "name": "SEMINARIO INV. II",
-      "default_credit": 4,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "SINV2-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "11",
-      "nombre": "SEMINARIO DE INVESTIGACIÓN I",
-      "name": "SEMINARIO INV. I",
-      "default_credit": 4,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "SINV1-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "12",
-      "nombre": "GESTIÓN DE SERVICIOS DIGITALES",
-      "name": "GEST. SERV. DIGITALES",
-      "default_credit": 4,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "GSD-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "13",
-      "nombre": "SISTEMAS ERP",
-      "name": "SISTEMAS ERP",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "ERP-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "14",
-      "nombre": "INTERNET DE LAS COSAS / INTERNET OF THINGS",
-      "name": "IoT",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "IOT-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "15",
-      "nombre": "SEGURIDAD DE SISTEMAS",
-      "name": "SEG. DE SISTEMAS",
-      "default_credit": 4,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "SS-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "16",
-      "nombre": "GESTIÓN DE BASE DE DATOS",
-      "name": "GEST. BASE DATOS",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "GBD-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "17",
-      "nombre": "ARQUITECTURA DE SOFTWARE",
-      "name": "ARQ. SOFTWARE",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "AS-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "18",
-      "nombre": "ARQUITECTURA EMPRESARIAL",
-      "name": "ARQ. EMPRESARIAL",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "AE-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "19",
-      "nombre": "INGENIERÍA DEL CONOCIMIENTO",
-      "name": "ING. CONOCIMIENTO",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "IK-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "20",
-      "nombre": "INTERACCIÓN HUMANO COMPUTADORA / HUMAN COMPUTER INTERACTION",
-      "name": "IHC",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "IHC-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "21",
-      "nombre": "DEVOPS",
-      "name": "DEVOPS",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "DO-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "22",
-      "nombre": "PLANEAMIENTO ESTRATÉGICO",
-      "name": "PLAN. ESTRATÉGICO",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "PE-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "23",
-      "nombre": "ANALÍTICA CON BIG DATA",
-      "name": "BIG DATA",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "BDA-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "24",
-      "nombre": "ARQUITECTURA DE TECNOLOGÍAS DE LA INFORMACIÓN",
-      "name": "ARQ. TI",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "ATI-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "25",
-      "nombre": "ANÁLISIS Y DISEÑO DE ALGORITMOS",
-      "name": "DISEÑO ALGORITMOS",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "ADA-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "26",
-      "nombre": "PROPUESTA DE INVESTIGACIÓN",
-      "name": "PROP. INVESTIGACIÓN",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "PI-TBD", "codigoSeccion": "TBD" }
-      ]
-    },
-    {
-      "id": "27",
-      "nombre": "SISTEMAS DISTRIBUIDOS",
-      "name": "SIST. DISTRIBUIDOS",
-      "default_credit": 3,
-      "is_active": false,
-      "ciclo": "2025-1",
-      "secciones": [
-        { "idSeccion": "SD-TBD", "codigoSeccion": "TBD" }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "code": "510003",
+    "name": "Lenguaje y Comunicación I",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 2,
+    "code": "510006",
+    "name": "Procesos Psicológicos",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 3,
+    "code": "510007",
+    "name": "Ética Ciudadana",
+    "default_credit": 2,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 4,
+    "code": "510005",
+    "name": "Introducción a la Ingeniería",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 5,
+    "code": "6508",
+    "name": "Metodologías de Investigación",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 6,
+    "code": "510014",
+    "name": "Precálculo",
+    "default_credit": 5,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 7,
+    "code": "6511",
+    "name": "Lenguaje y Comunicación II",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 8,
+    "code": "510010",
+    "name": "Filosofía Aplicada",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 9,
+    "code": "510015",
+    "name": "Fundamentos de Economía",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 10,
+    "code": "510011",
+    "name": "Introducción al Comercio Internacional",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 11,
+    "code": "6384",
+    "name": "Álgebra Lineal",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 12,
+    "code": "6503",
+    "name": "Cálculo I",
+    "default_credit": 5,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 13,
+    "code": "560040",
+    "name": "Inteligencia Artificial Aplicada",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 14,
+    "code": "560042",
+    "name": "Cálculo II",
+    "default_credit": 5,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 15,
+    "code": "560038",
+    "name": "Sistemas Organizacionales",
+    "default_credit": 2,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 16,
+    "code": "650053",
+    "name": "Física para Sistemas",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 17,
+    "code": "650055",
+    "name": "Estructuras Discretas de Computación",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 18,
+    "code": "650054",
+    "name": "Introducción a la Programación",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 19,
+    "code": "560046",
+    "name": "Estadística y Probabilidad",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 20,
+    "code": "560047",
+    "name": "Cálculo III",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 21,
+    "code": "650008",
+    "name": "Modelación e Integración de Sistemas",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 22,
+    "code": "560043",
+    "name": "Costeo de Operaciones",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 23,
+    "code": "650086",
+    "name": "Programación Orientada a Objetos",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 24,
+    "code": "650056",
+    "name": "Arquitectura de Computadoras",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 25,
+    "code": "650058",
+    "name": "Estadística Aplicada",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 26,
+    "code": "560048",
+    "name": "Investigación de Operaciones I",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 27,
+    "code": "650057",
+    "name": "Sistemas Operativos",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 28,
+    "code": "650009",
+    "name": "Desarrollo de Competencias Gerenciales",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 29,
+    "code": "650059",
+    "name": "Estructuras de Datos I",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 30,
+    "code": "650060",
+    "name": "Modelamiento de Base de Datos",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 31,
+    "code": "650010",
+    "name": "Ingeniería de Procesos de Negocio",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 32,
+    "code": "650015",
+    "name": "Redes de Computadoras",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 33,
+    "code": "650018",
+    "name": "Simulación",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 34,
+    "code": "650061",
+    "name": "Estructuras de Datos II",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 35,
+    "code": "650022",
+    "name": "Programación Web",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 36,
+    "code": "650016",
+    "name": "Gestión Financiera",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 37,
+    "code": "650062",
+    "name": "Sistemas de Inteligencia Empresarial",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 38,
+    "code": "650019",
+    "name": "Gestión de Operaciones",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 39,
+    "code": "650063",
+    "name": "Ingeniería de Software I",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 40,
+    "code": "650064",
+    "name": "Aprendizaje de Máquina",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 41,
+    "code": "650065",
+    "name": "Ciberseguridad",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 42,
+    "code": "650066",
+    "name": "Propuesta de Investigación",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 43,
+    "code": "650028",
+    "name": "Sistemas ERP",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 44,
+    "code": "650042",
+    "name": "Auditoría y Control de Sistemas",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 45,
+    "code": "1327",
+    "name": "Ingeniería de Software II",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 46,
+    "code": "650033",
+    "name": "Planeamiento Estratégico",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 47,
+    "code": "5674",
+    "name": "Gestión de Proyectos",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 48,
+    "code": "650035",
+    "name": "Seminario de Investigación I",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 49,
+    "code": "650067",
+    "name": "Seguridad de Sistemas",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 50,
+    "code": "650040",
+    "name": "Seminario de Investigación II",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 51,
+    "code": "650068",
+    "name": "Gestión de Servicios Digitales",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 52,
+    "code": "650069",
+    "name": "Proyecto Integrador de Sistemas",
+    "default_credit": 4,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 53,
+    "code": "650070",
+    "name": "Paradigmas de Programación",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 54,
+    "code": "650012",
+    "name": "Internet de las Cosas",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 55,
+    "code": "650071",
+    "name": "Gestión de Base de Datos",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 56,
+    "code": "550001",
+    "name": "Storytelling",
+    "default_credit": 3,
+    "origin_faculty": "Comunicaciones",
+    "is_active": true
+  },
+  {
+    "id": 57,
+    "code": "650072",
+    "name": "Análisis y Diseño de Algoritmos",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 58,
+    "code": "650073",
+    "name": "Redes Avanzadas",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 59,
+    "code": "650074",
+    "name": "Ingeniería del Conocimiento",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 60,
+    "code": "550043",
+    "name": "Diseño de Videojuegos",
+    "default_credit": 5,
+    "origin_faculty": "Comunicaciones",
+    "is_active": true
+  },
+  {
+    "id": 61,
+    "code": "550029",
+    "name": "Narrativa Gráfica",
+    "default_credit": 3,
+    "origin_faculty": "Comunicaciones",
+    "is_active": true
+  },
+  {
+    "id": 62,
+    "code": "650075",
+    "name": "Deep Learning",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 63,
+    "code": "650030",
+    "name": "Programación Móvil",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 64,
+    "code": "650076",
+    "name": "Tópicos Avanzados en Ciberseguridad",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 65,
+    "code": "650077",
+    "name": "Sistemas Distribuidos",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 66,
+    "code": "650044",
+    "name": "Analítica con Big Data",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 67,
+    "code": "650078",
+    "name": "Analítica de Negocios",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 68,
+    "code": "650079",
+    "name": "Proyecto de Desarrollo de Software",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 69,
+    "code": "650025",
+    "name": "Computación en la Nube",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 70,
+    "code": "650080",
+    "name": "Innovación Digital",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 71,
+    "code": "650081",
+    "name": "Proyecto de Videojuegos",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 72,
+    "code": "650082",
+    "name": "Arquitectura Empresarial",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 73,
+    "code": "650011",
+    "name": "Interacción Humano Computadora",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 74,
+    "code": "650083",
+    "name": "Arquitectura de Tecnologías de la Información",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 75,
+    "code": "650084",
+    "name": "DevOps",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 76,
+    "code": "650085",
+    "name": "Arquitectura de Software",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  },
+  {
+    "id": 77,
+    "code": "520074",
+    "name": "Seguridad, Salud Ocupacional y Bienestar Organizacional",
+    "default_credit": 3,
+    "origin_faculty": null,
+    "is_active": true
+  }
+]

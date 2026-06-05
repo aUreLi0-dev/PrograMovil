@@ -172,6 +172,13 @@ class MallaController extends GetxController {
   }
 
   int? get currentStudentLevel {
+    final explicitLevel = user?.courseProgress?.currentLevel;
+    if (explicitLevel != null &&
+        explicitLevel > 0 &&
+        cards.any((c) => c.level == explicitLevel)) {
+      return explicitLevel;
+    }
+
     final pendingMandatory = mandatoryCards
         .where((c) => statuses[c.id] != CourseStatus.approved)
         .toList();

@@ -1,0 +1,772 @@
+[
+  {
+    "id": 1,
+    "curriculum_id": 1,
+    "course_id": 1,
+    "cycle": 1,
+    "display_order": 1,
+    "credit": 4,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 2,
+    "curriculum_id": 1,
+    "course_id": 2,
+    "cycle": 1,
+    "display_order": 2,
+    "credit": 3,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 3,
+    "curriculum_id": 1,
+    "course_id": 3,
+    "cycle": 1,
+    "display_order": 3,
+    "credit": 2,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 4,
+    "curriculum_id": 1,
+    "course_id": 4,
+    "cycle": 1,
+    "display_order": 4,
+    "credit": 3,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 5,
+    "curriculum_id": 1,
+    "course_id": 5,
+    "cycle": 1,
+    "display_order": 5,
+    "credit": 3,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 6,
+    "curriculum_id": 1,
+    "course_id": 6,
+    "cycle": 1,
+    "display_order": 6,
+    "credit": 5,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 7,
+    "curriculum_id": 1,
+    "course_id": 7,
+    "cycle": 2,
+    "display_order": 1,
+    "credit": 3,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 8,
+    "curriculum_id": 1,
+    "course_id": 8,
+    "cycle": 2,
+    "display_order": 2,
+    "credit": 3,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 9,
+    "curriculum_id": 1,
+    "course_id": 9,
+    "cycle": 2,
+    "display_order": 3,
+    "credit": 3,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 10,
+    "curriculum_id": 1,
+    "course_id": 10,
+    "cycle": 2,
+    "display_order": 4,
+    "credit": 3,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 11,
+    "curriculum_id": 1,
+    "course_id": 11,
+    "cycle": 2,
+    "display_order": 5,
+    "credit": 3,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 12,
+    "curriculum_id": 1,
+    "course_id": 12,
+    "cycle": 2,
+    "display_order": 6,
+    "credit": 5,
+    "category": "general_studies",
+    "is_active": true
+  },
+  {
+    "id": 13,
+    "curriculum_id": 1,
+    "course_id": 13,
+    "cycle": 3,
+    "display_order": 1,
+    "credit": 3,
+    "category": "common",
+    "is_active": true
+  },
+  {
+    "id": 14,
+    "curriculum_id": 1,
+    "course_id": 14,
+    "cycle": 3,
+    "display_order": 2,
+    "credit": 5,
+    "category": "common",
+    "is_active": true
+  },
+  {
+    "id": 15,
+    "curriculum_id": 1,
+    "course_id": 15,
+    "cycle": 3,
+    "display_order": 3,
+    "credit": 2,
+    "category": "common",
+    "is_active": true
+  },
+  {
+    "id": 16,
+    "curriculum_id": 1,
+    "course_id": 16,
+    "cycle": 3,
+    "display_order": 4,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 17,
+    "curriculum_id": 1,
+    "course_id": 17,
+    "cycle": 3,
+    "display_order": 5,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 18,
+    "curriculum_id": 1,
+    "course_id": 18,
+    "cycle": 3,
+    "display_order": 6,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 19,
+    "curriculum_id": 1,
+    "course_id": 19,
+    "cycle": 4,
+    "display_order": 1,
+    "credit": 4,
+    "category": "common",
+    "is_active": true
+  },
+  {
+    "id": 20,
+    "curriculum_id": 1,
+    "course_id": 20,
+    "cycle": 4,
+    "display_order": 2,
+    "credit": 3,
+    "category": "common",
+    "is_active": true
+  },
+  {
+    "id": 21,
+    "curriculum_id": 1,
+    "course_id": 21,
+    "cycle": 4,
+    "display_order": 3,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 22,
+    "curriculum_id": 1,
+    "course_id": 22,
+    "cycle": 4,
+    "display_order": 4,
+    "credit": 3,
+    "category": "common",
+    "is_active": true
+  },
+  {
+    "id": 23,
+    "curriculum_id": 1,
+    "course_id": 23,
+    "cycle": 4,
+    "display_order": 5,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 24,
+    "curriculum_id": 1,
+    "course_id": 24,
+    "cycle": 4,
+    "display_order": 6,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 25,
+    "curriculum_id": 1,
+    "course_id": 25,
+    "cycle": 5,
+    "display_order": 1,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 26,
+    "curriculum_id": 1,
+    "course_id": 26,
+    "cycle": 5,
+    "display_order": 2,
+    "credit": 4,
+    "category": "common",
+    "is_active": true
+  },
+  {
+    "id": 27,
+    "curriculum_id": 1,
+    "course_id": 27,
+    "cycle": 5,
+    "display_order": 3,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 28,
+    "curriculum_id": 1,
+    "course_id": 28,
+    "cycle": 5,
+    "display_order": 4,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 29,
+    "curriculum_id": 1,
+    "course_id": 29,
+    "cycle": 5,
+    "display_order": 5,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 30,
+    "curriculum_id": 1,
+    "course_id": 30,
+    "cycle": 5,
+    "display_order": 6,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 31,
+    "curriculum_id": 1,
+    "course_id": 31,
+    "cycle": 6,
+    "display_order": 1,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 32,
+    "curriculum_id": 1,
+    "course_id": 32,
+    "cycle": 6,
+    "display_order": 2,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 33,
+    "curriculum_id": 1,
+    "course_id": 33,
+    "cycle": 6,
+    "display_order": 3,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 34,
+    "curriculum_id": 1,
+    "course_id": 34,
+    "cycle": 6,
+    "display_order": 4,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 35,
+    "curriculum_id": 1,
+    "course_id": 35,
+    "cycle": 6,
+    "display_order": 5,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 36,
+    "curriculum_id": 1,
+    "course_id": 36,
+    "cycle": 6,
+    "display_order": 6,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 37,
+    "curriculum_id": 1,
+    "course_id": 37,
+    "cycle": 7,
+    "display_order": 1,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 38,
+    "curriculum_id": 1,
+    "course_id": 38,
+    "cycle": 7,
+    "display_order": 2,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 39,
+    "curriculum_id": 1,
+    "course_id": 39,
+    "cycle": 7,
+    "display_order": 3,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 40,
+    "curriculum_id": 1,
+    "course_id": 40,
+    "cycle": 7,
+    "display_order": 4,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 41,
+    "curriculum_id": 1,
+    "course_id": 41,
+    "cycle": 7,
+    "display_order": 5,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 42,
+    "curriculum_id": 1,
+    "course_id": 42,
+    "cycle": 8,
+    "display_order": 1,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 43,
+    "curriculum_id": 1,
+    "course_id": 43,
+    "cycle": 8,
+    "display_order": 2,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 44,
+    "curriculum_id": 1,
+    "course_id": 44,
+    "cycle": 8,
+    "display_order": 3,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 45,
+    "curriculum_id": 1,
+    "course_id": 45,
+    "cycle": 8,
+    "display_order": 4,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 46,
+    "curriculum_id": 1,
+    "course_id": 46,
+    "cycle": 9,
+    "display_order": 1,
+    "credit": 3,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 47,
+    "curriculum_id": 1,
+    "course_id": 47,
+    "cycle": 9,
+    "display_order": 2,
+    "credit": 3,
+    "category": "common",
+    "is_active": true
+  },
+  {
+    "id": 48,
+    "curriculum_id": 1,
+    "course_id": 48,
+    "cycle": 9,
+    "display_order": 3,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 49,
+    "curriculum_id": 1,
+    "course_id": 49,
+    "cycle": 9,
+    "display_order": 4,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 50,
+    "curriculum_id": 1,
+    "course_id": 50,
+    "cycle": 10,
+    "display_order": 1,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 51,
+    "curriculum_id": 1,
+    "course_id": 51,
+    "cycle": 10,
+    "display_order": 2,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 52,
+    "curriculum_id": 1,
+    "course_id": 52,
+    "cycle": 10,
+    "display_order": 3,
+    "credit": 4,
+    "category": "faculty",
+    "is_active": true
+  },
+  {
+    "id": 53,
+    "curriculum_id": 1,
+    "course_id": 53,
+    "cycle": 6,
+    "display_order": 7,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 54,
+    "curriculum_id": 1,
+    "course_id": 54,
+    "cycle": 6,
+    "display_order": 8,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 55,
+    "curriculum_id": 1,
+    "course_id": 55,
+    "cycle": 6,
+    "display_order": 9,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 56,
+    "curriculum_id": 1,
+    "course_id": 56,
+    "cycle": 6,
+    "display_order": 10,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 57,
+    "curriculum_id": 1,
+    "course_id": 57,
+    "cycle": 7,
+    "display_order": 6,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 58,
+    "curriculum_id": 1,
+    "course_id": 58,
+    "cycle": 7,
+    "display_order": 7,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 59,
+    "curriculum_id": 1,
+    "course_id": 59,
+    "cycle": 7,
+    "display_order": 8,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 60,
+    "curriculum_id": 1,
+    "course_id": 60,
+    "cycle": 7,
+    "display_order": 10,
+    "credit": 5,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 61,
+    "curriculum_id": 1,
+    "course_id": 61,
+    "cycle": 7,
+    "display_order": 11,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 62,
+    "curriculum_id": 1,
+    "course_id": 62,
+    "cycle": 8,
+    "display_order": 5,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 63,
+    "curriculum_id": 1,
+    "course_id": 63,
+    "cycle": 8,
+    "display_order": 6,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 64,
+    "curriculum_id": 1,
+    "course_id": 64,
+    "cycle": 8,
+    "display_order": 7,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 65,
+    "curriculum_id": 1,
+    "course_id": 65,
+    "cycle": 9,
+    "display_order": 5,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 66,
+    "curriculum_id": 1,
+    "course_id": 66,
+    "cycle": 9,
+    "display_order": 6,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 67,
+    "curriculum_id": 1,
+    "course_id": 67,
+    "cycle": 9,
+    "display_order": 7,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 68,
+    "curriculum_id": 1,
+    "course_id": 68,
+    "cycle": 9,
+    "display_order": 8,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 69,
+    "curriculum_id": 1,
+    "course_id": 69,
+    "cycle": 10,
+    "display_order": 4,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 70,
+    "curriculum_id": 1,
+    "course_id": 70,
+    "cycle": 10,
+    "display_order": 5,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 71,
+    "curriculum_id": 1,
+    "course_id": 71,
+    "cycle": 10,
+    "display_order": 6,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 72,
+    "curriculum_id": 1,
+    "course_id": 72,
+    "cycle": 10,
+    "display_order": 7,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 73,
+    "curriculum_id": 1,
+    "course_id": 73,
+    "cycle": 10,
+    "display_order": 8,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 74,
+    "curriculum_id": 1,
+    "course_id": 74,
+    "cycle": 10,
+    "display_order": 9,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 75,
+    "curriculum_id": 1,
+    "course_id": 75,
+    "cycle": 10,
+    "display_order": 10,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 76,
+    "curriculum_id": 1,
+    "course_id": 76,
+    "cycle": 10,
+    "display_order": 11,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  },
+  {
+    "id": 77,
+    "curriculum_id": 1,
+    "course_id": 77,
+    "cycle": 7,
+    "display_order": 9,
+    "credit": 3,
+    "category": "elective",
+    "is_active": true
+  }
+]

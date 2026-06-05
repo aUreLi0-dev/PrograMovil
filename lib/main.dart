@@ -78,3 +78,5 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+// USUARIO DE PRUEBA PARA MOSTRAR SETUP_CARRERA: 20240000 || solo para mostrar en la expo

@@ -60,6 +60,33 @@ class StorageService extends GetxService {
 
   bool get savedSetupComplete => _prefs.getBool(_kSetupComplete) ?? false;
 
+  String _userKey(String baseKey, String code) => '${baseKey}_$code';
+
+  int? savedCareerIdFor(String code) =>
+      _prefs.getInt(_userKey(_kCareerId, code));
+
+  List<int> savedEspecialidadesFor(String code) {
+    final raw = _prefs.getString(_userKey(_kEspecialidades, code));
+    if (raw == null) return const [];
+    final decoded = jsonDecode(raw) as List;
+    return decoded
+        .map((value) {
+          if (value is int) return value;
+          if (value is num) return value.toInt();
+          return int.tryParse(value.toString());
+        })
+        .whereType<int>()
+        .toList();
+  }
+
+  bool hasSavedSetupFor(String code) =>
+      _prefs.containsKey(_userKey(_kCareerId, code)) ||
+      _prefs.containsKey(_userKey(_kEspecialidades, code)) ||
+      _prefs.containsKey(_userKey(_kSetupComplete, code));
+
+  bool savedSetupCompleteFor(String code) =>
+      _prefs.getBool(_userKey(_kSetupComplete, code)) ?? false;
+
   Future<void> saveSetup({
     required int careerId,
     required List<int> especialidades,
@@ -68,6 +95,20 @@ class StorageService extends GetxService {
     await _prefs.setInt(_kCareerId, careerId);
     await _prefs.setString(_kEspecialidades, jsonEncode(especialidades));
     await _prefs.setBool(_kSetupComplete, setupComplete);
+  }
+
+  Future<void> saveSetupFor({
+    required String code,
+    required int careerId,
+    required List<int> especialidades,
+    required bool setupComplete,
+  }) async {
+    await _prefs.setInt(_userKey(_kCareerId, code), careerId);
+    await _prefs.setString(
+      _userKey(_kEspecialidades, code),
+      jsonEncode(especialidades),
+    );
+    await _prefs.setBool(_userKey(_kSetupComplete, code), setupComplete);
   }
 
   // ── Estados de la malla ─────────────────────────────────────────────────────

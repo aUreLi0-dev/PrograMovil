@@ -75,6 +75,11 @@ flutter:
     - assets/data/docentes.json
     - assets/data/contactos.json
     - assets/data/malla_sistemas.json
+    - assets/data/curriculums.json
+    - assets/data/curriculum_courses.json
+    - assets/data/course_prerequisites.json
+    - assets/data/specialties.json
+    - assets/data/curriculum_course_specialties.json
     - assets/data/carreras.json
     - assets/data/especialidades.json
     - assets/data/user_especialidades.json

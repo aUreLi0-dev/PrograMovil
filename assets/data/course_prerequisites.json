@@ -1,0 +1,562 @@
+[
+  {
+    "id": 1,
+    "curriculum_id": 1,
+    "curriculum_course_id": 7,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 1,
+    "required_cycle": null
+  },
+  {
+    "id": 2,
+    "curriculum_id": 1,
+    "curriculum_course_id": 11,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 6,
+    "required_cycle": null
+  },
+  {
+    "id": 3,
+    "curriculum_id": 1,
+    "curriculum_course_id": 12,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 6,
+    "required_cycle": null
+  },
+  {
+    "id": 4,
+    "curriculum_id": 1,
+    "curriculum_course_id": 14,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 12,
+    "required_cycle": null
+  },
+  {
+    "id": 5,
+    "curriculum_id": 1,
+    "curriculum_course_id": 15,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 9,
+    "required_cycle": null
+  },
+  {
+    "id": 6,
+    "curriculum_id": 1,
+    "curriculum_course_id": 19,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 12,
+    "required_cycle": null
+  },
+  {
+    "id": 7,
+    "curriculum_id": 1,
+    "curriculum_course_id": 20,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 14,
+    "required_cycle": null
+  },
+  {
+    "id": 8,
+    "curriculum_id": 1,
+    "curriculum_course_id": 21,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 13,
+    "required_cycle": null
+  },
+  {
+    "id": 9,
+    "curriculum_id": 1,
+    "curriculum_course_id": 22,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 15,
+    "required_cycle": null
+  },
+  {
+    "id": 10,
+    "curriculum_id": 1,
+    "curriculum_course_id": 23,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 17,
+    "required_cycle": null
+  },
+  {
+    "id": 11,
+    "curriculum_id": 1,
+    "curriculum_course_id": 23,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 18,
+    "required_cycle": null
+  },
+  {
+    "id": 12,
+    "curriculum_id": 1,
+    "curriculum_course_id": 24,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 16,
+    "required_cycle": null
+  },
+  {
+    "id": 13,
+    "curriculum_id": 1,
+    "curriculum_course_id": 25,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 19,
+    "required_cycle": null
+  },
+  {
+    "id": 14,
+    "curriculum_id": 1,
+    "curriculum_course_id": 26,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 20,
+    "required_cycle": null
+  },
+  {
+    "id": 15,
+    "curriculum_id": 1,
+    "curriculum_course_id": 27,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 24,
+    "required_cycle": null
+  },
+  {
+    "id": 16,
+    "curriculum_id": 1,
+    "curriculum_course_id": 28,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 15,
+    "required_cycle": null
+  },
+  {
+    "id": 17,
+    "curriculum_id": 1,
+    "curriculum_course_id": 29,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 23,
+    "required_cycle": null
+  },
+  {
+    "id": 18,
+    "curriculum_id": 1,
+    "curriculum_course_id": 30,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 23,
+    "required_cycle": null
+  },
+  {
+    "id": 19,
+    "curriculum_id": 1,
+    "curriculum_course_id": 31,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 26,
+    "required_cycle": null
+  },
+  {
+    "id": 20,
+    "curriculum_id": 1,
+    "curriculum_course_id": 32,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 27,
+    "required_cycle": null
+  },
+  {
+    "id": 21,
+    "curriculum_id": 1,
+    "curriculum_course_id": 33,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 21,
+    "required_cycle": null
+  },
+  {
+    "id": 22,
+    "curriculum_id": 1,
+    "curriculum_course_id": 34,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 29,
+    "required_cycle": null
+  },
+  {
+    "id": 23,
+    "curriculum_id": 1,
+    "curriculum_course_id": 35,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 29,
+    "required_cycle": null
+  },
+  {
+    "id": 24,
+    "curriculum_id": 1,
+    "curriculum_course_id": 36,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 22,
+    "required_cycle": null
+  },
+  {
+    "id": 25,
+    "curriculum_id": 1,
+    "curriculum_course_id": 37,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 30,
+    "required_cycle": null
+  },
+  {
+    "id": 26,
+    "curriculum_id": 1,
+    "curriculum_course_id": 38,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 31,
+    "required_cycle": null
+  },
+  {
+    "id": 27,
+    "curriculum_id": 1,
+    "curriculum_course_id": 39,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 30,
+    "required_cycle": null
+  },
+  {
+    "id": 28,
+    "curriculum_id": 1,
+    "curriculum_course_id": 40,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 25,
+    "required_cycle": null
+  },
+  {
+    "id": 29,
+    "curriculum_id": 1,
+    "curriculum_course_id": 41,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 32,
+    "required_cycle": null
+  },
+  {
+    "id": 30,
+    "curriculum_id": 1,
+    "curriculum_course_id": 42,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 33,
+    "required_cycle": null
+  },
+  {
+    "id": 31,
+    "curriculum_id": 1,
+    "curriculum_course_id": 43,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 38,
+    "required_cycle": null
+  },
+  {
+    "id": 32,
+    "curriculum_id": 1,
+    "curriculum_course_id": 44,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 36,
+    "required_cycle": null
+  },
+  {
+    "id": 33,
+    "curriculum_id": 1,
+    "curriculum_course_id": 45,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 39,
+    "required_cycle": null
+  },
+  {
+    "id": 34,
+    "curriculum_id": 1,
+    "curriculum_course_id": 47,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 44,
+    "required_cycle": null
+  },
+  {
+    "id": 35,
+    "curriculum_id": 1,
+    "curriculum_course_id": 48,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 42,
+    "required_cycle": null
+  },
+  {
+    "id": 36,
+    "curriculum_id": 1,
+    "curriculum_course_id": 49,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 41,
+    "required_cycle": null
+  },
+  {
+    "id": 37,
+    "curriculum_id": 1,
+    "curriculum_course_id": 50,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 48,
+    "required_cycle": null
+  },
+  {
+    "id": 38,
+    "curriculum_id": 1,
+    "curriculum_course_id": 52,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 47,
+    "required_cycle": null
+  },
+  {
+    "id": 39,
+    "curriculum_id": 1,
+    "curriculum_course_id": 53,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 40,
+    "curriculum_id": 1,
+    "curriculum_course_id": 54,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 41,
+    "curriculum_id": 1,
+    "curriculum_course_id": 55,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 42,
+    "curriculum_id": 1,
+    "curriculum_course_id": 57,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 43,
+    "curriculum_id": 1,
+    "curriculum_course_id": 57,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 34,
+    "required_cycle": null
+  },
+  {
+    "id": 44,
+    "curriculum_id": 1,
+    "curriculum_course_id": 58,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 45,
+    "curriculum_id": 1,
+    "curriculum_course_id": 58,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 32,
+    "required_cycle": null
+  },
+  {
+    "id": 46,
+    "curriculum_id": 1,
+    "curriculum_course_id": 59,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 47,
+    "curriculum_id": 1,
+    "curriculum_course_id": 60,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 56,
+    "required_cycle": null
+  },
+  {
+    "id": 48,
+    "curriculum_id": 1,
+    "curriculum_course_id": 61,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 56,
+    "required_cycle": null
+  },
+  {
+    "id": 49,
+    "curriculum_id": 1,
+    "curriculum_course_id": 62,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 50,
+    "curriculum_id": 1,
+    "curriculum_course_id": 62,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 40,
+    "required_cycle": null
+  },
+  {
+    "id": 51,
+    "curriculum_id": 1,
+    "curriculum_course_id": 63,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 52,
+    "curriculum_id": 1,
+    "curriculum_course_id": 63,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 35,
+    "required_cycle": null
+  },
+  {
+    "id": 53,
+    "curriculum_id": 1,
+    "curriculum_course_id": 64,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 54,
+    "curriculum_id": 1,
+    "curriculum_course_id": 64,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 41,
+    "required_cycle": null
+  },
+  {
+    "id": 55,
+    "curriculum_id": 1,
+    "curriculum_course_id": 65,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 56,
+    "curriculum_id": 1,
+    "curriculum_course_id": 66,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 57,
+    "curriculum_id": 1,
+    "curriculum_course_id": 66,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 37,
+    "required_cycle": null
+  },
+  {
+    "id": 58,
+    "curriculum_id": 1,
+    "curriculum_course_id": 67,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 59,
+    "curriculum_id": 1,
+    "curriculum_course_id": 68,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 60,
+    "curriculum_id": 1,
+    "curriculum_course_id": 68,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 45,
+    "required_cycle": null
+  },
+  {
+    "id": 61,
+    "curriculum_id": 1,
+    "curriculum_course_id": 69,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 62,
+    "curriculum_id": 1,
+    "curriculum_course_id": 70,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 63,
+    "curriculum_id": 1,
+    "curriculum_course_id": 71,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 64,
+    "curriculum_id": 1,
+    "curriculum_course_id": 72,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 65,
+    "curriculum_id": 1,
+    "curriculum_course_id": 72,
+    "prerequisite_type": "course",
+    "prerequisite_curriculum_course_id": 46,
+    "required_cycle": null
+  },
+  {
+    "id": 66,
+    "curriculum_id": 1,
+    "curriculum_course_id": 73,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 67,
+    "curriculum_id": 1,
+    "curriculum_course_id": 74,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 68,
+    "curriculum_id": 1,
+    "curriculum_course_id": 75,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 69,
+    "curriculum_id": 1,
+    "curriculum_course_id": 76,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 5
+  },
+  {
+    "id": 70,
+    "curriculum_id": 1,
+    "curriculum_course_id": 77,
+    "prerequisite_type": "completed_cycle",
+    "prerequisite_curriculum_course_id": null,
+    "required_cycle": 6
+  }
+]
