@@ -14,6 +14,9 @@ class DelegadoAnunciosController extends GetxController {
   String rol = 'Delegado';
   int alumnosMatriculados = 0;
 
+  // Reactivo para las estadísticas del salón
+  final Rxn<EstadisticasSeccion> estadisticas = Rxn<EstadisticasSeccion>();
+
   void cargarCurso(Map<String, dynamic> args) {
     nombreCurso = args['curso']?.toString() ?? nombreCurso;
     idSeccion = args['idSeccion']?.toString() ?? idSeccion;
@@ -22,6 +25,37 @@ class DelegadoAnunciosController extends GetxController {
     alumnosMatriculados = (args['alumnos'] as num?)?.toInt() ?? 0;
     titulo.clear();
     mensaje.clear();
+
+    // Cargar estadísticas realistas según la sección
+    if (codigoSeccion.contains('854') || nombreCurso.toLowerCase().contains('móvil') || nombreCurso.toLowerCase().contains('movil')) {
+      estadisticas.value = EstadisticasSeccion(
+        promedioGeneral: 14.5,
+        porcentajeAprobados: 74,
+        rango0_10: 2,
+        rango11_13: 5,
+        rango14_16: 12,
+        rango17_20: 8,
+      );
+    } else if (codigoSeccion.contains('856') || nombreCurso.toLowerCase().contains('software')) {
+      estadisticas.value = EstadisticasSeccion(
+        promedioGeneral: 15.8,
+        porcentajeAprobados: 85,
+        rango0_10: 1,
+        rango11_13: 3,
+        rango14_16: 15,
+        rango17_20: 9,
+      );
+    } else {
+      // Valores por defecto consistentes para cualquier otro curso
+      estadisticas.value = EstadisticasSeccion(
+        promedioGeneral: 15.0,
+        porcentajeAprobados: 80,
+        rango0_10: 2,
+        rango11_13: 4,
+        rango14_16: 14,
+        rango17_20: 7,
+      );
+    }
   }
 
   void publicarAnuncio() async {
@@ -101,5 +135,23 @@ class DelegadoAnunciosController extends GetxController {
     mensaje.dispose();
     super.onClose();
   }
+}
+
+class EstadisticasSeccion {
+  final double promedioGeneral;
+  final int porcentajeAprobados;
+  final int rango0_10;
+  final int rango11_13;
+  final int rango14_16;
+  final int rango17_20;
+
+  EstadisticasSeccion({
+    required this.promedioGeneral,
+    required this.porcentajeAprobados,
+    required this.rango0_10,
+    required this.rango11_13,
+    required this.rango14_16,
+    required this.rango17_20,
+  });
 }
 

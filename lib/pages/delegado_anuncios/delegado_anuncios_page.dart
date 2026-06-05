@@ -245,6 +245,233 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
     );
   }
 
+  Widget _columnaBarra({
+    required BuildContext context,
+    required String rango,
+    required int cantidad,
+    required Color color,
+    required int maxCantidad,
+  }) {
+    final colors = Theme.of(context).colorScheme;
+    
+    // Altura máxima reservada para la barra física en píxeles
+    double alturaMaximaGrafico = 70.0;
+    
+    // Regla de tres simple para calcular la altura de cada barra de forma proporcional
+    double alturaCalculada = maxCantidad > 0 
+        ? (cantidad / maxCantidad) * alturaMaximaGrafico 
+        : 0;
+
+    // Altura mínima para que la barra se note aunque tenga valor bajo
+    double alturaMinima = cantidad > 0 ? 8.0 : 0.0;
+    double alturaFinal = alturaCalculada < alturaMinima ? alturaMinima : alturaCalculada;
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        // Cantidad de alumnos encima de la barra
+        Text(
+          '$cantidad',
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.bold,
+            color: colors.onSurface,
+          ),
+        ),
+        const SizedBox(height: 4),
+        // La barra física de color
+        Container(
+          width: 28,
+          height: alturaFinal,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(4)),
+          ),
+        ),
+        const SizedBox(height: 6),
+        // Etiqueta del rango de notas debajo
+        Text(
+          rango,
+          style: TextStyle(
+            fontSize: 10,
+            color: colors.onSurface.withOpacity(0.5),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _estadisticasSalon(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    return Obx(() {
+      final stats = control.estadisticas.value;
+      if (stats == null) {
+        return const SizedBox.shrink();
+      }
+
+      // Hallar la cantidad máxima del rango para escalar las barras de forma proporcional
+      int maxCantidad = [
+        stats.rango0_10,
+        stats.rango11_13,
+        stats.rango14_16,
+        stats.rango17_20
+      ].reduce((curr, next) => curr > next ? curr : next);
+
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: colors.surface,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: colors.outline),
+          boxShadow: [
+            BoxShadow(
+              color: colors.shadow.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Título de la sección
+            Row(
+              children: [
+                Icon(LucideIcons.barChart2, color: colors.primary, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  'Estadísticas del Salón',
+                  style: TextStyle(
+                    color: colors.onSurface,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            // Fila de Promedio General y Porcentaje de Aprobados
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'PROMEDIO GENERAL',
+                        style: TextStyle(
+                          color: colors.onSurface.withOpacity(0.5),
+                          fontSize: 10,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${stats.promedioGeneral.toStringAsFixed(1)}',
+                        style: TextStyle(
+                          color: colors.onSurface,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 1,
+                  height: 36,
+                  color: colors.outline,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'APROBADOS',
+                          style: TextStyle(
+                            color: colors.onSurface.withOpacity(0.5),
+                            fontSize: 10,
+                            fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${stats.porcentajeAprobados}%',
+                        style: const TextStyle(
+                          color: Color(0xFF2ECC71), // Verde agradable para aprobados
+                          fontSize: 22,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          // El Gráfico de Barras Nativos
+          Container(
+            height: 120,
+            width: double.infinity,
+            alignment: Alignment.bottomCenter,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                _columnaBarra(
+                  context: context,
+                  rango: '0-10',
+                  cantidad: stats.rango0_10,
+                  color: const Color(0xFFE74C3C), // Rojo
+                  maxCantidad: maxCantidad,
+                ),
+                _columnaBarra(
+                  context: context,
+                  rango: '11-13',
+                  cantidad: stats.rango11_13,
+                  color: const Color(0xFFE67E22), // Naranja
+                  maxCantidad: maxCantidad,
+                ),
+                _columnaBarra(
+                  context: context,
+                  rango: '14-16',
+                  cantidad: stats.rango14_16,
+                  color: const Color(0xFF3498DB), // Azul
+                  maxCantidad: maxCantidad,
+                ),
+                _columnaBarra(
+                  context: context,
+                  rango: '17-20',
+                  cantidad: stats.rango17_20,
+                  color: const Color(0xFF2ECC71), // Verde
+                  maxCantidad: maxCantidad,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 10),
+          // Subtítulo del gráfico
+          Center(
+            child: Text(
+              'Distribución de notas parciales',
+              style: TextStyle(
+                color: colors.onSurface.withOpacity(0.4),
+                fontSize: 11,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  });
+}
+
   Widget _buildBody(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(18),
@@ -252,6 +479,8 @@ class _DelegadoAnunciosPageState extends State<DelegadoAnunciosPage> {
         _courseSummary(context),
         const SizedBox(height: 16),
         _announcementForm(context),
+        const SizedBox(height: 16),
+        _estadisticasSalon(context),
       ],
     );
   }
