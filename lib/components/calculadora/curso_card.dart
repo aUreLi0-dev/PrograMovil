@@ -33,6 +33,7 @@ class CursoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
+          // Header Naranja - Parte Superior
           Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(

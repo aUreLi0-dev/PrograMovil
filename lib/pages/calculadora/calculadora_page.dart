@@ -100,12 +100,12 @@ class CalculadoraPage extends StatelessWidget {
                   final curso = cursosConNotas[index];
                   final cursoIndex = controller.cursos.indexOf(curso);
                   final notas = List<Map<String, dynamic>>.from(curso.notas);
-                   
-                   return CursoCard(
-                     curso: curso,
+                  
+                  return CursoCard(
+                    curso: curso,
                      cursoIndex: cursoIndex,
                      promedio: controller.calcularPromedio(cursoIndex),
-                     sumaPesos: controller.sumaPesos(notas),
+                    sumaPesos: controller.sumaPesos(notas),
                     onDeleteNota: controller.eliminarNota,
                   );
                 },

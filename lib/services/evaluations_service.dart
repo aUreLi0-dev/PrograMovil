@@ -40,5 +40,6 @@ class EvaluationSyllabusService {
     }
   }
 
+  /// Obtiene todos los sílabos cargados
   List<CourseSyllabus> get allSyllabuses => _syllabusData;
 }

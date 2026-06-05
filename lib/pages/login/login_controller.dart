@@ -35,8 +35,6 @@ class LoginController extends GetxController {
       return;
     }
 
-    // Regenera las alertas del alumno que inicia sesión (badge reactivo).
-    // Defensivo: nunca debe bloquear el login si el servicio no está listo.
     if (Get.isRegistered<AlertasService>()) {
       AlertasService.to.generarAlertas();
     }
