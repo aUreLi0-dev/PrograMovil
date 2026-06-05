@@ -27,27 +27,51 @@ class UserModel {
   String get fullName => '$firstName $lastName';
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    final fullName = json['full_name']?.toString();
+    final nameParts = (fullName ?? '').trim().split(RegExp(r'\s+'));
+    final currentLevel = (json['current_level'] as num?)?.toInt();
+    final courseProgressJson = json['courseProgress'] as Map<String, dynamic>?;
+
     return UserModel(
       code: json['code'] as String,
-      firstName: json['firstName'] as String,
-      lastName: json['lastName'] as String,
+      firstName:
+          json['firstName'] as String? ??
+          (nameParts.isNotEmpty ? nameParts.first : ''),
+      lastName:
+          json['lastName'] as String? ??
+          (nameParts.length > 1 ? nameParts.skip(1).join(' ') : ''),
       careerId: json['career_id'] as int?,
       especialidades: (json['especialidades'] as List?)?.cast<int>() ?? <int>[],
       currentCycle: json['currentCycle'] as String? ?? '2026-1',
-      setupComplete: json['setupComplete'] as bool? ?? false,
-      courseProgress: CourseProgress.fromJson(
-        json['courseProgress'] as Map<String, dynamic>?,
-      ),
+      setupComplete:
+          json['setupComplete'] as bool? ??
+          json['specialty_setup_completed'] as bool? ??
+          false,
+      courseProgress: courseProgressJson != null
+          ? CourseProgress.fromJson({
+              ...courseProgressJson,
+              'currentLevel': currentLevel,
+            })
+          : CourseProgress(
+              currentLevel: currentLevel,
+              approvedLevels: currentLevel == null
+                  ? <int>{}
+                  : List.generate(
+                      currentLevel > 1 ? currentLevel - 1 : 0,
+                      (index) => index + 1,
+                    ).toSet(),
+              approvedElectives: <String>{},
+            ),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'code': code,
-        'firstName': firstName,
-        'lastName': lastName,
-        'career_id': careerId,
-        'especialidades': especialidades,
-        'currentCycle': currentCycle,
-        'setupComplete': setupComplete,
-      };
+    'code': code,
+    'firstName': firstName,
+    'lastName': lastName,
+    'career_id': careerId,
+    'especialidades': especialidades,
+    'currentCycle': currentCycle,
+    'setupComplete': setupComplete,
+  };
 }

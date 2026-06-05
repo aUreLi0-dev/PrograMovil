@@ -23,8 +23,11 @@ class CoursesService {
         'assets/data/courses.json',
       );
 
-      final Map<String, dynamic> jsonData = jsonDecode(jsonString);
-      final cursosList = jsonData['cursos'] as List<dynamic>? ?? [];
+      final decoded = jsonDecode(jsonString);
+      final cursosList = decoded is List
+          ? decoded
+          : (decoded as Map<String, dynamic>)['cursos'] as List<dynamic>? ??
+                const [];
 
       _coursesData = List<Map<String, dynamic>>.from(cursosList);
 
@@ -38,15 +41,6 @@ class CoursesService {
 
   /// Obtiene todos los cursos cargados
   List<Map<String, dynamic>> get allCourses => _coursesData;
-
-  /// Obtiene un curso específico por su ID
-  Map<String, dynamic>? getCourseById(String id) {
-    try {
-      return _coursesData.firstWhere((course) => course['id'] == id);
-    } catch (e) {
-      return null;
-    }
-  }
 
   /// Verifica si los datos ya están cargados
   bool get isLoaded => _isLoaded;

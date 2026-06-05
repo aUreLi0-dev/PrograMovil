@@ -29,37 +29,166 @@ class MallaService extends GetxService {
   };
 
   final RxList<CourseNode> _courses = <CourseNode>[].obs;
-  final RxList<String> _specialties = <String>[].obs;
   Set<String> _currentCourseIds = {};
 
   List<CourseNode> get courses => _courses;
-  List<String> get availableSpecialties => _specialties;
 
   /// Carga el catálogo desde assets/data/malla_sistemas.json (idempotente).
   Future<void> load() async {
     if (_courses.isNotEmpty) return;
-    final raw = await rootBundle.loadString('assets/data/malla_sistemas.json');
-    final decoded = jsonDecode(raw) as Map<String, dynamic>;
-    final list = (decoded['courses'] as List)
-        .cast<Map<String, dynamic>>()
-        .map(CourseNode.fromJson)
-        .toList();
-    _courses.assignAll(list);
-    _specialties.assignAll(
-      ((decoded['specialties'] as List?) ?? const []).cast<String>(),
-    );
 
+    final coursesData =
+        (jsonDecode(await rootBundle.loadString('assets/data/courses.json'))
+                as List)
+            .cast<Map<String, dynamic>>();
+    final curriculumCoursesData =
+        (jsonDecode(
+                  await rootBundle.loadString(
+                    'assets/data/curriculum_courses.json',
+                  ),
+                )
+                as List)
+            .cast<Map<String, dynamic>>();
+    final prerequisitesData =
+        (jsonDecode(
+                  await rootBundle.loadString(
+                    'assets/data/course_prerequisites.json',
+                  ),
+                )
+                as List)
+            .cast<Map<String, dynamic>>();
+    final specialtiesData =
+        (jsonDecode(await rootBundle.loadString('assets/data/specialties.json'))
+                as List)
+            .cast<Map<String, dynamic>>();
+    final curriculumCourseSpecialtiesData =
+        (jsonDecode(
+                  await rootBundle.loadString(
+                    'assets/data/curriculum_course_specialties.json',
+                  ),
+                )
+                as List)
+            .cast<Map<String, dynamic>>();
+
+    final courseById = <int, Map<String, dynamic>>{
+      for (final course in coursesData) (course['id'] as num).toInt(): course,
+    };
+    final specialtyById = <int, Map<String, dynamic>>{
+      for (final specialty in specialtiesData)
+        (specialty['id'] as num).toInt(): specialty,
+    };
+
+    final prerequisitesByCurriculumCourseId = <int, List<String>>{};
+    for (final prerequisite in prerequisitesData) {
+      final curriculumCourseId = (prerequisite['curriculum_course_id'] as num)
+          .toInt();
+      final type = prerequisite['prerequisite_type']?.toString();
+      String? value;
+
+      if (type == 'completed_cycle') {
+        final requiredCycle = (prerequisite['required_cycle'] as num).toInt();
+        value = requiredCycle == 5
+            ? prereqVCiclo
+            : requiredCycle == 6
+            ? prereqVICiclo
+            : '_${requiredCycle}_CICLO_';
+      } else {
+        final prerequisiteCurriculumCourseId =
+            (prerequisite['prerequisite_curriculum_course_id'] as num).toInt();
+        value = prerequisiteCurriculumCourseId.toString();
+      }
+
+      if (value.isEmpty) continue;
+      prerequisitesByCurriculumCourseId
+          .putIfAbsent(curriculumCourseId, () => <String>[])
+          .add(value);
+    }
+
+    final specialtiesByCurriculumCourseId = <int, List<String>>{};
+    for (final relation in curriculumCourseSpecialtiesData) {
+      final curriculumCourseId = (relation['curriculum_course_id'] as num)
+          .toInt();
+      final specialtyId = (relation['specialty_id'] as num).toInt();
+      final specialtyName = specialtyById[specialtyId]?['name']?.toString();
+      if (specialtyName == null || specialtyName.isEmpty) continue;
+      specialtiesByCurriculumCourseId
+          .putIfAbsent(curriculumCourseId, () => <String>[])
+          .add(specialtyName);
+    }
+
+    final list = <CourseNode>[];
+    for (final curriculumCourse in curriculumCoursesData) {
+      final curriculumCourseId = (curriculumCourse['id'] as num).toInt();
+      final courseId = (curriculumCourse['course_id'] as num).toInt();
+      final course = courseById[courseId];
+      if (course == null) continue;
+
+      final node = CourseNode.fromDbJson(
+        course: course,
+        curriculumCourse: curriculumCourse,
+        prerequisites:
+            prerequisitesByCurriculumCourseId[curriculumCourseId] ??
+            const <String>[],
+        specialties:
+            specialtiesByCurriculumCourseId[curriculumCourseId] ??
+            const <String>[],
+      );
+      list.add(node);
+    }
+
+    _courses.assignAll(list);
     final user = AuthService.to.currentUser;
     if (user != null) {
-      final enrollments = await EnrollmentService().fetchByStudentCode(user.code);
-      _currentCourseIds = enrollments.map((e) => e.idCurso).toSet();
+      final enrollments = await EnrollmentService().fetchByStudentCode(
+        user.code,
+      );
+      _currentCourseIds = await _resolveCurrentCourseIds(enrollments);
     }
   }
 
-  /// Cantidad máxima de filas observadas en un mismo nivel (para sizing del canvas).
-  int get maxRow {
-    if (_courses.isEmpty) return 0;
-    return _courses.map((c) => c.row).reduce((a, b) => a > b ? a : b);
+  String _normalizeName(String value) {
+    return value.toLowerCase().replaceAll(RegExp(r'\s+'), ' ').trim();
+  }
+
+  Future<Set<String>> _resolveCurrentCourseIds(
+    List<dynamic> enrollments,
+  ) async {
+    final sectionRaw = await rootBundle.loadString(
+      'assets/data/secciones.json',
+    );
+    final sectionData = jsonDecode(sectionRaw) as Map<String, dynamic>;
+    final sections = ((sectionData['secciones'] as List?) ?? const [])
+        .cast<Map<String, dynamic>>();
+    final sectionsById = <String, Map<String, dynamic>>{
+      for (final section in sections) section['idSeccion'].toString(): section,
+    };
+    final coursesByName = <String, CourseNode>{
+      for (final course in _courses) _normalizeName(course.name): course,
+    };
+
+    final current = <String>{};
+    for (final enrollment in enrollments) {
+      final section = sectionsById[enrollment.idSeccion];
+      if (section == null) continue;
+
+      final rawName = section['curso']?.toString();
+      if (rawName == null || rawName.isEmpty) continue;
+
+      final normalizedSectionName = _normalizeName(rawName);
+      final exact = coursesByName[normalizedSectionName];
+      if (exact != null) {
+        current.add(exact.id);
+        continue;
+      }
+
+      final partial = _courses.firstWhereOrNull((course) {
+        final normalizedCourseName = _normalizeName(course.name);
+        return normalizedSectionName.contains(normalizedCourseName) ||
+            normalizedCourseName.contains(normalizedSectionName);
+      });
+      if (partial != null) current.add(partial.id);
+    }
+    return current;
   }
 
   /// Normaliza la especialidad del usuario al nombre oficial del diploma.
@@ -191,15 +320,15 @@ class MallaService extends GetxService {
   }
 
   /// Decide si un electivo debe mostrarse según la(s) especialidad(es)
-  /// elegidas por el alumno. Si no eligió ninguna o el electivo no tiene
-  /// especialidad asociada (caso 520074), siempre se muestra.
+  /// elegidas por el alumno. Si el electivo no tiene especialidad asociada
+  /// (caso 520074), siempre se muestra.
   bool electiveMatchesUserSpecialties(
     CourseNode elective,
     List<int> userEspecialidades,
   ) {
     if (!elective.isElective) return true;
+    if (userEspecialidades.isEmpty) return false;
     if (elective.specialties.isEmpty) return true;
-    if (userEspecialidades.isEmpty) return true;
     final authService = AuthService.to;
     final userEspNames = userEspecialidades
         .map((id) => authService.getEspecialidadName(id))
@@ -215,7 +344,10 @@ class MallaService extends GetxService {
 
     return _courses.where((c) {
       if (!c.isElective) return true;
-      if (approved.contains(c.id) || _currentCourseIds.contains(c.id)) return true;
+      if (user.especialidades.isEmpty) return false;
+      if (approved.contains(c.id) || _currentCourseIds.contains(c.id)) {
+        return true;
+      }
       return electiveMatchesUserSpecialties(c, user.especialidades);
     }).toList();
   }

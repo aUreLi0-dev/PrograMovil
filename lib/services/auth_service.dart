@@ -98,6 +98,16 @@ class AuthService extends GetxService {
     return copy;
   }
 
+  void _applySavedSetup(UserModel user) {
+    if (!_storage.hasSavedSetupFor(user.code)) return;
+
+    final careerId = _storage.savedCareerIdFor(user.code);
+    if (careerId != null) user.careerId = careerId;
+
+    user.especialidades = _storage.savedEspecialidadesFor(user.code);
+    user.setupComplete = _storage.savedSetupCompleteFor(user.code);
+  }
+
   /// Intenta restaurar la sesión guardada en local storage.
   /// Devuelve true si se restauró correctamente.
   Future<bool> tryRestoreSession() async {
@@ -111,13 +121,7 @@ class AuthService extends GetxService {
     }
     final user = UserModel.fromJson(_withEspecialidadesFromRelation(match));
     // Aplicar datos de setup guardados.
-    final careerId = _storage.savedCareerId;
-    if (careerId != null) user.careerId = careerId;
-    final especialidades = _storage.savedEspecialidades;
-    if (especialidades.isNotEmpty) user.especialidades = especialidades;
-    if (_storage.hasSavedSetup) {
-      user.setupComplete = _storage.savedSetupComplete;
-    }
+    _applySavedSetup(user);
 
     _currentUser.value = user;
     // Vincula las notas guardadas a este alumno (clave notas_estudiante_<code>).
@@ -139,13 +143,15 @@ class AuthService extends GetxService {
         (u) => u['code'].toString() == normalizedCode,
       );
       if (match == null) return 'No encontramos un alumno con ese código.';
-      if ((match['password'] as String?) != password) {
+      final storedPassword =
+          match['password_hash'] as String? ?? match['password'] as String?;
+      if (storedPassword != password) {
         return 'La contraseña no es correcta.';
       }
 
-      _currentUser.value = UserModel.fromJson(
-        _withEspecialidadesFromRelation(match),
-      );
+      final user = UserModel.fromJson(_withEspecialidadesFromRelation(match));
+      _applySavedSetup(user);
+      _currentUser.value = user;
       await _storage.saveCode(normalizedCode);
       // Vincula las notas guardadas a este alumno (clave notas_estudiante_<code>).
       await NotasService().guardarIdEstudianteActual(normalizedCode);
@@ -169,7 +175,8 @@ class AuthService extends GetxService {
     u.especialidades = List.of(especialidades);
     u.setupComplete = true;
     _currentUser.refresh();
-    await _storage.saveSetup(
+    await _storage.saveSetupFor(
+      code: u.code,
       careerId: careerId,
       especialidades: especialidades,
       setupComplete: true,
@@ -185,7 +192,8 @@ class AuthService extends GetxService {
     _currentUser.refresh();
     final careerId = u.careerId;
     if (careerId != null) {
-      await _storage.saveSetup(
+      await _storage.saveSetupFor(
+        code: u.code,
         careerId: careerId,
         especialidades: especialidades,
         setupComplete: u.setupComplete,

@@ -40,7 +40,10 @@ class LoginController extends GetxController {
     if (Get.isRegistered<AlertasService>()) {
       AlertasService.to.generarAlertas();
     }
-    Get.offAllNamed('/setup-carrera');
+    final user = _auth.currentUser;
+    Get.offAllNamed(
+      user != null && user.setupComplete ? '/home' : '/setup-carrera',
+    );
   }
 
   @override

@@ -59,12 +59,16 @@ enum CourseCategory { eegg, faculty, common, elective }
 CourseCategory _parseCategory(String? raw) {
   switch (raw) {
     case 'EEGG':
+    case 'general_studies':
       return CourseCategory.eegg;
     case 'COMMON':
+    case 'common':
       return CourseCategory.common;
     case 'ELECTIVE':
+    case 'elective':
       return CourseCategory.elective;
     case 'FACULTY':
+    case 'faculty':
     default:
       return CourseCategory.faculty;
   }
@@ -124,20 +128,23 @@ class CourseNode {
     return null;
   }
 
-  factory CourseNode.fromJson(Map<String, dynamic> json) {
+  factory CourseNode.fromDbJson({
+    required Map<String, dynamic> course,
+    required Map<String, dynamic> curriculumCourse,
+    required List<String> prerequisites,
+    required List<String> specialties,
+  }) {
     return CourseNode(
-      id: json['id'] as String,
-      code: (json['code'] ?? '').toString(),
-      name: json['name'] as String,
-      credits: (json['credits'] as num?)?.toInt() ?? 3,
-      level: (json['level'] as num).toInt(),
-      prerequisites:
-          (json['prerequisites'] as List?)?.cast<String>() ?? const <String>[],
-      category: _parseCategory(json['category'] as String?),
-      row: (json['row'] as num?)?.toInt() ?? 0,
-      specialties:
-          (json['specialties'] as List?)?.cast<String>() ?? const <String>[],
-      externalFaculty: json['externalFaculty'] as String?,
+      id: curriculumCourse['id'].toString(),
+      code: course['code'].toString(),
+      name: course['name'].toString(),
+      credits: (curriculumCourse['credit'] as num).toInt(),
+      level: (curriculumCourse['cycle'] as num).toInt(),
+      prerequisites: prerequisites,
+      category: _parseCategory(curriculumCourse['category']?.toString()),
+      row: (curriculumCourse['display_order'] as num).toInt() - 1,
+      specialties: specialties,
+      externalFaculty: course['origin_faculty']?.toString(),
     );
   }
 }
@@ -145,9 +152,13 @@ class CourseNode {
 /// Progreso académico del alumno tal como viene de users.json.
 class CourseProgress {
   CourseProgress({
+    this.currentLevel,
     required this.approvedLevels,
     required this.approvedElectives,
   });
+
+  /// Nivel actual del estudiante.
+  final int? currentLevel;
 
   /// Niveles cuyos cursos obligatorios están todos aprobados.
   final Set<int> approvedLevels;
@@ -155,20 +166,20 @@ class CourseProgress {
   /// Electivos individuales que el alumno ya aprobó.
   final Set<String> approvedElectives;
 
-  factory CourseProgress.empty() => CourseProgress(
-    approvedLevels: <int>{},
-    approvedElectives: <String>{},
-  );
+  factory CourseProgress.empty() =>
+      CourseProgress(approvedLevels: <int>{}, approvedElectives: <String>{});
 
   factory CourseProgress.fromJson(Map<String, dynamic>? json) {
     if (json == null) return CourseProgress.empty();
+    final rawCurrentLevel = json['currentLevel'] ?? json['current_level'];
 
     return CourseProgress(
+      currentLevel: rawCurrentLevel is num ? rawCurrentLevel.toInt() : null,
       approvedLevels: ((json['approvedLevels'] as List?) ?? const [])
           .map<int>((e) => (e as num).toInt())
           .toSet(),
       approvedElectives: ((json['approvedElectives'] as List?) ?? const [])
-          .cast<String>()
+          .map((e) => e.toString())
           .toSet(),
     );
   }
