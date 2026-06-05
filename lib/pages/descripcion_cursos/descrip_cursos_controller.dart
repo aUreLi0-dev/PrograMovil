@@ -55,8 +55,12 @@ class DescripCursosController extends GetxController{
   }
 
   Future<void> fetchAnuncios(String idSeccion) async {
-    final data=await _anuncioService.fetchAnuncios(idSeccion);
-    anuncios.value=data;
+    final response = await _anuncioService.fetchAnuncios(idSeccion);
+    if (response.success && response.data != null) {
+      anuncios.value = response.data!;
+    } else {
+      anuncios.clear();
+    }
   }
 
   Future<void> fetchAsesorias(String idSeccion) async {

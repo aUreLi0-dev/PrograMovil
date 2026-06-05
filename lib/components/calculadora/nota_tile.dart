@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../constants/calculadora_constants.dart';
 
+// fila individual de una nota con boton para eliminar
 class NotaTile extends StatelessWidget {
   final String titulo;
   final int peso;
@@ -62,6 +63,7 @@ class NotaTile extends StatelessWidget {
               ],
             ),
           ),
+          // boton de eliminar con confirmacion
           IconButton(
             icon: Icon(
               Icons.delete_outline,

@@ -1,3 +1,4 @@
+// constantes de texto y config de la calculadora, todo centralizado aca
 class CalculadoraConstantes {
   static const String titulo = 'Calculadora de Notas';
   static const String cursosConNotas = 'Cursos con notas:';

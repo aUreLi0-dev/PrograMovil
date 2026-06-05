@@ -11,17 +11,20 @@ import '../../services/seccion_service.dart';
 import '../../constants/calculadora_constants.dart';
 
 class CalculadoraController extends GetxController {
+  // lista reactiva de cursos con sus notas, la ui se actualiza sola
   final cursos = <CursoSeccion>[].obs;
 
   late EvaluationSyllabusService _syllabusService;
   late NotasService _notasService;
   late SeccionService _seccionService;
 
+  // mapa de silabos por id de curso, para sacar las evaluaciones de cada uno
   final syllabusData = <String, CourseSyllabus>{}.obs;
 
   @override
   void onInit() {
     super.onInit();
+    // creamos los servicios y arrancamos la carga
     _syllabusService = EvaluationSyllabusService();
     _notasService = NotasService();
     _seccionService = SeccionService();
@@ -29,10 +32,12 @@ class CalculadoraController extends GetxController {
   }
 
   Future<void> _init() async {
+    // primero el silabo, luego los cursos (necesita el silabo ya cargado)
     await _cargarDatosSyllabus();
     await _inicializarCursos();
   }
 
+  // lo llama home_controller al cambiar a la pestana de calculadora
   Future<void> reload() async {
     cursos.clear();
     syllabusData.clear();
@@ -45,9 +50,9 @@ class CalculadoraController extends GetxController {
       for (final syllabus in _syllabusService.allSyllabuses) {
         syllabusData[syllabus.cursoId] = syllabus;
       }
-      developer.log('✓ Datos del sílabo cargados en el controlador');
+      developer.log('âœ“ Datos del sÃ­labo cargados en el controlador');
     } catch (e) {
-      developer.log('✗ Error al cargar datos del sílabo: $e');
+      developer.log('âœ— Error al cargar datos del sÃ­labo: $e');
     }
   }
 
@@ -55,6 +60,7 @@ class CalculadoraController extends GetxController {
     try {
       final user = AuthService.to.currentUser;
 
+      // obtenemos las inscripciones del alumno logeado desde el servicio
       final enrollments = await EnrollmentService().fetchByStudentCode(
         user?.code ?? '',
       );
@@ -72,6 +78,7 @@ class CalculadoraController extends GetxController {
         final seccion = seccionesById[enrollment.idSeccion];
         if (seccion == null) continue;
 
+        // recuperamos notas guardadas anteriormente (si hay)
         final notasRx = <Map<String, dynamic>>[].obs;
 
         final cursoBuscado = notasGuardadas.firstWhereOrNull(
@@ -99,15 +106,17 @@ class CalculadoraController extends GetxController {
         );
       }
 
+      // actualizamos la lista reactiva de golpe
       cursos.assignAll(cursosExpandidos);
       developer.log(
-        '✓ Cursos y secciones cargados correctamente: ${cursos.length} secciones.',
+        'âœ“ Cursos y secciones cargados correctamente: ${cursos.length} secciones.',
       );
     } catch (e) {
-      developer.log('✗ Error al inicializar cursos: $e');
+      developer.log('âœ— Error al inicializar cursos: $e');
     }
   }
 
+  // promedio ponderado: (nota * peso) / peso total del silabo
   double calcularPromedio(int cursoIndex) {
     if (cursoIndex < 0 || cursoIndex >= cursos.length) return 0.0;
     final notas = cursos[cursoIndex].notas;
@@ -122,6 +131,7 @@ class CalculadoraController extends GetxController {
       weightSum += peso;
     }
 
+    // dividimos contra el peso total del silabo (ej. 100%), no contra lo registrado
     final syllabus = getSyllabusForCourse(cursoIndex);
     if (syllabus != null) {
       final totalWeight = syllabus.evaluaciones.fold<double>(
@@ -134,10 +144,12 @@ class CalculadoraController extends GetxController {
     return weightSum > 0 ? weightedSum / weightSum : 0.0;
   }
 
+  // suma simple de pesos de las notas registradas
   double sumaPesos(List<Map<String, dynamic>> notas) {
     return notas.fold(0, (sum, item) => sum + (item['peso'] as num));
   }
 
+  // agrega nota al curso y guarda local
   void agregarNota(
     int cursoIndex,
     String titulo,
@@ -157,6 +169,7 @@ class CalculadoraController extends GetxController {
     }
   }
 
+  // elimina nota y guarda local
   void eliminarNota(int cursoIndex, int notaIndex) {
     if (cursoIndex >= 0 && cursoIndex < cursos.length) {
       final notas = cursos[cursoIndex].notas;
@@ -168,6 +181,7 @@ class CalculadoraController extends GetxController {
     }
   }
 
+  // persiste todas las notas en sharedpreferences
   void _guardarNotasLocal() async {
     try {
       final idEstudiante =
@@ -185,10 +199,11 @@ class CalculadoraController extends GetxController {
           .toList();
       await _notasService.guardarNotas(idEstudiante, cursosMap);
     } catch (e) {
-      developer.log('✗ Error al guardar notas localmente: $e');
+      developer.log('âœ— Error al guardar notas localmente: $e');
     }
   }
 
+  // busca el silabo de un curso por su id
   CourseSyllabus? getSyllabusForCourse(int cursoIndex) {
     if (cursoIndex >= 0 && cursoIndex < cursos.length) {
       final cursoId = cursos[cursoIndex].id;
@@ -199,11 +214,13 @@ class CalculadoraController extends GetxController {
     return null;
   }
 
+  // todas las evaluaciones que tiene un curso segun su silabo
   List<EvaluationComponent> getEvaluationsForCourse(int cursoIndex) {
     final syllabus = getSyllabusForCourse(cursoIndex);
     return syllabus?.evaluaciones ?? [];
   }
 
+  // ids de evaluaciones que ya se registraron (para no mostrarlas de nuevo)
   List<String> getRegisteredEvaluationIds(int cursoIndex) {
     if (cursoIndex >= 0 && cursoIndex < cursos.length) {
       return cursos[cursoIndex].notas
@@ -214,6 +231,7 @@ class CalculadoraController extends GetxController {
     return [];
   }
 
+  // evaluaciones del silabo menos las que ya se agregaron
   List<EvaluationComponent> getAvailableEvaluations(int cursoIndex) {
     final allEvaluations = getEvaluationsForCourse(cursoIndex);
     final registeredIds = getRegisteredEvaluationIds(cursoIndex);

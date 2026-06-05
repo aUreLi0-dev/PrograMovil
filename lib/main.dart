@@ -29,6 +29,7 @@ void main() async {
   Get.put<MallaService>(MallaService(), permanent: true);
   Get.put<AlertasService>(AlertasService(), permanent: true);
 
+  // precarga los datos de la calculadora (silabo y cursos) en paralelo
   await Future.wait([
     EvaluationSyllabusService().loadEvaluationData(),
     CoursesService().loadCoursesData(),
@@ -48,6 +49,7 @@ void main() async {
     initialRoute = '/login';
   }
 
+  // registramos el controller de la calculadora como singleton permanente
   Get.put(CalculadoraController(), permanent: true);
   runApp(MyApp(initialRoute: initialRoute));
 }
@@ -70,7 +72,6 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/setup-carrera', page: () => const SetupCarreraPage()),
         GetPage(name: '/home', page: () => const HomePage()),
-        // AQUÍ ESTÁ TU NUEVA RUTA:
         GetPage(name: '/delegado-cursos', page: () => const DelegadoCursosPage()),
         GetPage(name: '/delegado-anuncios', page: () => const DelegadoAnunciosPage()),
       ],

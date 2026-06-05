@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
-/// Servicio para cargar y gestionar los datos de cursos
+// servicio singleton que carga los cursos desde el json
 class CoursesService {
   static final CoursesService _instance = CoursesService._internal();
 
@@ -14,7 +14,7 @@ class CoursesService {
   late List<Map<String, dynamic>> _coursesData;
   bool _isLoaded = false;
 
-  /// Carga el archivo JSON con los datos de cursos
+  // lee courses.json y lo guarda como lista de mapas
   Future<void> loadCoursesData() async {
     if (_isLoaded) return;
 
@@ -32,16 +32,23 @@ class CoursesService {
       _coursesData = List<Map<String, dynamic>>.from(cursosList);
 
       _isLoaded = true;
-      print('✓ Datos de cursos cargados: ${_coursesData.length} cursos');
+      print('âœ“ Datos de cursos cargados: ${_coursesData.length} cursos');
     } catch (e) {
-      print('✗ Error al cargar datos de cursos: $e');
+      print('âœ— Error al cargar datos de cursos: $e');
       rethrow;
     }
   }
 
-  /// Obtiene todos los cursos cargados
   List<Map<String, dynamic>> get allCourses => _coursesData;
 
-  /// Verifica si los datos ya están cargados
+  // busca un curso por su id
+  Map<String, dynamic>? getCourseById(String id) {
+    try {
+      return _coursesData.firstWhere((course) => course['id'].toString() == id);
+    } catch (e) {
+      return null;
+    }
+  }
+
   bool get isLoaded => _isLoaded;
 }

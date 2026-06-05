@@ -31,8 +31,21 @@ class Anuncio {
       mensaje: json['mensaje'].toString(),
       fecha: json['fecha'].toString(),
       autorCode: json['autorCode'].toString(),
-      autorName: autorName ?? '',
-      autorRole: autorRole ?? 'estudiante',
+      autorName: autorName ?? json['autorName']?.toString() ?? '',
+      autorRole: autorRole ?? json['autorRole']?.toString() ?? 'estudiante',
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'idSeccion': idSeccion,
+      'titulo': titulo,
+      'mensaje': mensaje,
+      'fecha': fecha,
+      'autorCode': autorCode,
+      'autorName': autorName,
+      'autorRole': autorRole,
+    };
   }
 }

@@ -4,6 +4,7 @@ import '../../constants/calculadora_constants.dart';
 import '../../models/curso_seccion_model.dart';
 import 'nota_tile.dart';
 
+// tarjeta que muestra un curso con su promedio y lista de notas
 class CursoCard extends StatelessWidget {
   final CursoSeccion curso;
   final double promedio;
@@ -32,6 +33,7 @@ class CursoCard extends StatelessWidget {
       ),
       child: Column(
         children: [
+          // Header Naranja - Parte Superior
           Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -80,6 +82,7 @@ class CursoCard extends StatelessWidget {
                         ],
                       ),
                     ),
+                    // promedio grande a la derecha
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -91,6 +94,7 @@ class CursoCard extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        // si el promedio es menor a 11, muestra "desaprobado"
                         if (promedio < CalculadoraConstantes.notaMinimaAprobatoria)
                           Row(
                             children: [
@@ -114,6 +118,7 @@ class CursoCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
 
+                // barra de progreso de pesos
                 Container(
                   height: 38,
                   decoration: BoxDecoration(
@@ -148,6 +153,7 @@ class CursoCard extends StatelessWidget {
             ),
           ),
 
+          // lista de notas del curso (reactiva)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
             child: Obx(() {

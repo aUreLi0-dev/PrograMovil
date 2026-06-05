@@ -1,24 +1,34 @@
 {
-  "sectionRepresentatives":[
+  "sectionRepresentatives": [
     {
-      "id":"1",
-      "enrollmentId":"1",
-      "role":"delegado"
+      "id": "1",
+      "enrollmentId": "1",
+      "role": "delegado"
     },
     {
-      "id":"2",
-      "enrollmentId":"7",
-      "role":"delegado"
+      "id": "2",
+      "enrollmentId": "2",
+      "role": "subdelegado"
     },
     {
-      "id":"3",
-      "enrollmentId":"10",
-      "role":"subdelegado"
+      "id": "3",
+      "enrollmentId": "7",
+      "role": "delegado"
     },
     {
-      "id":"4",
-      "enrollmentId":"11",
-      "role":"subdelegado"
+      "id": "4",
+      "enrollmentId": "10",
+      "role": "subdelegado"
+    },
+    {
+      "id": "5",
+      "enrollmentId": "11",
+      "role": "subdelegado"
+    },
+    {
+      "id": "6",
+      "enrollmentId": "4",
+      "role": "subdelegado"
     }
   ]
 }

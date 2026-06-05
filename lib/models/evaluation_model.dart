@@ -1,3 +1,4 @@
+// componente de evaluacion individual del silabo (ej. "practica 1", "examen final")
 class EvaluationComponent {
   final String id;
   final String nombre;
@@ -13,7 +14,7 @@ class EvaluationComponent {
     required this.tipo,
   });
 
-  /// Convertir desde JSON
+  // construye desde el json del silabo
   factory EvaluationComponent.fromJson(Map<String, dynamic> json) {
     return EvaluationComponent(
       id: json['id'] ?? '',
@@ -24,5 +25,3 @@ class EvaluationComponent {
     );
   }
 }
-
-

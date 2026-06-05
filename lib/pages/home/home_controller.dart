@@ -4,6 +4,7 @@ import 'package:ulima_plus/services/auth_service.dart';
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
+
   final RxInt currentTabIndex = 0.obs;
 
   @override

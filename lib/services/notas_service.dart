@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// servicio singleton para guardar/cargar notas en sharedpreferences
 class NotasService {
   static final NotasService _instance = NotasService._internal();
   static const String _notasKey = 'notas_estudiante';
@@ -11,6 +12,7 @@ class NotasService {
 
   NotasService._internal();
 
+  // serializa los cursos con notas y los guarda
   Future<void> guardarNotas(String idEstudiante, List<Map<String, dynamic>> cursos) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -33,6 +35,7 @@ class NotasService {
     }
   }
 
+  // recupera las notas guardadas de un alumno
   Future<List<Map<String, dynamic>>> cargarNotas(String idEstudiante) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -51,6 +54,7 @@ class NotasService {
     }
   }
 
+  // lee el id del alumno guardado en sharedpreferences
   Future<String?> obtenerIdEstudianteActual() async {
     try {
       final prefs = await SharedPreferences.getInstance();
