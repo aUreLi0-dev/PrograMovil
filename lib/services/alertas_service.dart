@@ -8,7 +8,7 @@ import 'package:ulima_plus/services/auth_service.dart';
 import 'package:ulima_plus/services/notas_service.dart';
 import 'package:ulima_plus/services/enrollment_service.dart';
 
-class AlertasService extends GetxController {
+class AlertasService extends GetxService {
   static AlertasService get to => Get.find();
 
   final RxList<AlertaModel> alertas = <AlertaModel>[].obs;

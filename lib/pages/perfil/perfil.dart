@@ -1,41 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ulima_plus/configs/themes.dart';
+import 'package:ulima_plus/pages/perfil/perfil_controller.dart';
 import 'package:ulima_plus/services/auth_service.dart';
 import '../horario/horario_semanal.dart';
-import '../malla/malla_controller.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
-  String _roleLabel(String role) {
-    switch (role) {
-      case 'delegado':
-        return 'DELEGADO';
-      case 'subdelegado':
-        return 'SUBDELEGADO';
-      default:
-        return 'ALUMNO';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(PerfilController());
     final colors = Theme.of(context).colorScheme;
-    final auth = AuthService.to;
 
     return Obx(() {
-      final user = auth.currentUser;
+      final user = controller.user;
       if (user == null) {
         return const Center(child: Text('No hay sesión activa.'));
       }
-
-      final nombre = '${user.lastName} ${user.firstName}'.toUpperCase();
-      final carrera = auth.getCareerName(user.careerId);
-      final especialidad = user.especialidades
-          .map((id) => auth.getEspecialidadName(id))
-          .where((n) => n.isNotEmpty)
-          .join(', ');
 
       return SingleChildScrollView(
       child: Column(
@@ -48,7 +30,7 @@ class ProfilePage extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  _roleLabel(auth.role),
+                  controller.roleLabel,
                   style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
@@ -72,7 +54,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  nombre,
+                  controller.nombre,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20,
@@ -90,7 +72,7 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  carrera,
+                  controller.carrera,
                   style: TextStyle(
                     fontSize: 14,
                     color: colors.onSurface.withValues(alpha: 0.7),
@@ -104,11 +86,11 @@ class ProfilePage extends StatelessWidget {
             icon: Icons.business_center,
             iconBg: MaterialTheme.blackColor,
             title: 'Especialidad',
-            subtitle: especialidad.isEmpty
+            subtitle: controller.especialidad.isEmpty
                 ? 'Sin especialidad asignada'
-                : especialidad.toUpperCase(),
+                : controller.especialidad.toUpperCase(),
             subtitleColor: MaterialTheme.primaryColor,
-            onTap: () => _mostrarSelectorEspecialidad(context, auth, user),
+            onTap: () => _mostrarSelectorEspecialidad(context, controller, user),
           ),
           const SizedBox(height: 12),
           _InfoCard(
@@ -123,23 +105,13 @@ class ProfilePage extends StatelessWidget {
     });
   }
 
-  /// Abre un selector (checkboxes) con las especialidades de la carrera del
-  /// alumno. Al guardar, actualiza las especialidades y refresca la malla
-  /// para que se filtren los electivos.
   void _mostrarSelectorEspecialidad(
     BuildContext context,
-    AuthService auth,
+    PerfilController controller,
     dynamic user,
   ) {
     final colors = Theme.of(context).colorScheme;
-    final disponibles = auth.especialidades
-        .where((e) => e['carrera_id'] == user.careerId && e['is_active'] == true)
-        .toList()
-      ..sort((a, b) {
-        final oa = (a['display_order'] as num?)?.toInt() ?? 999;
-        final ob = (b['display_order'] as num?)?.toInt() ?? 999;
-        return oa.compareTo(ob);
-      });
+    final disponibles = controller.getEspecialidadesDisponibles(user.careerId);
 
     final seleccion = <int>{...user.especialidades};
 
@@ -221,11 +193,7 @@ class ProfilePage extends StatelessWidget {
                         ),
                       ),
                       onPressed: () async {
-                        await auth.updateEspecialidades(seleccion.toList());
-                        // Refresca la malla si ya está construida.
-                        if (Get.isRegistered<MallaController>()) {
-                          Get.find<MallaController>().reloadForUser();
-                        }
+                        await controller.guardarEspecialidades(seleccion);
                         if (ctx.mounted) Navigator.pop(ctx);
                       },
                       child: const Text('Guardar'),

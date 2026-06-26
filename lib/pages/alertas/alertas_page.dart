@@ -3,39 +3,19 @@ import 'package:get/get.dart';
 import 'package:ulima_plus/components/footer/app_footer.dart';
 import 'package:ulima_plus/components/header/app_header.dart';
 import 'package:ulima_plus/models/alerta_model.dart';
+import 'package:ulima_plus/pages/alertas/alertas_controller.dart';
 import 'package:ulima_plus/pages/home/home_controller.dart';
-import 'package:ulima_plus/services/alertas_service.dart';
 import 'package:ulima_plus/services/auth_service.dart';
 
-class AlertasPage extends StatefulWidget {
+class AlertasPage extends StatelessWidget {
   const AlertasPage({super.key});
 
   @override
-  State<AlertasPage> createState() => _AlertasPageState();
-}
-
-class _AlertasPageState extends State<AlertasPage> {
-  late final AlertasService _service;
-
-  @override
-  void initState() {
-    super.initState();
-    // Reutiliza el controller si ya existe para preservar el estado de lectura
-    _service = Get.isRegistered<AlertasService>()
-        ? Get.find<AlertasService>()
-        : Get.put(AlertasService());
-    _service.generarAlertas();
-  }
-
-  @override
-  void dispose() {
-    // No destruir el controller: conserva _readIds entre visitas
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AlertasController());
     final colors = Theme.of(context).colorScheme;
+
+    controller.generarAlertas();
 
     return Scaffold(
       backgroundColor: colors.surface,
@@ -75,13 +55,13 @@ class _AlertasPageState extends State<AlertasPage> {
           // Lista de alertas
           Expanded(
             child: Obx(() {
-              if (_service.cargando.value) {
+              if (controller.cargando.value) {
                 return Center(
                   child: CircularProgressIndicator(color: colors.primary),
                 );
               }
 
-              if (_service.alertas.isEmpty) {
+              if (controller.alertas.isEmpty) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -110,13 +90,13 @@ class _AlertasPageState extends State<AlertasPage> {
                   horizontal: 16,
                   vertical: 14,
                 ),
-                itemCount: _service.alertas.length,
+                itemCount: controller.alertas.length,
                 separatorBuilder: (context, index) =>
                     const SizedBox(height: 10),
                 itemBuilder: (context, index) {
                   return _AlertCard(
-                    alerta: _service.alertas[index],
-                    service: _service,
+                    alerta: controller.alertas[index],
+                    controller: controller,
                   );
                 },
               );
@@ -145,10 +125,10 @@ class _AlertasPageState extends State<AlertasPage> {
 }
 
 class _AlertCard extends StatelessWidget {
-  const _AlertCard({required this.alerta, required this.service});
+  const _AlertCard({required this.alerta, required this.controller});
 
   final AlertaModel alerta;
-  final AlertasService service;
+  final AlertasController controller;
 
   Color _dotColor(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
@@ -245,7 +225,7 @@ class _AlertCard extends StatelessWidget {
             Align(
               alignment: Alignment.centerRight,
               child: GestureDetector(
-                onTap: () => service.marcarComoLeido(alerta.id),
+                onTap: () => controller.marcarComoLeido(alerta.id),
                 child: Text(
                   'Marcar como leído',
                   style: TextStyle(
