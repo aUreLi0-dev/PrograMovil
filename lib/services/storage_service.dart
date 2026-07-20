@@ -18,6 +18,7 @@ class StorageService extends GetxService {
   static const _kEspecialidades = 'session_especialidades_v2';
   static const _kLegacyEspecialidades = 'session_especialidades';
   static const _kSetupComplete = 'session_setup_complete';
+  static const _kJwt = 'session_jwt';
   static const _kStatuses = 'session_statuses_v2';
   static const _kLegacyStatuses = 'session_statuses';
   static const _kLocalAnuncios = 'local_anuncios_v1';
@@ -32,6 +33,12 @@ class StorageService extends GetxService {
   String? get savedCode => _prefs.getString(_kCode);
 
   Future<void> saveCode(String code) => _prefs.setString(_kCode, code);
+
+  String? get savedJwt => _prefs.getString(_kJwt);
+
+  Future<void> saveJwt(String jwt) => _prefs.setString(_kJwt, jwt);
+
+  Future<void> clearJwt() => _prefs.remove(_kJwt);
 
   // ── Setup de carrera/especialidad ───────────────────────────────────────────
 
@@ -146,6 +153,7 @@ class StorageService extends GetxService {
     await _prefs.remove(_kEspecialidades);
     await _prefs.remove(_kLegacyEspecialidades);
     await _prefs.remove(_kSetupComplete);
+    await _prefs.remove(_kJwt);
     await _prefs.remove(_kStatuses);
     await _prefs.remove(_kLegacyStatuses);
   }
