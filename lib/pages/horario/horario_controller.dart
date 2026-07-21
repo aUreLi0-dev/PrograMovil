@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 
 import '../../services/auth_service.dart';
 import '../../services/enrollment_service.dart';
+import '../../services/schedule_service.dart';
 
 class DaySchedule {
   final String dayName;
@@ -27,6 +28,7 @@ class HorarioController extends GetxController {
   final _todasLasSecciones = <Map<String, dynamic>>[].obs;
   final _enrolledSectionIds = <String>{}.obs;
   Timer? _clockTimer;
+  final ScheduleService _scheduleService = ScheduleService();
 
   static const List<String> _months = [
     "Enero",
@@ -54,10 +56,18 @@ class HorarioController extends GetxController {
     super.onInit();
     _startClock();
     _loadDays();
-    _loadSecciones();
+    // _loadSecciones ya puebla _enrolledSectionIds; _loadEnrollments agrega
+    // secciones adicionales que no vengan en el horario (ej. sin schedule_session).
+    _loadSecciones().then((_) => _loadEnrollments());
     _loadAssessments();
     _loadWeeklyLoad();
-    _loadEnrollments();
+
+    try {
+      ever(AuthService.to.currentUserRx, (_) {
+        _enrolledSectionIds.clear();
+        _loadSecciones().then((_) => _loadEnrollments());
+      });
+    } catch (_) {}
   }
 
   @override
@@ -84,7 +94,7 @@ class HorarioController extends GetxController {
     if (user == null) return;
     try {
       final enrollments = await EnrollmentService().fetchByStudentCode(user.code);
-      _enrolledSectionIds.assignAll(enrollments.map((e) => e.idSeccion));
+      _enrolledSectionIds.addAll(enrollments.map((e) => e.idSeccion));
       update();
     } catch (e) {
       debugPrint('Error al cargar matriculas: $e');
@@ -152,17 +162,27 @@ class HorarioController extends GetxController {
   }
 
   Future<void> _loadSecciones() async {
+    final user = AuthService.to.currentUser;
+    if (user == null) {
+      _todasLasSecciones.clear();
+      update();
+      return;
+    }
+
+    final studentId = user.studentId ?? user.id ?? 2;
+
     try {
-      final jsonString = await rootBundle.loadString('assets/data/secciones.json');
-      final Map<String, dynamic> data = jsonDecode(jsonString);
-      _todasLasSecciones.assignAll(
-        (data['secciones'] as List? ?? [])
-            .map((item) => Map<String, dynamic>.from(item))
-            .toList(),
-      );
+      final backendSchedule = await _scheduleService.fetchStudentSchedule(studentId);
+      _todasLasSecciones.assignAll(backendSchedule);
+      for (final sec in backendSchedule) {
+        final idSec = sec['idSeccion']?.toString();
+        if (idSec != null) _enrolledSectionIds.add(idSec);
+      }
       update();
     } catch (e) {
-      debugPrint('Error al cargar secciones: $e');
+      debugPrint('Error al cargar horario del backend: $e');
+      _todasLasSecciones.clear();
+      update();
     }
   }
 
@@ -269,8 +289,9 @@ class HorarioController extends GetxController {
         
         final evalCursoId = assessment['cursoId']?.toString().trim() ?? '';
         final evalCourseName = assessment['courseName']?.toString().toLowerCase().trim() ?? '';
-        
-        final matchesCourse = (evalCursoId.isNotEmpty && evalCursoId == course['idSeccion']) ||
+        // idCurso es el ID numérico del curso en el backend, idSeccion es el código (ej. 'IS-856')
+        final backendCursoId = course['idCurso']?.toString().trim() ?? '';
+        final matchesCourse = (evalCursoId.isNotEmpty && evalCursoId == backendCursoId) ||
                               (evalCourseName.isNotEmpty && evalCourseName == courseName);
 
         if (weekMatches && matchesCourse) {
