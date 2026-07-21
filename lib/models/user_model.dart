@@ -35,19 +35,33 @@ class UserModel {
     final nameParts = (fullName ?? '').trim().split(RegExp(r'\s+'));
     final currentLevel = (json['current_level'] as num?)?.toInt();
     final courseProgressJson = json['courseProgress'] as Map<String, dynamic>?;
+    final career = json['career'] as Map<String, dynamic>?;
+    final rawEspecialidades = (json['especialidades'] as List?) ?? const [];
+    final especialidadIds = rawEspecialidades
+        .map((item) {
+          if (item is num) return item.toInt();
+          if (item is Map && item['id'] is num) {
+            return (item['id'] as num).toInt();
+          }
+          return int.tryParse(item.toString());
+        })
+        .whereType<int>()
+        .toList();
 
     return UserModel(
       id: (json['id'] as num?)?.toInt(),
-      studentId: (json['student_id'] as num?)?.toInt() ?? (json['id'] as num?)?.toInt(),
-      code: json['code'] as String,
+      studentId: (json['student_id'] as num?)?.toInt(),
+      code: json['code']?.toString() ?? '',
       firstName:
           json['firstName'] as String? ??
           (nameParts.isNotEmpty ? _extractFirstName(nameParts) : ''),
       lastName:
           json['lastName'] as String? ??
           (nameParts.length > 1 ? _extractLastName(nameParts) : ''),
-      careerId: json['career_id'] as int?,
-      especialidades: (json['especialidades'] as List?)?.cast<int>() ?? <int>[],
+      careerId:
+          (json['career_id'] as num?)?.toInt() ??
+          (career?['id'] as num?)?.toInt(),
+      especialidades: especialidadIds,
       currentCycle: json['currentCycle'] as String? ?? '2026-1',
       setupComplete:
           json['setupComplete'] as bool? ??

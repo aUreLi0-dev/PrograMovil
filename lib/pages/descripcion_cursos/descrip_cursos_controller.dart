@@ -10,47 +10,50 @@ import 'package:ulima_plus/services/asesoria_service.dart';
 import 'package:ulima_plus/services/contacto_service.dart';
 import 'package:ulima_plus/services/seccion_service.dart';
 
-class DescripCursosController extends GetxController{
-  final SeccionService _seccionService=SeccionService();
-  final AnuncioService _anuncioService=AnuncioService();
-  final AsesoriaService _asesoriaService=AsesoriaService();
-  final ContactoService _contactoService=ContactoService();
+class DescripCursosController extends GetxController {
+  final SeccionService _seccionService = SeccionService();
+  final AnuncioService _anuncioService = AnuncioService();
+  final AsesoriaService _asesoriaService = AsesoriaService();
+  final ContactoService _contactoService = ContactoService();
 
-  RxList<Seccion> secciones=<Seccion>[].obs;
-  Rxn<Seccion> seccionActual=Rxn<Seccion>();
-  RxList<Anuncio> anuncios=<Anuncio>[].obs;
-  RxList<Asesoria> asesorias=<Asesoria>[].obs;
-  RxList<ContactoCurso> alumnosContacto=<ContactoCurso>[].obs;
-  Rxn<Docente> docenteContacto=Rxn<Docente>();
-  RxInt selectedTab=0.obs;
-  RxBool isLoading=false.obs;
+  RxList<Seccion> secciones = <Seccion>[].obs;
+  Rxn<Seccion> seccionActual = Rxn<Seccion>();
+  RxList<Anuncio> anuncios = <Anuncio>[].obs;
+  RxList<Asesoria> asesorias = <Asesoria>[].obs;
+  RxList<ContactoCurso> alumnosContacto = <ContactoCurso>[].obs;
+  Rxn<Docente> docenteContacto = Rxn<Docente>();
+  RxInt selectedTab = 0.obs;
+  RxBool isLoading = false.obs;
+  RxnString errorMessage = RxnString();
 
-  Seccion? getSeccionPorId(String id){
-    return secciones.firstWhereOrNull((s)=>s.idSeccion==id);
+  Seccion? getSeccionPorId(String id) {
+    return secciones.firstWhereOrNull((section) => section.idSeccion == id);
   }
 
   Future<void> cargarDatosCurso(String idSeccion) async {
-    try{
-      isLoading.value=true;
-      final seccion=await _seccionService.findSectionById(idSeccion);
-      if(seccion==null){
-        throw Exception('No existe sección con id $idSeccion');
+    try {
+      isLoading.value = true;
+      errorMessage.value = null;
+      final seccion = await _seccionService.findSectionById(idSeccion);
+      if (seccion == null) {
+        throw Exception('No existe seccion con id $idSeccion');
       }
-      seccionActual.value=seccion;
-      secciones.value=[seccion];
 
-      // Anuncios y contactos sí trabajan directo con la sección.
-      // Asesorías recibe idSeccion, pero su service busca curso + docente internamente.
+      seccionActual.value = seccion;
+      secciones.value = [seccion];
+
+      final resolvedSectionId = seccion.idSeccion;
       await Future.wait([
-        fetchAnuncios(idSeccion),
-        fetchAsesorias(idSeccion),
-        fetchContactos(idSeccion),
+        fetchAnuncios(resolvedSectionId),
+        fetchAsesorias(resolvedSectionId),
+        fetchContactos(resolvedSectionId),
       ]);
-    }catch(e){
+    } catch (e) {
       debugPrint('Error cargando datos del curso: $e');
+      errorMessage.value = 'No se pudo cargar la seccion.';
       limpiarDatos();
-    }finally{
-      isLoading.value=false;
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -64,22 +67,21 @@ class DescripCursosController extends GetxController{
   }
 
   Future<void> fetchAsesorias(String idSeccion) async {
-    final data=await _asesoriaService.fetchAsesorias(idSeccion);
-    asesorias.value=data;
+    asesorias.value = await _asesoriaService.fetchAsesorias(idSeccion);
   }
 
   Future<void> fetchContactos(String idSeccion) async {
-    final data=await _contactoService.fetchContactos(idSeccion);
-    docenteContacto.value=data['docente'] as Docente?;
-    alumnosContacto.value=List<ContactoCurso>.from(data['alumnos']??[]);
+    final data = await _contactoService.fetchContactos(idSeccion);
+    docenteContacto.value = data['docente'] as Docente?;
+    alumnosContacto.value = List<ContactoCurso>.from(data['alumnos'] ?? []);
   }
-  
-  void limpiarDatos(){
+
+  void limpiarDatos() {
     secciones.clear();
-    seccionActual.value=null;
+    seccionActual.value = null;
     anuncios.clear();
     asesorias.clear();
     alumnosContacto.clear();
-    docenteContacto.value=null;
+    docenteContacto.value = null;
   }
 }

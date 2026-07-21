@@ -15,7 +15,7 @@ import 'pages/delegado_anuncios/delegado_anuncios_page.dart';
 import 'pages/calculadora/calculadora_controller.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();  
+  WidgetsFlutterBinding.ensureInitialized();
   LucideIcons.info.codePoint;
 
   // Servicios globales permanentes.
@@ -29,8 +29,6 @@ void main() async {
 
   // registramos el controller de la calculadora (lazy, no carga datos hasta que se use)
   Get.lazyPut(() => CalculadoraController(), fenix: true);
-
-  await MallaService.to.load();
 
   // Intentar restaurar sesión guardada.
   final restored = await AuthService.to.tryRestoreSession();
@@ -66,8 +64,14 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginPage()),
         GetPage(name: '/setup-carrera', page: () => const SetupCarreraPage()),
         GetPage(name: '/home', page: () => const HomePage()),
-        GetPage(name: '/delegado-cursos', page: () => const DelegadoCursosPage()),
-        GetPage(name: '/delegado-anuncios', page: () => const DelegadoAnunciosPage()),
+        GetPage(
+          name: '/delegado-cursos',
+          page: () => const DelegadoCursosPage(),
+        ),
+        GetPage(
+          name: '/delegado-anuncios',
+          page: () => const DelegadoAnunciosPage(),
+        ),
       ],
     );
   }

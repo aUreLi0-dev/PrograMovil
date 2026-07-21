@@ -10,6 +10,35 @@ import 'package:flutter/material.dart';
 /// - approved  → finalizado/aprobado
 enum CourseStatus { locked, unlocked, current, approved }
 
+CourseStatus courseStatusFromJson(Object? raw) {
+  switch (raw?.toString()) {
+    case 'approved':
+      return CourseStatus.approved;
+    case 'current':
+    case 'in_progress':
+      return CourseStatus.current;
+    case 'unlocked':
+    case 'available':
+      return CourseStatus.unlocked;
+    case 'locked':
+    default:
+      return CourseStatus.locked;
+  }
+}
+
+String courseStatusToApiValue(CourseStatus status) {
+  switch (status) {
+    case CourseStatus.approved:
+      return 'approved';
+    case CourseStatus.current:
+      return 'current';
+    case CourseStatus.unlocked:
+      return 'available';
+    case CourseStatus.locked:
+      return 'locked';
+  }
+}
+
 extension CourseStatusX on CourseStatus {
   String get label {
     switch (this) {
@@ -90,6 +119,8 @@ class CourseNode {
     required this.category,
     required this.row,
     required this.specialties,
+    required this.status,
+    this.requiredCompletedLevel,
     this.externalFaculty,
   });
 
@@ -106,6 +137,8 @@ class CourseNode {
 
   /// Especialidades que recomiendan este electivo. Vacío para obligatorios.
   final List<String> specialties;
+  final CourseStatus status;
+  final int? requiredCompletedLevel;
 
   /// Facultad externa si el curso pertenece a otra carrera (e.g. "Comunicaciones").
   final String? externalFaculty;
@@ -120,9 +153,7 @@ class CourseNode {
   List<String> get coursePrerequisites =>
       prerequisites.where((p) => !_isCicloMarker(p)).toList();
 
-  /// Si está marcado como _V_CICLO_ o _VI_CICLO_, devuelve el ciclo mínimo
-  /// requerido. Null si no aplica.
-  int? get requiredCompletedLevel {
+  static int? _requiredLevelFromPrerequisites(List<String> prerequisites) {
     if (prerequisites.contains(prereqVCiclo)) return 5;
     if (prerequisites.contains(prereqVICiclo)) return 6;
     return null;
@@ -144,7 +175,30 @@ class CourseNode {
       category: _parseCategory(curriculumCourse['category']?.toString()),
       row: (curriculumCourse['display_order'] as num).toInt() - 1,
       specialties: specialties,
+      status: CourseStatus.locked,
+      requiredCompletedLevel: _requiredLevelFromPrerequisites(prerequisites),
       externalFaculty: course['origin_faculty']?.toString(),
+    );
+  }
+
+  factory CourseNode.fromApiJson(Map<String, dynamic> json) {
+    return CourseNode(
+      id: (json['curriculumCourseId'] ?? json['id']).toString(),
+      code: json['code']?.toString() ?? '',
+      name: json['name']?.toString() ?? 'Sin curso',
+      credits: (json['credits'] as num?)?.toInt() ?? 0,
+      level: (json['level'] as num?)?.toInt() ?? 1,
+      prerequisites: ((json['prerequisites'] as List?) ?? const [])
+          .map((item) => item.toString())
+          .toList(),
+      category: _parseCategory(json['category']?.toString()),
+      row: (json['row'] as num?)?.toInt() ?? 0,
+      specialties: ((json['specialties'] as List?) ?? const [])
+          .map((item) => item.toString())
+          .toList(),
+      status: courseStatusFromJson(json['status']),
+      requiredCompletedLevel: (json['requiredCompletedLevel'] as num?)?.toInt(),
+      externalFaculty: json['externalFaculty']?.toString(),
     );
   }
 }
