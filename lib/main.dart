@@ -5,8 +5,6 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '/configs/themes.dart';
 import '/services/alertas_service.dart';
 import '/services/auth_service.dart';
-import '/services/courses_service.dart';
-import 'services/evaluations_service.dart';
 import '/services/malla_service.dart';
 import '/services/storage_service.dart';
 import 'pages/home/home_page.dart';
@@ -29,12 +27,10 @@ void main() async {
   Get.put<MallaService>(MallaService(), permanent: true);
   Get.put<AlertasService>(AlertasService(), permanent: true);
 
-  // precarga los datos de la calculadora (silabo y cursos) en paralelo
-  await Future.wait([
-    EvaluationSyllabusService().loadEvaluationData(),
-    CoursesService().loadCoursesData(),
-    MallaService.to.load(),
-  ]);
+  // registramos el controller de la calculadora (lazy, no carga datos hasta que se use)
+  Get.lazyPut(() => CalculadoraController(), fenix: true);
+
+  await MallaService.to.load();
 
   // Intentar restaurar sesión guardada.
   final restored = await AuthService.to.tryRestoreSession();
@@ -49,8 +45,6 @@ void main() async {
     initialRoute = '/login';
   }
 
-  // registramos el controller de la calculadora como singleton permanente
-  Get.put(CalculadoraController(), permanent: true);
   runApp(MyApp(initialRoute: initialRoute));
 }
 

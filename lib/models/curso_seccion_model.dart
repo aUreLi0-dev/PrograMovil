@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 
-// modelo de un curso+seccion con sus notas (rxlist para reactividad)
 class CursoSeccion {
   final String id;
   final String nombre;
   final String ciclo;
   final String codigoSeccion;
+  final int enrollmentId;
   final RxList<Map<String, dynamic>> notas;
 
   CursoSeccion({
@@ -13,6 +13,7 @@ class CursoSeccion {
     required this.nombre,
     required this.ciclo,
     required this.codigoSeccion,
+    this.enrollmentId = 0,
     required this.notas,
   });
 }

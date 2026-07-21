@@ -45,6 +45,19 @@ class LoginController extends GetxController {
   }
 
   @override
+  void onInit() {
+    super.onInit();
+    if (_auth.isLoggedIn) {
+      final user = _auth.currentUser;
+      if (user != null && user.setupComplete) {
+        Get.offAllNamed('/home');
+      } else {
+        Get.offAllNamed('/setup-carrera');
+      }
+    }
+  }
+
+  @override
   void onClose() {
     codeController.dispose();
     passwordController.dispose();

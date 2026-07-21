@@ -91,6 +91,7 @@ class _AddNotaState extends State<AddNota> {
       _evaluacionSeleccionada!.peso.toInt(),
       valor,
       _evaluacionSeleccionada!.id,
+      _evaluacionSeleccionada!.assessmentId ?? 0,
     );
 
     final themeColors = Theme.of(context).colorScheme;

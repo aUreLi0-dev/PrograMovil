@@ -1,24 +1,24 @@
-// lib/services/auth_service.dart
-// Autenticación con JSON local + persistencia de sesión via StorageService.
-
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:get/get.dart';
 
 import '../models/user_model.dart';
-import 'notas_service.dart';
+import 'api_client.dart';
 import 'section_representative_service.dart';
 import 'storage_service.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
 
+  @override
+  void onInit() {
+    super.onInit();
+    _ensureLoaded();
+  }
+
   final Rx<UserModel?> _currentUser = Rx<UserModel?>(null);
-  final RxList<Map<String, dynamic>> _users = <Map<String, dynamic>>[].obs;
   final RxList<Map<String, dynamic>> _carreras = <Map<String, dynamic>>[].obs;
   final RxList<Map<String, dynamic>> _especialidades =
-      <Map<String, dynamic>>[].obs;
-  final RxList<Map<String, dynamic>> _userEspecialidades =
       <Map<String, dynamic>>[].obs;
   final RxBool _loading = false.obs;
   final RxBool _isDelegate = false.obs;
@@ -46,131 +46,136 @@ class AuthService extends GetxService {
     return match != null ? match['name'] as String : '';
   }
 
-  /// Carga el catálogo de usuarios mock desde assets (idempotente).
   Future<void> _ensureLoaded() async {
-    if (_users.isNotEmpty &&
-        _carreras.isNotEmpty &&
-        _especialidades.isNotEmpty &&
-        _userEspecialidades.isNotEmpty) {
-      return;
+    if (_carreras.isNotEmpty && _especialidades.isNotEmpty) return;
+
+    if (_carreras.isEmpty) {
+      try {
+        final rawCarreras = await rootBundle.loadString('assets/data/carreras.json');
+        _carreras.assignAll(
+          (jsonDecode(rawCarreras) as List).cast<Map<String, dynamic>>(),
+        );
+      } catch (_) {}
     }
 
-    final raw = await rootBundle.loadString('assets/data/users.json');
-    final decoded = jsonDecode(raw) as Map<String, dynamic>;
-    final list = (decoded['users'] as List).cast<Map<String, dynamic>>();
-    _users.assignAll(list);
-
-    final rawCarreras = await rootBundle.loadString(
-      'assets/data/carreras.json',
-    );
-    _carreras.assignAll(
-      (jsonDecode(rawCarreras) as List).cast<Map<String, dynamic>>(),
-    );
-
-    final rawEspecialidades = await rootBundle.loadString(
-      'assets/data/especialidades.json',
-    );
-    _especialidades.assignAll(
-      (jsonDecode(rawEspecialidades) as List).cast<Map<String, dynamic>>(),
-    );
-
-    final rawUserEspecialidades = await rootBundle.loadString(
-      'assets/data/user_especialidades.json',
-    );
-    _userEspecialidades.assignAll(
-      (jsonDecode(rawUserEspecialidades) as List).cast<Map<String, dynamic>>(),
-    );
-  }
-
-  Map<String, dynamic> _withEspecialidadesFromRelation(
-    Map<String, dynamic> userJson,
-  ) {
-    final copy = Map<String, dynamic>.from(userJson);
-    final userCode = copy['code'].toString();
-    final userEspIds = _userEspecialidades
-        .where((ue) => ue['user_code'].toString() == userCode)
-        .map((ue) => (ue['especialidad_id'] as num).toInt())
-        .toList();
-
-    if (userEspIds.isNotEmpty) {
-      copy['especialidades'] = userEspIds;
+    if (_especialidades.isEmpty) {
+      try {
+        final rawEspecialidades = await rootBundle.loadString('assets/data/especialidades.json');
+        _especialidades.assignAll(
+          (jsonDecode(rawEspecialidades) as List).cast<Map<String, dynamic>>(),
+        );
+      } catch (_) {      }
     }
-    return copy;
   }
 
-  void _applySavedSetup(UserModel user) {
-    if (!_storage.hasSavedSetupFor(user.code)) return;
+  /// Intenta restaurar sesión desde el JWT guardado (API).
+  Future<bool> tryAutoLogin() async {
+    if (_currentUser.value != null) return true;
+    final jwt = _storage.savedJwt;
+    if (jwt == null || jwt.isEmpty) return false;
 
-    final careerId = _storage.savedCareerIdFor(user.code);
-    if (careerId != null) user.careerId = careerId;
+    _loading.value = true;
+    try {
+      final api = ApiClient();
+      final response = await api.getJson('/api/me', token: jwt);
+      final userData = response['data'] as Map<String, dynamic>?;
+      if (userData == null) return false;
 
-    user.especialidades = _storage.savedEspecialidadesFor(user.code);
-    user.setupComplete = _storage.savedSetupCompleteFor(user.code);
-  }
-
-  /// Intenta restaurar la sesión guardada en local storage.
-  /// Devuelve true si se restauró correctamente.
-  Future<bool> tryRestoreSession() async {
-    final code = _storage.savedCode;
-    if (code == null) return false;
-    await _ensureLoaded();
-    final match = _users.firstWhereOrNull((u) => u['code'].toString() == code);
-    if (match == null) {
-      await _storage.clearSession();
+      _currentUser.value = UserModel.fromJson(userData);
+      final code = _currentUser.value?.code ?? '';
+      if (code.isNotEmpty) {
+        await _storage.saveCode(code);
+      }
+      await refreshDelegateStatus();
+      return true;
+    } catch (_) {
+      await _storage.clearJwt();
       return false;
+    } finally {
+      _loading.value = false;
     }
-    final user = UserModel.fromJson(_withEspecialidadesFromRelation(match));
-    // Aplicar datos de setup guardados.
-    _applySavedSetup(user);
-
-    _currentUser.value = user;
-    // Vincula las notas guardadas a este alumno (clave notas_estudiante_<code>).
-    await NotasService().guardarIdEstudianteActual(code);
-    await refreshDelegateStatus();
-    return true;
   }
 
-  /// Intenta autenticar al usuario. Devuelve null si OK, o mensaje de error.
+  Future<bool> tryRestoreSession() async {
+    return await tryAutoLogin();
+  }
+
   Future<String?> login({
     required String code,
     required String password,
   }) async {
     _loading.value = true;
     try {
-      await _ensureLoaded();
-      final normalizedCode = code.trim();
-      final match = _users.firstWhereOrNull(
-        (u) => u['code'].toString() == normalizedCode,
+      final api = ApiClient();
+      final response = await api.postJson(
+        '/api/sign-in',
+        body: {'code': code.trim(), 'password': password},
+        authenticated: false,
       );
-      if (match == null) return 'No encontramos un alumno con ese código.';
-      final storedPassword =
-          match['password_hash'] as String? ?? match['password'] as String?;
-      if (storedPassword != password) {
-        return 'La contraseña no es correcta.';
+
+      final data = response['data'] as Map<String, dynamic>?;
+      if (data == null) return 'Error al procesar la respuesta';
+
+      final jwt = data['jwt'] as String?;
+      if (jwt == null || jwt.isEmpty) return 'No se recibió token de autenticación';
+
+      await _storage.saveJwt(jwt);
+
+      final userData = data['user'] as Map<String, dynamic>?;
+      if (userData != null) {
+        _currentUser.value = UserModel.fromJson(userData);
       }
 
-      final user = UserModel.fromJson(_withEspecialidadesFromRelation(match));
-      _applySavedSetup(user);
-      _currentUser.value = user;
-      await _storage.saveCode(normalizedCode);
-      // Vincula las notas guardadas a este alumno (clave notas_estudiante_<code>).
-      await NotasService().guardarIdEstudianteActual(normalizedCode);
+      final meResponse = await api.getJson('/api/me', token: jwt);
+      final meData = meResponse['data'] as Map<String, dynamic>?;
+      if (meData != null) {
+        _currentUser.value = UserModel.fromJson(meData);
+      }
+
+      final userCode = _currentUser.value?.code ?? '';
+      if (userCode.isNotEmpty) {
+        await _storage.saveCode(userCode);
+      }
       await refreshDelegateStatus();
       return null;
+    } on ApiException catch (e) {
+      return e.message;
     } catch (e) {
-      return 'Ocurrió un error inesperado: $e';
+      return 'Error de conexión: $e';
     } finally {
       _loading.value = false;
     }
   }
 
-  /// Actualiza carrera/especialidades del usuario actual y marca el setup completo.
   Future<void> completeSetup({
     required int careerId,
     required List<int> especialidades,
   }) async {
-    final u = _currentUser.value;
-    if (u == null) return;
+    final user = _currentUser.value;
+    if (user == null) return;
+
+    final api = ApiClient();
+    try {
+      await api.postJson(
+        '/api/v1/students/${user.id}/setup-career',
+        body: {
+          'career_id': careerId,
+          'specialty_ids': especialidades,
+        },
+      );
+      final meResponse = await api.getJson('/api/me');
+      final meData = meResponse['data'] as Map<String, dynamic>?;
+      if (meData != null) {
+        _currentUser.value = UserModel.fromJson(meData);
+      }
+    } catch (_) {
+      user.careerId = careerId;
+      user.especialidades = List.of(especialidades);
+      user.setupComplete = true;
+      _currentUser.refresh();
+    }
+
+    final u = _currentUser.value!;
     u.careerId = careerId;
     u.especialidades = List.of(especialidades);
     u.setupComplete = true;
@@ -183,8 +188,6 @@ class AuthService extends GetxService {
     );
   }
 
-  /// Actualiza solo las especialidades del alumno (desde el perfil) y las
-  /// persiste, sin tocar el flag de setup ni navegar.
   Future<void> updateEspecialidades(List<int> especialidades) async {
     final u = _currentUser.value;
     if (u == null) return;
@@ -215,6 +218,10 @@ class AuthService extends GetxService {
   }
 
   Future<void> logout() async {
+    try {
+      final api = ApiClient();
+      await api.getJson('/api/sign-out');
+    } catch (_) {}
     _currentUser.value = null;
     _isDelegate.value = false;
     _role.value = 'estudiante';
