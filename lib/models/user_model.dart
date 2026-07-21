@@ -4,6 +4,8 @@
 import 'malla_models.dart';
 
 class UserModel {
+  final int? id;
+  final int? studentId;
   final String code;
   final String firstName;
   final String lastName;
@@ -14,6 +16,8 @@ class UserModel {
   CourseProgress? courseProgress;
 
   UserModel({
+    this.id,
+    this.studentId,
     required this.code,
     required this.firstName,
     required this.lastName,
@@ -33,6 +37,8 @@ class UserModel {
     final courseProgressJson = json['courseProgress'] as Map<String, dynamic>?;
 
     return UserModel(
+      id: (json['id'] as num?)?.toInt(),
+      studentId: (json['student_id'] as num?)?.toInt() ?? (json['id'] as num?)?.toInt(),
       code: json['code'] as String,
       firstName:
           json['firstName'] as String? ??
