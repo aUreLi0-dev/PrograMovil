@@ -1,6 +1,6 @@
 import 'package:ulima_plus/models/docente_model.dart';
 
-class Asesoria{
+class Asesoria {
   final String id;
   final String courseId;
   final String docenteCode;
@@ -23,18 +23,27 @@ class Asesoria{
     required this.zoom,
   });
 
-  factory Asesoria.fromJson(Map<String,dynamic> json,{required Docente docente}){
+  factory Asesoria.fromJson(Map<String, dynamic> json, {Docente? docente}) {
+    final docenteJson = json['docente'] as Map<String, dynamic>?;
     return Asesoria(
       //Asesoria segun docente y curso
-      id:json['id'].toString(),
-      courseId:json['courseId'].toString(),
-      docenteCode:json['docenteCode'].toString(),
-      docente:docente,
-      dia:json['dia'].toString(),
-      inicio:json['inicio'].toString(),
-      fin:json['fin'].toString(),
-      aula:json['aula'].toString(),
-      zoom:json['zoom'].toString(),
+      id: json['id'].toString(),
+      courseId: json['courseId'].toString(),
+      docenteCode: json['docenteCode'].toString(),
+      docente:
+          docente ??
+          (docenteJson != null
+              ? Docente.fromJson(docenteJson)
+              : Docente(
+                  code: json['docenteCode']?.toString() ?? '',
+                  firstName: 'No',
+                  lastName: 'Asignado',
+                )),
+      dia: json['dia'].toString(),
+      inicio: json['inicio'].toString(),
+      fin: json['fin'].toString(),
+      aula: json['aula'].toString(),
+      zoom: json['zoom'].toString(),
     );
   }
 }

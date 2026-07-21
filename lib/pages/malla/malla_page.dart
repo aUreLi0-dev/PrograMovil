@@ -34,6 +34,8 @@ class MallaPage extends StatelessWidget {
                         color: MaterialTheme.primaryColor,
                       ),
                     )
+                  : c.errorMessage.value != null
+                  ? Center(child: Text(c.errorMessage.value!))
                   : _MallaCanvas(controller: c),
             ),
           ),
@@ -91,9 +93,9 @@ class _ProgressBar extends StatelessWidget {
               child: LinearProgressIndicator(
                 value: controller.approvedRatio,
                 minHeight: 6,
-                backgroundColor: Theme.of(context)
-                    .colorScheme
-                    .surfaceContainerHighest,
+                backgroundColor: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerHighest,
                 color: MaterialTheme.primaryColor,
               ),
             ),
@@ -101,10 +103,9 @@ class _ProgressBar extends StatelessWidget {
             Text(
               'Avance: ${controller.approvedCount} / ${controller.totalVisible} cursos',
               style: TextStyle(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.55),
+                color: Theme.of(
+                  context,
+                ).colorScheme.onSurface.withValues(alpha: 0.55),
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
               ),
@@ -301,9 +302,7 @@ class _IconBtn extends StatelessWidget {
         child: SizedBox(
           width: 32,
           height: 32,
-          child: Center(
-            child: Icon(icon, size: 18, color: colors.onSurface),
-          ),
+          child: Center(child: Icon(icon, size: 18, color: colors.onSurface)),
         ),
       ),
     );
@@ -565,7 +564,7 @@ class _MallaCanvasState extends State<_MallaCanvas> {
     CourseNode course,
     Map<String, CourseStatus> statuses,
   ) {
-      showModalBottomSheet<void>(
+    showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -823,8 +822,11 @@ class _CourseDetailSheet extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.lock_outline, size: 16,
-                      color: colors.onSurface.withValues(alpha: 0.5)),
+                  Icon(
+                    Icons.lock_outline,
+                    size: 16,
+                    color: colors.onSurface.withValues(alpha: 0.5),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -870,9 +872,6 @@ class _PrereqList extends StatelessWidget {
     final byId = {for (final c in mallaController.cards) c.id: c};
     final concrete = course.coursePrerequisites;
     final cycleReq = course.requiredCompletedLevel;
-    final cycleReqOk = cycleReq == null
-        ? false
-        : mallaController.hasCompletedMandatoryCycles(cycleReq, statuses);
 
     if (concrete.isEmpty && cycleReq == null) {
       return Text(
@@ -891,8 +890,8 @@ class _PrereqList extends StatelessWidget {
           _PrereqRow(
             label:
                 'Haber aprobado todos los obligatorios hasta el nivel $cycleReq',
-            ok: cycleReqOk,
-            icon: cycleReqOk ? Icons.flag_outlined : Icons.block,
+            ok: statuses[course.id] != CourseStatus.locked,
+            icon: Icons.flag_outlined,
           ),
         ...concrete.map((p) {
           final c = byId[p];

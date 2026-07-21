@@ -55,18 +55,28 @@ class AuthService extends GetxService {
 
     if (_storage.savedJwt != null && _storage.savedJwt!.isNotEmpty) {
       try {
-        final res = await _apiClient.getJson('/api/v1/careers', authenticated: true);
+        final res = await _apiClient.getJson(
+          '/api/v1/careers',
+          authenticated: true,
+        );
         if (res['success'] == true && res['data'] is List) {
-          _carreras.assignAll((res['data'] as List).cast<Map<String, dynamic>>());
+          _carreras.assignAll(
+            (res['data'] as List).cast<Map<String, dynamic>>(),
+          );
         }
       } catch (e) {
         debugPrint('Error al cargar carreras del backend: $e');
       }
 
       try {
-        final res = await _apiClient.getJson('/api/v1/specialties', authenticated: true);
+        final res = await _apiClient.getJson(
+          '/api/v1/specialties',
+          authenticated: true,
+        );
         if (res['success'] == true && res['data'] is List) {
-          _especialidades.assignAll((res['data'] as List).cast<Map<String, dynamic>>());
+          _especialidades.assignAll(
+            (res['data'] as List).cast<Map<String, dynamic>>(),
+          );
         }
       } catch (e) {
         debugPrint('Error al cargar especialidades del backend: $e');
@@ -75,7 +85,9 @@ class AuthService extends GetxService {
 
     if (_carreras.isEmpty) {
       try {
-        final rawCarreras = await rootBundle.loadString('assets/data/carreras.json');
+        final rawCarreras = await rootBundle.loadString(
+          'assets/data/carreras.json',
+        );
         _carreras.assignAll(
           (jsonDecode(rawCarreras) as List).cast<Map<String, dynamic>>(),
         );
@@ -84,7 +96,9 @@ class AuthService extends GetxService {
 
     if (_especialidades.isEmpty) {
       try {
-        final rawEspecialidades = await rootBundle.loadString('assets/data/especialidades.json');
+        final rawEspecialidades = await rootBundle.loadString(
+          'assets/data/especialidades.json',
+        );
         _especialidades.assignAll(
           (jsonDecode(rawEspecialidades) as List).cast<Map<String, dynamic>>(),
         );
@@ -138,7 +152,9 @@ class AuthService extends GetxService {
       if (data == null) return 'Error al procesar la respuesta';
 
       final jwt = data['jwt'] as String?;
-      if (jwt == null || jwt.isEmpty) return 'No se recibió token de autenticación';
+      if (jwt == null || jwt.isEmpty) {
+        return 'No se recibió token de autenticación';
+      }
 
       await _storage.saveJwt(jwt);
 
@@ -195,10 +211,7 @@ class AuthService extends GetxService {
       }
       await _apiClient.postJson(
         '/api/v1/students/$studentId/setup-career',
-        body: {
-          'career_id': careerId,
-          'specialty_ids': especialidades,
-        },
+        body: {'career_id': careerId, 'specialty_ids': especialidades},
       );
       debugPrint('Configuración de carrera guardada con éxito en el backend.');
     } catch (e) {
@@ -223,15 +236,14 @@ class AuthService extends GetxService {
       try {
         final studentId = u.studentId ?? u.id;
         if (studentId == null) {
-          debugPrint('No se pudo actualizar especialidades en backend: studentId nulo.');
+          debugPrint(
+            'No se pudo actualizar especialidades en backend: studentId nulo.',
+          );
           return;
         }
         await _apiClient.postJson(
           '/api/v1/students/$studentId/setup-career',
-          body: {
-            'career_id': careerId,
-            'specialty_ids': especialidades,
-          },
+          body: {'career_id': careerId, 'specialty_ids': especialidades},
         );
         debugPrint('Especialidades actualizadas con éxito en el backend.');
       } catch (e) {
@@ -254,12 +266,15 @@ class AuthService extends GetxService {
   }
 
   Future<void> logout() async {
-    try {
-      await _apiClient.getJson('/api/sign-out');
-    } catch (_) {}
+    final jwt = _storage.savedJwt;
     _currentUser.value = null;
     _isDelegate.value = false;
     _role.value = 'estudiante';
     await _storage.clearSession();
+
+    if (jwt == null || jwt.isEmpty) return;
+    try {
+      await _apiClient.getJson('/api/sign-out', token: jwt);
+    } catch (_) {}
   }
 }

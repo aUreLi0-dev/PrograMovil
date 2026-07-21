@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ulima_plus/configs/themes.dart';
 import 'package:ulima_plus/pages/alertas/alertas_page.dart';
-import 'package:ulima_plus/pages/login/login_page.dart';
 import 'package:ulima_plus/services/alertas_service.dart';
 import 'package:ulima_plus/services/auth_service.dart';
 
@@ -28,10 +27,7 @@ class AppHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: MaterialTheme.headerColor(Theme.brightnessOf(context)),
         border: Border(
-          bottom: BorderSide(
-            color: colors.primaryContainer,
-            width: 2.0,
-          ),
+          bottom: BorderSide(color: colors.primaryContainer, width: 2.0),
         ),
       ),
       child: Column(
@@ -85,9 +81,9 @@ class AppHeader extends StatelessWidget {
                   if (showLogout) ...[
                     const SizedBox(width: 18),
                     InkWell(
-                      onTap: () {
-                        AuthService.to.logout();
-                        Get.offAll(() => const LoginPage());
+                      onTap: () async {
+                        await AuthService.to.logout();
+                        Get.offAllNamed('/login');
                       },
                       child: Icon(
                         Icons.logout,
