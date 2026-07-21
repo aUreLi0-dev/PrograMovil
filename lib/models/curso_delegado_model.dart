@@ -15,6 +15,18 @@ class CursoDelegado {
     required this.alumnosMatriculados,
   });
 
+  factory CursoDelegado.fromJson(Map<String, dynamic> json) {
+    return CursoDelegado(
+      idCurso: json['idCurso']?.toString() ?? '',
+      nombreCurso: json['nombreCurso']?.toString() ?? '',
+      idSeccion: json['idSeccion']?.toString() ?? '',
+      codigoSeccion: json['codigoSeccion']?.toString() ?? '',
+      rol: json['rol']?.toString() ?? 'estudiante',
+      alumnosMatriculados:
+          (json['alumnosMatriculados'] as num?)?.toInt() ?? 0,
+    );
+  }
+
   String get rolTexto {
     if (rol == 'subdelegado') return 'Subdelegado';
     return 'Delegado';

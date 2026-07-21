@@ -270,6 +270,7 @@ class AuthService extends GetxService {
     _currentUser.value = null;
     _isDelegate.value = false;
     _role.value = 'estudiante';
+    SectionRepresentativeService().clearCache();
     await _storage.clearSession();
 
     if (jwt == null || jwt.isEmpty) return;

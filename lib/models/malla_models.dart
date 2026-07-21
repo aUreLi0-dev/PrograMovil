@@ -1,25 +1,24 @@
 // lib/models/malla_models.dart
-// Modelos del dominio de la malla curricular.
+// Modelos simples para pintar la malla que ya viene calculada desde backend.
 
 import 'package:flutter/material.dart';
 
-/// Estado de un curso dentro de la malla para un alumno.
-/// - locked    → bloqueado: no cumple prerrequisitos
-/// - unlocked  → disponible: cumple prereqs, aún no lo lleva
-/// - current   → cursando ahora
-/// - approved  → finalizado/aprobado
 enum CourseStatus { locked, unlocked, current, approved }
 
 CourseStatus courseStatusFromJson(Object? raw) {
   switch (raw?.toString()) {
     case 'approved':
+    case 'simulated_approved':
       return CourseStatus.approved;
     case 'current':
     case 'in_progress':
+    case 'simulated_in_progress':
       return CourseStatus.current;
     case 'unlocked':
     case 'available':
+    case 'simulated_unlocked':
       return CourseStatus.unlocked;
+    case 'simulated_locked':
     case 'locked':
     default:
       return CourseStatus.locked;
@@ -53,7 +52,6 @@ extension CourseStatusX on CourseStatus {
     }
   }
 
-  /// Color principal para pintar la card.
   Color get color {
     switch (this) {
       case CourseStatus.approved:
@@ -67,7 +65,6 @@ extension CourseStatusX on CourseStatus {
     }
   }
 
-  /// Borde más oscuro (1 stop más fuerte que el fondo).
   Color get borderColor {
     switch (this) {
       case CourseStatus.approved:
@@ -82,7 +79,6 @@ extension CourseStatusX on CourseStatus {
   }
 }
 
-/// Categoría visual del curso (define el grupo al que pertenece en la malla).
 enum CourseCategory { eegg, faculty, common, elective }
 
 CourseCategory _parseCategory(String? raw) {
@@ -103,11 +99,6 @@ CourseCategory _parseCategory(String? raw) {
   }
 }
 
-/// Marcadores especiales en la lista de prerrequisitos.
-const String prereqVCiclo = '_V_CICLO_';
-const String prereqVICiclo = '_VI_CICLO_';
-
-/// Nodo de la malla con la metadata estática del curso.
 class CourseNode {
   CourseNode({
     required this.id,
@@ -131,55 +122,20 @@ class CourseNode {
   final int level;
   final List<String> prerequisites;
   final CourseCategory category;
-
-  /// Fila visual del curso dentro del grid (0..N por nivel).
   final int row;
-
-  /// Especialidades que recomiendan este electivo. Vacío para obligatorios.
   final List<String> specialties;
   final CourseStatus status;
   final int? requiredCompletedLevel;
-
-  /// Facultad externa si el curso pertenece a otra carrera (e.g. "Comunicaciones").
   final String? externalFaculty;
 
   bool get isElective => category == CourseCategory.elective;
   bool get isExternal => externalFaculty != null;
 
-  /// True si el prereq es un marcador "haber culminado X ciclo".
-  bool _isCicloMarker(String p) => p.startsWith('_') && p.endsWith('_CICLO_');
-
-  /// Lista de prerrequisitos "concretos" (cursos, no marcadores).
   List<String> get coursePrerequisites =>
-      prerequisites.where((p) => !_isCicloMarker(p)).toList();
+      prerequisites.where((item) => !_isCycleMarker(item)).toList();
 
-  static int? _requiredLevelFromPrerequisites(List<String> prerequisites) {
-    if (prerequisites.contains(prereqVCiclo)) return 5;
-    if (prerequisites.contains(prereqVICiclo)) return 6;
-    return null;
-  }
-
-  factory CourseNode.fromDbJson({
-    required Map<String, dynamic> course,
-    required Map<String, dynamic> curriculumCourse,
-    required List<String> prerequisites,
-    required List<String> specialties,
-  }) {
-    return CourseNode(
-      id: curriculumCourse['id'].toString(),
-      code: course['code'].toString(),
-      name: course['name'].toString(),
-      credits: (curriculumCourse['credit'] as num).toInt(),
-      level: (curriculumCourse['cycle'] as num).toInt(),
-      prerequisites: prerequisites,
-      category: _parseCategory(curriculumCourse['category']?.toString()),
-      row: (curriculumCourse['display_order'] as num).toInt() - 1,
-      specialties: specialties,
-      status: CourseStatus.locked,
-      requiredCompletedLevel: _requiredLevelFromPrerequisites(prerequisites),
-      externalFaculty: course['origin_faculty']?.toString(),
-    );
-  }
+  bool _isCycleMarker(String value) =>
+      value.startsWith('_') && value.endsWith('_CICLO_');
 
   factory CourseNode.fromApiJson(Map<String, dynamic> json) {
     return CourseNode(
@@ -188,22 +144,21 @@ class CourseNode {
       name: json['name']?.toString() ?? 'Sin curso',
       credits: (json['credits'] as num?)?.toInt() ?? 0,
       level: (json['level'] as num?)?.toInt() ?? 1,
-      prerequisites: ((json['prerequisites'] as List?) ?? const [])
-          .map((item) => item.toString())
-          .toList(),
+      prerequisites: _readStringList(json['prerequisites']),
       category: _parseCategory(json['category']?.toString()),
       row: (json['row'] as num?)?.toInt() ?? 0,
-      specialties: ((json['specialties'] as List?) ?? const [])
-          .map((item) => item.toString())
-          .toList(),
+      specialties: _readStringList(json['specialties']),
       status: courseStatusFromJson(json['status']),
       requiredCompletedLevel: (json['requiredCompletedLevel'] as num?)?.toInt(),
       externalFaculty: json['externalFaculty']?.toString(),
     );
   }
+
+  static List<String> _readStringList(Object? raw) {
+    return ((raw as List?) ?? const []).map((item) => item.toString()).toList();
+  }
 }
 
-/// Progreso académico del alumno tal como viene de users.json.
 class CourseProgress {
   CourseProgress({
     this.currentLevel,
@@ -211,13 +166,8 @@ class CourseProgress {
     required this.approvedElectives,
   });
 
-  /// Nivel actual del estudiante.
   final int? currentLevel;
-
-  /// Niveles cuyos cursos obligatorios están todos aprobados.
   final Set<int> approvedLevels;
-
-  /// Electivos individuales que el alumno ya aprobó.
   final Set<String> approvedElectives;
 
   factory CourseProgress.empty() =>
@@ -230,10 +180,10 @@ class CourseProgress {
     return CourseProgress(
       currentLevel: rawCurrentLevel is num ? rawCurrentLevel.toInt() : null,
       approvedLevels: ((json['approvedLevels'] as List?) ?? const [])
-          .map<int>((e) => (e as num).toInt())
+          .map<int>((item) => (item as num).toInt())
           .toSet(),
       approvedElectives: ((json['approvedElectives'] as List?) ?? const [])
-          .map((e) => e.toString())
+          .map((item) => item.toString())
           .toSet(),
     );
   }

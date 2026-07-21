@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -19,14 +20,17 @@ class MallaController extends GetxController {
   static const double sectionLabelHeight = 36;
   static const double sectionGap = 80;
 
-  final loading = true.obs;
-  final cards = <CourseNode>[].obs;
-  final statuses = <String, CourseStatus>{}.obs;
-  final errorMessage = RxnString();
-  final zoom = 1.0.obs;
-  final focusRequests = 0.obs;
+  final RxBool loading = true.obs;
+  final RxList<CourseNode> cards = <CourseNode>[].obs;
+  final RxMap<String, CourseStatus> statuses = <String, CourseStatus>{}.obs;
+  final RxSet<String> updatingCourseIds = <String>{}.obs;
+  final RxnString errorMessage = RxnString();
+  final RxDouble zoom = 1.0.obs;
+  final RxInt focusRequests = 0.obs;
+  final RxInt renderTick = 0.obs;
 
   final _electiveNormRows = <String, int>{};
+  String? _focusCourseId;
   int _mandatoryMaxRow = 0;
   int _electiveMaxRow = 0;
 
@@ -62,7 +66,7 @@ class MallaController extends GetxController {
     errorMessage.value = null;
     try {
       await _malla.load(force: true);
-      _refresh();
+      _syncStateFromService();
     } catch (_) {
       errorMessage.value = 'No se pudo cargar la malla.';
       cards.clear();
@@ -77,7 +81,7 @@ class MallaController extends GetxController {
     errorMessage.value = null;
     try {
       await _malla.load(force: true);
-      _refresh();
+      _syncStateFromService();
     } catch (_) {
       errorMessage.value = 'No se pudo actualizar la malla.';
     } finally {
@@ -85,7 +89,7 @@ class MallaController extends GetxController {
     }
   }
 
-  void _refresh() {
+  void _syncStateFromService({bool updateFocusTarget = true}) {
     final currentUser = user;
     if (currentUser == null) {
       cards.clear();
@@ -96,8 +100,14 @@ class MallaController extends GetxController {
 
     final visible = _malla.visibleCoursesFor(currentUser);
     cards.assignAll(visible);
-    statuses.assignAll(_malla.computeStatuses(currentUser));
+    statuses.value = Map<String, CourseStatus>.from(
+      _malla.computeStatuses(currentUser),
+    );
     _computePoolLayout();
+    if (updateFocusTarget) {
+      _computeInitialFocusTarget();
+    }
+    _repaintCanvas();
   }
 
   void _computePoolLayout() {
@@ -120,6 +130,26 @@ class MallaController extends GetxController {
         if (index > _electiveMaxRow) _electiveMaxRow = index;
       }
     }
+  }
+
+  void _computeInitialFocusTarget() {
+    final level = currentStudentLevel;
+    if (level == null) {
+      _focusCourseId = null;
+      return;
+    }
+
+    final target =
+        mandatoryCards
+            .where(
+              (course) =>
+                  course.level == level &&
+                  statuses[course.id] != CourseStatus.approved,
+            )
+            .toList()
+          ..sort((a, b) => a.row.compareTo(b.row));
+
+    _focusCourseId = target.isEmpty ? null : target.first.id;
   }
 
   Offset positionFor(CourseNode course) {
@@ -153,22 +183,31 @@ class MallaController extends GetxController {
     final level = currentStudentLevel;
     if (level == null) return null;
 
-    final target =
-        mandatoryCards
-            .where(
-              (course) =>
-                  course.level == level &&
-                  statuses[course.id] != CourseStatus.approved,
-            )
-            .toList()
-          ..sort((a, b) => a.row.compareTo(b.row));
-
-    if (target.isNotEmpty) return positionFor(target.first);
+    final targetId = _focusCourseId;
+    if (targetId != null) {
+      final target = mandatoryCards.firstWhereOrNull(
+        (course) => course.id == targetId,
+      );
+      if (target != null) return positionFor(target);
+    }
 
     return Offset(
       padding + (level - 1) * (cardWidth + columnGap),
       padding + sectionLabelHeight + levelHeaderHeight,
     );
+  }
+
+  bool isUpdating(String courseId) => updatingCourseIds.contains(courseId);
+
+  void _repaintCanvas() => renderTick.value++;
+
+  CourseStatus _nextStatus(CourseStatus current) {
+    return switch (current) {
+      CourseStatus.unlocked => CourseStatus.current,
+      CourseStatus.current => CourseStatus.approved,
+      CourseStatus.approved => CourseStatus.unlocked,
+      CourseStatus.locked => CourseStatus.locked,
+    };
   }
 
   Size canvasSize() {
@@ -185,30 +224,47 @@ class MallaController extends GetxController {
   }
 
   Future<void> cycleStatus(String courseId) async {
-    final current = statuses[courseId] ?? CourseStatus.locked;
-    if (current == CourseStatus.locked) return;
+    if (updatingCourseIds.contains(courseId)) return;
 
-    final next = switch (current) {
-      CourseStatus.unlocked => CourseStatus.current,
-      CourseStatus.current => CourseStatus.approved,
-      CourseStatus.approved => CourseStatus.unlocked,
-      CourseStatus.locked => CourseStatus.locked,
-    };
-    if (next == CourseStatus.locked) return;
+    final previous = statuses[courseId] ?? CourseStatus.locked;
+    if (previous == CourseStatus.locked) return;
 
-    loading.value = true;
-    errorMessage.value = null;
+    final next = _nextStatus(previous);
+
+    _markCourseAsUpdating(courseId);
+    _setVisibleStatus(courseId, next);
+    unawaited(_persistStatusChange(courseId, previous, next));
+  }
+
+  Future<void> _persistStatusChange(
+    String courseId,
+    CourseStatus previous,
+    CourseStatus next,
+  ) async {
     try {
-      await _malla.updateCourseStatus(courseId: courseId, nextStatus: next);
-      _refresh();
+      final savedStatus = await _malla
+          .updateCourseStatus(courseId: courseId, nextStatus: next)
+          .timeout(const Duration(seconds: 8));
+      _setVisibleStatus(courseId, savedStatus);
+      _markCourseAsReady(courseId);
+
+      unawaited(_reloadAfterSimulationSave());
+    } catch (_) {
+      _setVisibleStatus(courseId, previous);
+      _markCourseAsReady(courseId);
+      Get.snackbar('Malla', 'No se pudo actualizar el estado del curso.');
+    }
+  }
+
+  Future<void> _reloadAfterSimulationSave() async {
+    try {
+      await _malla.load(force: true).timeout(const Duration(seconds: 8));
+      _syncStateFromService(updateFocusTarget: false);
       if (Get.isRegistered<AlertasService>()) {
-        AlertasService.to.generarAlertas();
+        unawaited(AlertasService.to.generarAlertas());
       }
     } catch (_) {
-      errorMessage.value = 'No se pudo actualizar el estado del curso.';
-      Get.snackbar('Malla', errorMessage.value!);
-    } finally {
-      loading.value = false;
+      Get.snackbar('Malla', 'Estado guardado. No se pudo recalcular la malla.');
     }
   }
 
@@ -228,5 +284,21 @@ class MallaController extends GetxController {
   void resetZoom() {
     zoom.value = 1.0;
     focusRequests.value++;
+  }
+
+  void _setVisibleStatus(String courseId, CourseStatus status) {
+    statuses[courseId] = status;
+    statuses.refresh();
+    _repaintCanvas();
+  }
+
+  void _markCourseAsUpdating(String courseId) {
+    updatingCourseIds.add(courseId);
+    updatingCourseIds.refresh();
+  }
+
+  void _markCourseAsReady(String courseId) {
+    updatingCourseIds.remove(courseId);
+    updatingCourseIds.refresh();
   }
 }

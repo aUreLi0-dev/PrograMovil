@@ -16,15 +16,15 @@ class DescripCursosController extends GetxController {
   final AsesoriaService _asesoriaService = AsesoriaService();
   final ContactoService _contactoService = ContactoService();
 
-  RxList<Seccion> secciones = <Seccion>[].obs;
-  Rxn<Seccion> seccionActual = Rxn<Seccion>();
-  RxList<Anuncio> anuncios = <Anuncio>[].obs;
-  RxList<Asesoria> asesorias = <Asesoria>[].obs;
-  RxList<ContactoCurso> alumnosContacto = <ContactoCurso>[].obs;
-  Rxn<Docente> docenteContacto = Rxn<Docente>();
-  RxInt selectedTab = 0.obs;
-  RxBool isLoading = false.obs;
-  RxnString errorMessage = RxnString();
+  final RxList<Seccion> secciones = <Seccion>[].obs;
+  final Rxn<Seccion> seccionActual = Rxn<Seccion>();
+  final RxList<Anuncio> anuncios = <Anuncio>[].obs;
+  final RxList<Asesoria> asesorias = <Asesoria>[].obs;
+  final RxList<ContactoCurso> alumnosContacto = <ContactoCurso>[].obs;
+  final Rxn<Docente> docenteContacto = Rxn<Docente>();
+  final RxInt selectedTab = 0.obs;
+  final RxBool isLoading = false.obs;
+  final RxnString errorMessage = RxnString();
 
   Seccion? getSeccionPorId(String id) {
     return secciones.firstWhereOrNull((section) => section.idSeccion == id);
@@ -34,20 +34,12 @@ class DescripCursosController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = null;
-      final seccion = await _seccionService.findSectionById(idSeccion);
-      if (seccion == null) {
-        throw Exception('No existe seccion con id $idSeccion');
-      }
 
-      seccionActual.value = seccion;
-      secciones.value = [seccion];
-
+      final seccion = await _resolveSection(idSeccion);
       final resolvedSectionId = seccion.idSeccion;
-      await Future.wait([
-        fetchAnuncios(resolvedSectionId),
-        fetchAsesorias(resolvedSectionId),
-        fetchContactos(resolvedSectionId),
-      ]);
+
+      _setCurrentSection(seccion);
+      await _loadSectionTabs(resolvedSectionId);
     } catch (e) {
       debugPrint('Error cargando datos del curso: $e');
       errorMessage.value = 'No se pudo cargar la seccion.';
@@ -55,6 +47,27 @@ class DescripCursosController extends GetxController {
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<Seccion> _resolveSection(String idSeccion) async {
+    final seccion = await _seccionService.findSectionById(idSeccion);
+    if (seccion == null) {
+      throw Exception('No existe seccion con id $idSeccion');
+    }
+    return seccion;
+  }
+
+  void _setCurrentSection(Seccion seccion) {
+    seccionActual.value = seccion;
+    secciones.value = [seccion];
+  }
+
+  Future<void> _loadSectionTabs(String idSeccion) async {
+    await Future.wait([
+      fetchAnuncios(idSeccion),
+      fetchAsesorias(idSeccion),
+      fetchContactos(idSeccion),
+    ]);
   }
 
   Future<void> fetchAnuncios(String idSeccion) async {
@@ -72,8 +85,8 @@ class DescripCursosController extends GetxController {
 
   Future<void> fetchContactos(String idSeccion) async {
     final data = await _contactoService.fetchContactos(idSeccion);
-    docenteContacto.value = data['docente'] as Docente?;
-    alumnosContacto.value = List<ContactoCurso>.from(data['alumnos'] ?? []);
+    docenteContacto.value = data.docente;
+    alumnosContacto.value = data.alumnos;
   }
 
   void limpiarDatos() {

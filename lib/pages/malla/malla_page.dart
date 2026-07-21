@@ -338,10 +338,11 @@ class _MallaCanvasState extends State<_MallaCanvas> {
           final mandatory = controller.mandatoryCards;
           final electives = controller.electiveCards;
           final allCards = controller.cards;
-          final statuses = controller.statuses;
           final size = controller.canvasSize();
           final zoom = controller.zoom.value;
           final focusRequest = controller.focusRequests.value;
+          final _ = controller.renderTick.value;
+          final statuses = Map<String, CourseStatus>.from(controller.statuses);
 
           _scheduleFocusIfNeeded(
             viewportSize: constraints.biggest,
@@ -442,7 +443,7 @@ class _MallaCanvasState extends State<_MallaCanvas> {
                         child: CourseCard(
                           course: c,
                           status: statuses[c.id] ?? CourseStatus.locked,
-                          onTap: () => _openDetails(context, c, statuses),
+                          onTap: () => _openDetails(context, c),
                           onLongPress: () => controller.cycleStatus(c.id),
                         ),
                       ),
@@ -455,7 +456,7 @@ class _MallaCanvasState extends State<_MallaCanvas> {
                         child: CourseCard(
                           course: c,
                           status: statuses[c.id] ?? CourseStatus.locked,
-                          onTap: () => _openDetails(context, c, statuses),
+                          onTap: () => _openDetails(context, c),
                           onLongPress: () => controller.cycleStatus(c.id),
                         ),
                       ),
@@ -559,11 +560,7 @@ class _MallaCanvasState extends State<_MallaCanvas> {
     ];
   }
 
-  void _openDetails(
-    BuildContext context,
-    CourseNode course,
-    Map<String, CourseStatus> statuses,
-  ) {
+  void _openDetails(BuildContext context, CourseNode course) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -571,7 +568,7 @@ class _MallaCanvasState extends State<_MallaCanvas> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (ctx) => _CourseDetailSheet(course: course, statuses: statuses),
+      builder: (ctx) => _CourseDetailSheet(course: course),
     );
   }
 }
@@ -644,121 +641,114 @@ class _SectionLabel extends StatelessWidget {
 
 // ── Detail sheet ───────────────────────────────────────────────────────────────
 class _CourseDetailSheet extends StatelessWidget {
-  const _CourseDetailSheet({required this.course, required this.statuses});
+  const _CourseDetailSheet({required this.course});
   final CourseNode course;
-  final Map<String, CourseStatus> statuses;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final controller = Get.find<MallaController>();
-    final currentStatus = statuses[course.id] ?? CourseStatus.locked;
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        20,
-        16,
-        20,
-        MediaQuery.of(context).viewInsets.bottom + 20,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: colors.outline.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(99),
+    return Obx(() {
+      final currentStatus =
+          controller.statuses[course.id] ?? CourseStatus.locked;
+      final isUpdating = controller.isUpdating(course.id);
+
+      return Padding(
+        padding: EdgeInsets.fromLTRB(
+          20,
+          16,
+          20,
+          MediaQuery.of(context).viewInsets.bottom + 20,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: colors.outline.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(99),
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: currentStatus.color.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  course.code,
-                  style: TextStyle(
-                    color: currentStatus.borderColor,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 11,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              _PillStatus(status: currentStatus),
-              if (course.isExternal) ...[
-                const SizedBox(width: 8),
+            const SizedBox(height: 14),
+            Row(
+              children: [
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 8,
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                    color: colors.surfaceContainerHighest,
+                    color: currentStatus.color.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    course.externalFaculty!,
+                    course.code,
                     style: TextStyle(
-                      color: colors.onSurface.withValues(alpha: 0.65),
-                      fontWeight: FontWeight.w800,
+                      color: currentStatus.borderColor,
+                      fontWeight: FontWeight.w900,
                       fontSize: 11,
                     ),
                   ),
                 ),
+                const SizedBox(width: 8),
+                _PillStatus(status: currentStatus),
+                if (course.isExternal) ...[
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: colors.surfaceContainerHighest,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(
+                      course.externalFaculty!,
+                      style: TextStyle(
+                        color: colors.onSurface.withValues(alpha: 0.65),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ),
+                ],
               ],
-            ],
-          ),
-          const SizedBox(height: 8),
-          Text(
-            course.name,
-            style: TextStyle(
-              color: colors.onSurface,
-              fontSize: 18,
-              fontWeight: FontWeight.w900,
             ),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 6,
-            children: [
-              _InfoTag(
-                icon: Icons.layers_outlined,
-                text: 'Nivel ${course.level}',
-              ),
-              _InfoTag(
-                icon: Icons.workspace_premium_outlined,
-                text: '${course.credits} créditos',
-              ),
-              if (course.isElective)
-                const _InfoTag(icon: Icons.bookmark_border, text: 'Electivo'),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(
-            'Prerrequisitos',
-            style: TextStyle(
-              color: colors.onSurface.withValues(alpha: 0.75),
-              fontSize: 13,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 0.4,
-            ),
-          ),
-          const SizedBox(height: 6),
-          _PrereqList(course: course, statuses: statuses),
-          if (course.isElective && course.specialties.isNotEmpty) ...[
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Text(
-              'Forma parte de los diplomas',
+              course.name,
+              style: TextStyle(
+                color: colors.onSurface,
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 6,
+              children: [
+                _InfoTag(
+                  icon: Icons.layers_outlined,
+                  text: 'Nivel ${course.level}',
+                ),
+                _InfoTag(
+                  icon: Icons.workspace_premium_outlined,
+                  text: '${course.credits} créditos',
+                ),
+                if (course.isElective)
+                  const _InfoTag(icon: Icons.bookmark_border, text: 'Electivo'),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'Prerrequisitos',
               style: TextStyle(
                 color: colors.onSurface.withValues(alpha: 0.75),
                 fontSize: 13,
@@ -767,83 +757,99 @@ class _CourseDetailSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 6),
-            Wrap(
-              spacing: 6,
-              runSpacing: 6,
-              children: course.specialties
-                  .map(
-                    (s) => Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
+            _PrereqList(course: course),
+            if (course.isElective && course.specialties.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              Text(
+                'Forma parte de los diplomas',
+                style: TextStyle(
+                  color: colors.onSurface.withValues(alpha: 0.75),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 0.4,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: course.specialties
+                    .map(
+                      (s) => Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFE8DC),
+                          borderRadius: BorderRadius.circular(99),
+                        ),
+                        child: Text(
+                          s,
+                          style: const TextStyle(
+                            color: MaterialTheme.primaryDark,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFE8DC),
-                        borderRadius: BorderRadius.circular(99),
-                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+            const SizedBox(height: 18),
+            if (currentStatus != CourseStatus.locked)
+              ElevatedButton.icon(
+                onPressed: isUpdating
+                    ? null
+                    : () {
+                        controller.cycleStatus(course.id);
+                        Navigator.pop(context);
+                      },
+                icon: const Icon(Icons.repeat, size: 18),
+                label: Text(_nextStatusLabel(currentStatus)),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: MaterialTheme.primaryColor,
+                  foregroundColor: Colors.white,
+                  minimumSize: const Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              )
+            else
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: colors.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.lock_outline,
+                      size: 16,
+                      color: colors.onSurface.withValues(alpha: 0.5),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
                       child: Text(
-                        s,
-                        style: const TextStyle(
-                          color: MaterialTheme.primaryDark,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w800,
+                        'Este curso está bloqueado hasta que cumplas sus prerrequisitos.',
+                        style: TextStyle(
+                          color: colors.onSurface.withValues(alpha: 0.65),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
-                  )
-                  .toList(),
-            ),
-          ],
-          const SizedBox(height: 18),
-          if (currentStatus != CourseStatus.locked)
-            ElevatedButton.icon(
-              onPressed: () {
-                controller.cycleStatus(course.id);
-                Navigator.pop(context);
-              },
-              icon: const Icon(Icons.repeat, size: 18),
-              label: Text(_nextStatusLabel(currentStatus)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: MaterialTheme.primaryColor,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  ],
                 ),
               ),
-            )
-          else
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: colors.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.lock_outline,
-                    size: 16,
-                    color: colors.onSurface.withValues(alpha: 0.5),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Este curso está bloqueado hasta que cumplas sus prerrequisitos.',
-                      style: TextStyle(
-                        color: colors.onSurface.withValues(alpha: 0.65),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   String _nextStatusLabel(CourseStatus s) {
@@ -861,15 +867,15 @@ class _CourseDetailSheet extends StatelessWidget {
 }
 
 class _PrereqList extends StatelessWidget {
-  const _PrereqList({required this.course, required this.statuses});
+  const _PrereqList({required this.course});
   final CourseNode course;
-  final Map<String, CourseStatus> statuses;
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final mallaController = Get.find<MallaController>();
     final byId = {for (final c in mallaController.cards) c.id: c};
+    final statuses = mallaController.statuses;
     final concrete = course.coursePrerequisites;
     final cycleReq = course.requiredCompletedLevel;
 
