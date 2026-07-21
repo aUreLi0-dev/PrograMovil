@@ -5,14 +5,15 @@ import 'package:ulima_plus/models/asesoria_model.dart';
 import 'package:ulima_plus/models/contacto_model.dart';
 import 'package:ulima_plus/models/docente_model.dart';
 import 'package:ulima_plus/models/seccion_model.dart';
-import 'package:ulima_plus/services/anuncio_service.dart';
+import 'package:ulima_plus/services/api_client.dart';
 import 'package:ulima_plus/services/asesoria_service.dart';
 import 'package:ulima_plus/services/contacto_service.dart';
+import 'package:ulima_plus/services/delegate_service.dart';
 import 'package:ulima_plus/services/seccion_service.dart';
 
 class DescripCursosController extends GetxController {
   final SeccionService _seccionService = SeccionService();
-  final AnuncioService _anuncioService = AnuncioService();
+  final DelegateService _delegateService = DelegateService();
   final AsesoriaService _asesoriaService = AsesoriaService();
   final ContactoService _contactoService = ContactoService();
 
@@ -71,11 +72,19 @@ class DescripCursosController extends GetxController {
   }
 
   Future<void> fetchAnuncios(String idSeccion) async {
-    final response = await _anuncioService.fetchAnuncios(idSeccion);
-    if (response.success && response.data != null) {
-      anuncios.value = response.data!;
-    } else {
+    if (idSeccion.isEmpty) {
       anuncios.clear();
+      return;
+    }
+    try {
+      // Se manda el identificador tal cual: puede ser id numérico ("1") o
+      // código ("IS-856"). El backend resuelve ambos.
+      anuncios.value = await _delegateService.fetchAnuncios(idSeccion);
+    } on ApiException catch (e) {
+      // Un fallo de anuncios NO debe borrar el resto de la pantalla,
+      // por eso se atrapa aquí y no se relanza.
+      anuncios.clear();
+      debugPrint('Error cargando anuncios: ${e.message}');
     }
   }
 

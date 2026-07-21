@@ -22,8 +22,7 @@ class CursoDelegado {
       idSeccion: json['idSeccion']?.toString() ?? '',
       codigoSeccion: json['codigoSeccion']?.toString() ?? '',
       rol: json['rol']?.toString() ?? 'estudiante',
-      alumnosMatriculados:
-          (json['alumnosMatriculados'] as num?)?.toInt() ?? 0,
+      alumnosMatriculados: (json['alumnosMatriculados'] as num?)?.toInt() ?? 0,
     );
   }
 
